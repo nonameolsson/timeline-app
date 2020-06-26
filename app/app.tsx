@@ -13,7 +13,12 @@ import "./i18n"
 import "./utils/ignore-warnings"
 import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
 import { NavigationContainerRef } from "@react-navigation/native"
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { HttpLink } from 'apollo-link-http'
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
+import { ApolloClient } from 'apollo-client'
+import { ApolloProvider } from '@apollo/react-hooks'
+
 import { initFonts } from "./theme/fonts"
 import * as storage from "./utils/storage"
 import {
@@ -24,7 +29,6 @@ import {
   useNavigationPersistence,
 } from "./navigation"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
-import { GET_ALL_TIMELINES } from './queries/timeline'
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
@@ -34,6 +38,12 @@ import { enableScreens } from "react-native-screens"
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
+
+// Create the client as outlined in the setup guide
+const client = new ApolloClient({
+  link: new HttpLink({ uri: 'http://localhost:1337/graphql' }),
+  cache: new InMemoryCache()
+})
 
 /**
  * This is the root component of our app.
@@ -65,15 +75,17 @@ const App: Component<{}> = () => {
 
   // otherwise, we're ready to render the app
   return (
-    <RootStoreProvider value={rootStore}>
-      <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-        <RootNavigator
-          ref={navigationRef}
-          initialState={initialNavigationState}
-          onStateChange={onNavigationStateChange}
-        />
-      </SafeAreaProvider>
-    </RootStoreProvider>
+    <ApolloProvider client={client}>
+      <RootStoreProvider value={rootStore}>
+        <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
+          <RootNavigator
+            ref={navigationRef}
+            initialState={initialNavigationState}
+            onStateChange={onNavigationStateChange}
+          />
+        </SafeAreaProvider>
+      </RootStoreProvider>
+    </ApolloProvider>
   )
 }
 

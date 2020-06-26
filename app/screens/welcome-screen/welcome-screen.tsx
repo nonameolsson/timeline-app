@@ -78,6 +78,7 @@ const FOOTER_CONTENT: ViewStyle = {
 export const WelcomeScreen: Component = observer(function WelcomeScreen() {
   const navigation = useNavigation()
   const nextScreen = () => navigation.navigate("demo")
+  const goToGraphQL = () => navigation.navigate("graphql")
 
   return (
     <View style={FULL}>
@@ -102,6 +103,12 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
+          <Button
+            style={CONTINUE}
+            textStyle={CONTINUE_TEXT}
+            onPress={goToGraphQL}
+            text="GraphQL"
+          />
           <Button
             style={CONTINUE}
             textStyle={CONTINUE_TEXT}
