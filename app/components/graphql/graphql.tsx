@@ -17,7 +17,7 @@ interface Props {
 export function GraphQL(props: Props) {
   const { title } = props
   const [getTimelines, { loading, error, data }] = useLazyQuery(GET_ALL_TIMELINES, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
   })
 
   if (loading) return <Text>Loading...</Text>

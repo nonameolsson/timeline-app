@@ -8,6 +8,8 @@ import React from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { PrimaryNavigator } from "./primary-navigator"
+import { AuthNavigator } from "./auth-navigator"
+import * as storage from "utils/storage"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -21,11 +23,23 @@ import { PrimaryNavigator } from "./primary-navigator"
  */
 export type RootParamList = {
   primaryStack: undefined
+  authStack: undefined
 }
 
 const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
+  const [jwt, setJwt] = React.useState(undefined)
+
+  const loadJwt = async () => {
+    const data = await storage.loadString('jwt')
+    setJwt(data)
+  }
+
+  React.useEffect(() => {
+    loadJwt()
+  })
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -33,13 +47,24 @@ const RootStack = () => {
         gestureEnabled: true,
       }}
     >
-      <Stack.Screen
-        name="primaryStack"
-        component={PrimaryNavigator}
-        options={{
-          headerShown: false,
-        }}
-      />
+      {jwt ? (
+        <Stack.Screen
+          name="primaryStack"
+          component={PrimaryNavigator}
+          options={{
+            headerShown: false,
+          }}
+          herp="fdsa"
+        />
+      ) : (
+        <Stack.Screen
+          name="authStack"
+          component={AuthNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
     </Stack.Navigator>
   )
 }

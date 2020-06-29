@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
+    "baseUrl": "app",
     "experimentalDecorators": true,
     "jsx": "react-native",
     "module": "es2015",
@@ -14,6 +15,15 @@
     "target": "esnext",
     "lib": ["esnext"],
     "skipLibCheck": true,
+    "paths": {
+      "config/*": ["./config/*"],
+      "theme/*": ["./theme/*"],
+      "models/*": ["./models/*"],
+      "navigation/*": ["./navigation/*"],
+      "screens/*": ["./screens/*"],
+      "services/*": ["./services/*"],
+      "utils/*": ["./utils/*"]
+    },
     "plugins": [
       {
         "name": "@divyenduz/ts-graphql-plugin"
