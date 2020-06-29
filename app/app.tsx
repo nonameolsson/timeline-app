@@ -11,13 +11,14 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
-import { NavigationContainerRef } from "@react-navigation/native"
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
-import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
 import { ApolloClient } from 'apollo-client'
 import { ApolloProvider } from '@apollo/react-hooks'
+import { HttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { NavigationContainerRef } from "@react-navigation/native"
+import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
+import * as eva from '@eva-design/eva'
+import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
 
 import { initFonts } from "./theme/fonts"
 import * as storage from "./utils/storage"
@@ -34,6 +35,7 @@ import { RootStore, RootStoreProvider, setupRootStore } from "./models"
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from "react-native-screens"
+import { ApplicationProvider } from "@ui-kitten/components"
 
 enableScreens()
 
@@ -75,17 +77,19 @@ const App: Component<{}> = () => {
 
   // otherwise, we're ready to render the app
   return (
-    <ApolloProvider client={client}>
-      <RootStoreProvider value={rootStore}>
-        <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-          <RootNavigator
-            ref={navigationRef}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
-        </SafeAreaProvider>
-      </RootStoreProvider>
-    </ApolloProvider>
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <ApolloProvider client={client}>
+        <RootStoreProvider value={rootStore}>
+          <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
+            <RootNavigator
+              ref={navigationRef}
+              initialState={initialNavigationState}
+              onStateChange={onNavigationStateChange}
+            />
+          </SafeAreaProvider>
+        </RootStoreProvider>
+      </ApolloProvider>
+    </ApplicationProvider>
   )
 }
 
