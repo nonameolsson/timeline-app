@@ -2,7 +2,14 @@ import { GeneralApiProblem } from "./api-problem"
 
 export interface User {
   id: number
-  name: string
+  username: string
+  email: string
+  provider: string
+  confirmed: boolean
+  blocked: boolean
+  role: any
+  createdAt: string
+  updatedAt: string
 }
 
 export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem

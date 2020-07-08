@@ -52,8 +52,6 @@ export const GraphQLScreen: Component = observer(function WelcomeScreen() {
           style={HEADER}
           titleStyle={HEADER_TITLE}
         />
-        <GraphQL title="GraphQL1" />
-        <GraphQL title="GraphQL2a" />
         <Text style={CONTENT}>
           This probably isn't what your app is going to look like. Unless your designer handed you
           this screen and, in that case, congrats! You're ready to ship.

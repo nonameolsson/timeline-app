@@ -11,10 +11,6 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import { ApolloClient } from 'apollo-client'
-import { ApolloProvider } from '@apollo/react-hooks'
-import { HttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
 import { NavigationContainerRef } from "@react-navigation/native"
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
 import * as eva from '@eva-design/eva'
@@ -40,12 +36,6 @@ import { ApplicationProvider } from "@ui-kitten/components"
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
-
-// Create the client as outlined in the setup guide
-const client = new ApolloClient({
-  link: new HttpLink({ uri: 'http://localhost:1337/graphql' }),
-  cache: new InMemoryCache()
-})
 
 /**
  * This is the root component of our app.
@@ -78,17 +68,15 @@ const App: Component<{}> = () => {
   // otherwise, we're ready to render the app
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
-      <ApolloProvider client={client}>
-        <RootStoreProvider value={rootStore}>
-          <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-            <RootNavigator
-              ref={navigationRef}
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-          </SafeAreaProvider>
-        </RootStoreProvider>
-      </ApolloProvider>
+      <RootStoreProvider value={rootStore}>
+        <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
+          <RootNavigator
+            ref={navigationRef}
+            initialState={initialNavigationState}
+            onStateChange={onNavigationStateChange}
+          />
+        </SafeAreaProvider>
+      </RootStoreProvider>
     </ApplicationProvider>
   )
 }
