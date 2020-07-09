@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing, typography } from "../../theme"
+import { useStores } from "../../models/root-store/root-store-context"
 const bowserLogo = require("./bowser.png")
 
 const FULL: ViewStyle = { flex: 1 }
@@ -77,8 +78,16 @@ const FOOTER_CONTENT: ViewStyle = {
 
 export const WelcomeScreen: Component = observer(function WelcomeScreen() {
   const navigation = useNavigation()
+  const { userStore } = useStores()
+  console.tron.log(userStore.user)
   const nextScreen = () => navigation.navigate("demo")
   const goToGraphQL = () => navigation.navigate("graphql")
+
+  // const getUser = () => userStore.getUser('1')
+  const getUser = () => {
+    userStore.getUser(2)
+    console.tron.log('Get user')
+  }
 
   return (
     <View style={FULL}>
@@ -106,8 +115,8 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
           <Button
             style={CONTINUE}
             textStyle={CONTINUE_TEXT}
-            onPress={goToGraphQL}
-            text="GraphQL"
+            onPress={getUser}
+            text="Get User"
           />
           <Button
             style={CONTINUE}

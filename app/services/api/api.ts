@@ -37,6 +37,7 @@ export class Api {
     // construct the apisauce instance
     this.apisauce = create({
       baseURL: this.config.url,
+
       timeout: this.config.timeout,
       headers: {
         Accept: "application/json",
@@ -78,9 +79,9 @@ export class Api {
    * Gets a single user by ID
    */
 
-  async getUser(id: string): Promise<Types.GetUserResult> {
+  async getUser(id: number): Promise<Types.GetUserResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`)
+    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`, null, { headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk0MjE2ODE2LCJleHAiOjE1OTY4MDg4MTZ9.LuPgVDDzBrJsHyxJ39RPeq_7qf900rxtb8Hr4Vc7NqY' } })
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -92,9 +93,55 @@ export class Api {
     try {
       const resultUser: Types.User = {
         id: response.data.id,
-        name: response.data.name,
+        email: response.data.email,
+        username: response.data.username,
+        blocked: response.data.blocked,
+        confirmed: response.data.confirmed,
+        createdAt: response.data.created_at,
+        updatedAt: response.data.updated_at,
+        provider: response.data.provider,
+        role: response.data.role,
       }
       return { kind: "ok", user: resultUser }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
+   * Login a user with identifier and password
+   *
+   * @param identifier Could be something like e-mail or username
+   * @param password The password used to login
+   */
+
+  async login(identifier: string, password: string): Promise<Types.GetLoginResult> {
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.post(`/auth/local`, { identifier, password })
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const resultLogin: Types.Login = {
+        jwt: response.data.jwt,
+        user: {
+          id: response.data.user.id,
+          email: response.data.user.email,
+          username: response.data.user.username,
+          blocked: response.data.user.blocked,
+          confirmed: response.data.user.confirmed,
+          createdAt: response.data.user.created_at,
+          updatedAt: response.data.user.updated_at,
+          provider: response.data.user.provider,
+          role: response.data.user.role,
+        }
+      }
+      return { kind: "ok", login: resultLogin }
     } catch {
       return { kind: "bad-data" }
     }
