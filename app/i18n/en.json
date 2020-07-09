@@ -1,4 +1,10 @@
 {
+  "login": {
+    "errors": {
+      "rejected": "Wrong e-mail or password.",
+      "cannot-connect": "Cannot connect to server. Please check your internet connection."
+    }
+  },
   "common": {
     "ok": "OK!",
     "cancel": "Cancel",

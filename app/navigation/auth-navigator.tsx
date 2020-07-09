@@ -23,7 +23,6 @@ import { LoginScreen } from "../screens"
 export type AuthParamList = {
   welcome: undefined
   demo: undefined
-  graphql: undefined
   login: undefined
 }
 

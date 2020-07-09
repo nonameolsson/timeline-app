@@ -9,7 +9,8 @@ import { NavigationContainer, NavigationContainerRef } from "@react-navigation/n
 import { createStackNavigator } from "@react-navigation/stack"
 import { PrimaryNavigator } from "./primary-navigator"
 import { AuthNavigator } from "./auth-navigator"
-import * as storage from "utils/storage"
+import { useStores } from "../models"
+import { observer } from "mobx-react-lite"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -28,17 +29,8 @@ export type RootParamList = {
 
 const Stack = createStackNavigator<RootParamList>()
 
-const RootStack = () => {
-  const [jwt, setJwt] = React.useState(undefined)
-
-  const loadJwt = async () => {
-    const data = await storage.loadString('jwt')
-    setJwt(data)
-  }
-
-  React.useEffect(() => {
-    loadJwt()
-  })
+const RootStack = observer(function RootStack() {
+  const { userStore } = useStores()
 
   return (
     <Stack.Navigator
@@ -47,14 +39,13 @@ const RootStack = () => {
         gestureEnabled: true,
       }}
     >
-      {jwt ? (
+      {userStore.isLoggedIn() ? (
         <Stack.Screen
           name="primaryStack"
           component={PrimaryNavigator}
           options={{
             headerShown: false,
           }}
-          herp="fdsa"
         />
       ) : (
         <Stack.Screen
@@ -62,12 +53,13 @@ const RootStack = () => {
           component={AuthNavigator}
           options={{
             headerShown: false,
+            animationTypeForReplace: 'pop'
           }}
         />
       )}
     </Stack.Navigator>
   )
-}
+})
 
 export const RootNavigator = React.forwardRef<
   NavigationContainerRef,

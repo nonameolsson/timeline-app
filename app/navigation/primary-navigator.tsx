@@ -6,7 +6,7 @@
  */
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import { GraphQLScreen, WelcomeScreen, DemoScreen } from "../screens"
+import { WelcomeScreen, DemoScreen } from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -23,7 +23,6 @@ import { GraphQLScreen, WelcomeScreen, DemoScreen } from "../screens"
 export type PrimaryParamList = {
   welcome: undefined
   demo: undefined
-  graphql: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -39,7 +38,6 @@ export function PrimaryNavigator() {
       }}
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="graphql" component={GraphQLScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
     </Stack.Navigator>
   )

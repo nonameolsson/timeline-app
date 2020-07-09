@@ -1,105 +1,41 @@
-import React, { FunctionComponent } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useNavigation } from '@react-navigation/native'
-import { StyleService, Button, Input, useStyleSheet } from '@ui-kitten/components'
-import { Text, View } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import * as yup from 'yup'
-
-/** Import utilities here */
-// import { useStores } from 'models/rootStore'
+import { Button, Input, useStyleSheet } from '@ui-kitten/components'
+import { Text } from 'react-native'
+import React, { FunctionComponent } from 'react'
 
 /** Import types here */
 import { FormData } from './login-form.types'
 
-const LoginSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required(),
-  password: yup
-    .string()
-    .min(6)
-    .required()
-})
-
-const themedStyles = StyleService.create({
-  captionTextStyle: {
-    color: 'text-danger-color',
-    textTransform: 'capitalize'
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 16
-  },
-  forgotPasswordButton: {
-    alignItems: 'flex-end',
-    marginTop: 8
-  },
-  forgotPasswordText: {
-    color: 'text-hint-color'
-  },
-  passwordInput: {
-    marginTop: 16
-  },
-  signInButton: {
-    marginTop: 180,
-    marginVertical: 16,
-    textTransform: 'uppercase',
-    tintColor: 'text-basic-color',
-    width: '100%'
-  },
-  subtitleText: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 80,
-    marginTop: 18,
-    textAlign: 'center'
-  },
-  titleText: {
-    fontSize: 36,
-    marginTop: 80,
-    textAlign: 'center'
-  }
-})
+import { themedStyles } from './login-form.styles'
+import { LoginSchema } from './login-form.validation'
 
 interface LoginFormProps {
   handleLogin: (email: string, password: string) => void
-  error: any
-  data: any
+  error?: string
   loading: boolean
 }
 
-export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, loading, error }) => {
+export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, error, loading }) => {
   const styles = useStyleSheet(themedStyles)
-  const navigation = useNavigation()
 
-  const { control, formState, setValue, setError, handleSubmit, errors } = useForm<FormData>({
+  const { control, formState, setValue, handleSubmit, errors } = useForm<FormData>({
     validationSchema: LoginSchema,
     mode: 'onChange',
     submitFocusError: true
   })
 
-  React.useEffect(() => {
-    if (error?.graphQLErrors[0]?.extensions?.exception?.data?.message[0]?.messages[0]?.id === "Auth.form.error.invalid") {
-      setError('email', 'notMatch', 'Wrong e-mail or password')
-    }
-  })
-
-  const onSubmit = async ({ email, password }): Promise<void> => {
-    await handleLogin(email, password)
-    // if (code === 'auth/user-not-found') {
-    //   setError('email', 'notMatch', 'No account found with that e-mail')
-    // } else if (code === 'auth/wrong-password') {
-    //   setError('password', 'wrongPassword', 'Wrong password')
-    // }
+  const onSubmit = ({ email, password }): void => {
+    handleLogin(email, password)
   }
 
   const handleChange = (fieldName: string, value: any, validate = false): void => {
     setValue(fieldName, value, validate)
   }
 
-  const navigateToPasswordReset = () => navigation.navigate('PasswordReset')
+  /**
+   * TODO: Implement this
+   * const navigateToPasswordReset = () => navigation.navigate('PasswordReset')
+  */
 
   return (
     <>
@@ -135,7 +71,6 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, load
             secureTextEntry={true}
             spellCheck={false}
             style={styles.passwordInput}
-            // captionStyle={styles.captionTextStyle}
             textContentType="password"
           />
         }
@@ -150,6 +85,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, load
           <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
         </TouchableOpacity>
       </View> */}
+      <Text style={styles.loginErrorText}>{error || ''}</Text>
       <Button
         disabled={!formState.isValid || formState.isSubmitting}
         style={styles.signInButton}

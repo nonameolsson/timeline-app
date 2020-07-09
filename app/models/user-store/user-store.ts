@@ -37,10 +37,11 @@ export const UserStoreModel = types
       const result: GetLoginResult = yield self.environment.api.login(identifier, password)
 
       if (result.kind === "ok") {
-        self.saveUser(result.login.user)
-        self.saveJwt(result.login.jwt)
+        self.saveUser(result.data.user)
+        self.saveJwt(result.data.jwt)
       } else {
         __DEV__ && console.tron.log(result.kind)
+        return result
       }
     }),
     getUser: flow(function * (user: number) {

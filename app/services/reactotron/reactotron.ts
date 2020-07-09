@@ -141,6 +141,18 @@ export class Reactotron {
 
       // Register Custom Commands
       Tron.onCustomCommand({
+        title: "Log out",
+        command: "logOut",
+        handler: () => this.rootStore.userStore.logOut()
+      })
+
+      Tron.onCustomCommand({
+        title: "Log in",
+        command: "logIn",
+        handler: () => this.rootStore.userStore.login("kalle@timeline.app", "password")
+      })
+
+      Tron.onCustomCommand({
         title: "Reset Root Store",
         description: "Resets the MST store",
         command: "resetStore",

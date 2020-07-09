@@ -91,7 +91,7 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
 
   const logOut = () => {
     try {
-      storage.remove('jwt')
+      userStore.logOut()
     } catch (error) {
       console.error(error)
     }

@@ -67,7 +67,7 @@ const App: Component<{}> = () => {
 
   // otherwise, we're ready to render the app
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
+    <ApplicationProvider {...eva} theme={eva.dark}>
       <RootStoreProvider value={rootStore}>
         <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
           <RootNavigator
