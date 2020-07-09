@@ -5,6 +5,8 @@ import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { useStores } from "../../models/root-store/root-store-context"
+import * as storage from "utils/storage"
+
 const bowserLogo = require("./bowser.png")
 
 const FULL: ViewStyle = { flex: 1 }
@@ -81,12 +83,18 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
   const { userStore } = useStores()
   console.tron.log(userStore.user)
   const nextScreen = () => navigation.navigate("demo")
-  const goToGraphQL = () => navigation.navigate("graphql")
 
-  // const getUser = () => userStore.getUser('1')
   const getUser = () => {
     userStore.getUser(2)
     console.tron.log('Get user')
+  }
+
+  const logOut = () => {
+    try {
+      userStore.logOut()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -113,10 +121,8 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
           <Button
-            style={CONTINUE}
-            textStyle={CONTINUE_TEXT}
-            onPress={getUser}
-            text="Get User"
+            onPress={logOut}
+            text="Logout"
           />
           <Button
             style={CONTINUE}

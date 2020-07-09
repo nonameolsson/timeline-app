@@ -33,4 +33,4 @@ export interface Login {
   user: User
 }
 
-export type GetLoginResult = { kind: "ok"; login: Login } | GeneralApiProblem
+export type GetLoginResult = { kind: "ok"; data: Login } | GeneralApiProblem

@@ -141,7 +141,7 @@ export class Api {
           role: response.data.user.role,
         }
       }
-      return { kind: "ok", login: resultLogin }
+      return { kind: "ok", data: resultLogin }
     } catch {
       return { kind: "bad-data" }
     }

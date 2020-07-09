@@ -8,6 +8,9 @@ import React from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { PrimaryNavigator } from "./primary-navigator"
+import { AuthNavigator } from "./auth-navigator"
+import { useStores } from "../models"
+import { observer } from "mobx-react-lite"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -21,11 +24,14 @@ import { PrimaryNavigator } from "./primary-navigator"
  */
 export type RootParamList = {
   primaryStack: undefined
+  authStack: undefined
 }
 
 const Stack = createStackNavigator<RootParamList>()
 
-const RootStack = () => {
+const RootStack = observer(function RootStack() {
+  const { userStore } = useStores()
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -33,16 +39,27 @@ const RootStack = () => {
         gestureEnabled: true,
       }}
     >
-      <Stack.Screen
-        name="primaryStack"
-        component={PrimaryNavigator}
-        options={{
-          headerShown: false,
-        }}
-      />
+      {userStore.isLoggedIn() ? (
+        <Stack.Screen
+          name="primaryStack"
+          component={PrimaryNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
+      ) : (
+        <Stack.Screen
+          name="authStack"
+          component={AuthNavigator}
+          options={{
+            headerShown: false,
+            animationTypeForReplace: 'pop'
+          }}
+        />
+      )}
     </Stack.Navigator>
   )
-}
+})
 
 export const RootNavigator = React.forwardRef<
   NavigationContainerRef,
