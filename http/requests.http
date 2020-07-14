@@ -1,0 +1,9 @@
+@token =
+
+GET http://localhost:1337/timelines
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:1337/events
+Authorization: Bearer {{token}}
