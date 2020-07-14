@@ -1,5 +1,5 @@
 import React, { FunctionComponent as Component } from "react"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import { Button as ButtonNative, View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Wallpaper } from "../../components"
@@ -79,7 +79,7 @@ const FOOTER_CONTENT: ViewStyle = {
 
 export const WelcomeScreen: Component = observer(function WelcomeScreen() {
   const navigation = useNavigation()
-  const { userStore } = useStores()
+  const { eventStore, userStore } = useStores()
   const { timelineStore } = useStores()
   const nextScreen = () => navigation.navigate("demo")
 
@@ -91,9 +91,9 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
     }
   }
 
-  const getTimelines = async() => {
-    timelineStore.getTimelines()
-  }
+  const getTimelines = async() => timelineStore.getTimelines()
+
+  const getEvents = async() => eventStore.getEvents()
 
   return (
     <View style={FULL}>
@@ -118,10 +118,11 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
-          <Button onPress={getTimelines} tx="Get timelines" />
-          <Button
+          <ButtonNative onPress={getTimelines} title="Get Timelines" />
+          <ButtonNative onPress={getEvents} title="Get Events" />
+          <ButtonNative
             onPress={logOut}
-            text="Logout"
+            title="Logout"
           />
           <Button
             style={CONTINUE}
