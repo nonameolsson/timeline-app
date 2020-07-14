@@ -1,5 +1,5 @@
-import React, { FunctionComponent as Component } from "react"
-import { Button as ButtonNative, View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import React, { FunctionComponent as Component, useEffect, useState } from "react"
+import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Wallpaper } from "../../components"
@@ -82,6 +82,7 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
   const { eventStore, userStore } = useStores()
   const { timelineStore } = useStores()
   const nextScreen = () => navigation.navigate("demo")
+  const [isLoading, setIsLoading] = useState(false)
 
   const logOut = () => {
     try {
@@ -90,6 +91,13 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
       console.error(error)
     }
   }
+
+  useEffect(() => {
+    setIsLoading(true)
+    timelineStore.getTimelines()
+    eventStore.getEvents()
+    setIsLoading(false)
+  }, [])
 
   const getTimelines = async() => timelineStore.getTimelines()
 
@@ -101,28 +109,36 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
         <Text style={TITLE_WRAPPER}>
-          <Text style={TITLE} text="Your new app, " />
-          <Text style={ALMOST} text="almost" />
-          <Text style={TITLE} text="!" />
+          <Text style={TITLE} text="Timelines" />
         </Text>
-        <Text style={TITLE} preset="header" tx="welcomeScreen.readyForLaunch" />
-        <Image source={bowserLogo} style={BOWSER} />
-        <Text style={CONTENT}>
-          This probably isn't what your app is going to look like. Unless your designer handed you
-          this screen and, in that case, congrats! You're ready to ship.
+
+        {isLoading ? (
+          <Text style={CONTENT}>
+            Loading...
+          </Text>
+        ) : (
+          timelineStore.timelines.map(timeline => <Text key={timeline.id}>{timeline.title} - {timeline.description}</Text>)
+        )}
+
+        <Text style={TITLE_WRAPPER}>
+          <Text style={TITLE} text="Events" />
         </Text>
-        <Text style={CONTENT}>
-          For everyone else, this is where you'll see a live preview of your fully functioning app
-          using Ignite.
-        </Text>
+
+        {isLoading ? (
+          <Text style={CONTENT}>
+            Loading...
+          </Text>
+        ) : (
+          eventStore.events.map(event => <Text key={event.id}>{event.title} - {event.description}</Text>)
+        )}
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
-          <ButtonNative onPress={getTimelines} title="Get Timelines" />
-          <ButtonNative onPress={getEvents} title="Get Events" />
-          <ButtonNative
+          <Button style={CONTINUE} textStyle={CONTINUE_TEXT} onPress={getTimelines} text="Get Timelines" />
+          <Button style={CONTINUE} textStyle={CONTINUE_TEXT} onPress={getEvents} text="Get Events" />
+          <Button style={CONTINUE} textStyle={CONTINUE_TEXT}
             onPress={logOut}
-            title="Logout"
+            text="Logout"
           />
           <Button
             style={CONTINUE}
