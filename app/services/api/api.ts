@@ -127,7 +127,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const resultLogin: Types.Login = {
+      const rawLogin: Types.Login = {
         jwt: response.data.jwt,
         user: {
           id: response.data.user.id,
@@ -141,7 +141,38 @@ export class Api {
           role: response.data.user.role,
         }
       }
-      return { kind: "ok", data: resultLogin }
+      return { kind: "ok", data: rawLogin }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
+   * Gets a list of all timelines.
+   */
+  async getTimelines(): Promise<Types.GetTimelinesResult> {
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.get(`/timelines`)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    const convertTimeline = raw => {
+      return {
+        id: raw.id,
+        title: raw.title,
+        description: raw.description
+      }
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const rawTimelines = response.data
+      const resultTimelines: Types.Timeline[] = rawTimelines.map(convertTimeline)
+      return { kind: "ok", timelines: resultTimelines }
     } catch {
       return { kind: "bad-data" }
     }
