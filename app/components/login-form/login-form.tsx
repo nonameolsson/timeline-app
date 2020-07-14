@@ -28,6 +28,8 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
     handleLogin(email, password)
   }
 
+  const superSubmit = () => handleLogin('zetajaz@gmail.com', 'password')
+
   const handleChange = (fieldName: string, value: any, validate = false): void => {
     setValue(fieldName, value, validate)
   }
@@ -86,6 +88,12 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
         </TouchableOpacity>
       </View> */}
       <Text style={styles.loginErrorText}>{error || ''}</Text>
+      <Button
+        style={styles.signInButton}
+        onPress={superSubmit}
+      >
+        SUPER LOGIN
+      </Button>
       <Button
         disabled={!formState.isValid || formState.isSubmitting}
         style={styles.signInButton}

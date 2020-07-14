@@ -30,6 +30,7 @@ export const UserStoreModel = types
     logOut: () => {
       self.jwt = null
       self.user = null
+      self.environment.api.apisauce.deleteHeader('Authorization')
     }
   }))
   .actions(self => ({
@@ -39,6 +40,7 @@ export const UserStoreModel = types
       if (result.kind === "ok") {
         self.saveUser(result.data.user)
         self.saveJwt(result.data.jwt)
+        self.environment.api.apisauce.setHeader('Authorization', `Bearer ${result.data.jwt}`)
       } else {
         __DEV__ && console.tron.log(result.kind)
         return result

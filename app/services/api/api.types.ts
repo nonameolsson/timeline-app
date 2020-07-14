@@ -34,3 +34,16 @@ export interface Login {
 }
 
 export type GetLoginResult = { kind: "ok"; data: Login } | GeneralApiProblem
+
+/**
+ * Timeline
+ */
+export interface Timeline {
+  id: number
+  title: string
+  description: string
+  // events: any
+}
+
+export type GetTimelinesResult = { kind: "ok"; timelines: Timeline[] } | GeneralApiProblem
+export type GetTimelineResult = { kind: "ok"; timelines: Timeline } | GeneralApiProblem
