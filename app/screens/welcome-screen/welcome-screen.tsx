@@ -5,7 +5,6 @@ import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { useStores } from "../../models/root-store/root-store-context"
-import * as storage from "utils/storage"
 
 const bowserLogo = require("./bowser.png")
 
@@ -81,13 +80,8 @@ const FOOTER_CONTENT: ViewStyle = {
 export const WelcomeScreen: Component = observer(function WelcomeScreen() {
   const navigation = useNavigation()
   const { userStore } = useStores()
-  console.tron.log(userStore.user)
+  const { timelineStore } = useStores()
   const nextScreen = () => navigation.navigate("demo")
-
-  const getUser = () => {
-    userStore.getUser(2)
-    console.tron.log('Get user')
-  }
 
   const logOut = () => {
     try {
@@ -95,6 +89,10 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const getTimelines = async() => {
+    timelineStore.getTimelines()
   }
 
   return (
@@ -120,6 +118,7 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
+          <Button onPress={getTimelines} tx="Get timelines" />
           <Button
             onPress={logOut}
             text="Logout"
