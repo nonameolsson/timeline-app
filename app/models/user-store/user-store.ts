@@ -1,7 +1,8 @@
-import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
+import { Instance, SnapshotOut, types, flow, getRoot } from "mobx-state-tree"
 import { UserModel, UserSnapshot } from "../user/user"
 import { withEnvironment } from "../extensions/with-environment"
 import { User, GetUserResult, GetLoginResult } from "../../services/api"
+import { RootStore } from ".."
 
 /**
  * Model description here for TypeScript hints.
@@ -19,6 +20,10 @@ export const UserStoreModel = types
     }
   }))
   .actions(self => ({
+    resetStore: () => {
+      self.jwt = null
+      self.user = null
+    },
     saveJwt: (jwt: string) => {
       self.jwt = jwt
     },
@@ -26,14 +31,20 @@ export const UserStoreModel = types
       console.tron.log(userSnapshot)
       const userModel: User = UserModel.create(userSnapshot) // create model instances from the plain objects
       self.user = userModel // Replace the existing data with the new data
-    },
-    logOut: () => {
-      self.jwt = null
-      self.user = null
-      self.environment.api.apisauce.deleteHeader('Authorization')
     }
   }))
   .actions(self => ({
+    logOut: () => {
+      const root = getRoot<RootStore>(self)
+
+      // Empty stores
+      self.resetStore()
+      root.eventStore.resetStore()
+      root.timelineStore.resetStore()
+
+      // Reset Apisauce
+      self.environment.api.apisauce.deleteHeader('Authorization')
+    },
     login: flow(function * (identifier: string, password: string) {
       const result: GetLoginResult = yield self.environment.api.login(identifier, password)
 

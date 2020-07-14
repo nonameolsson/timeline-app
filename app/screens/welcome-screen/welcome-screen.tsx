@@ -1,11 +1,10 @@
 import React, { FunctionComponent as Component } from "react"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import { Button as ButtonNative, View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { useStores } from "../../models/root-store/root-store-context"
-import * as storage from "utils/storage"
 
 const bowserLogo = require("./bowser.png")
 
@@ -80,14 +79,9 @@ const FOOTER_CONTENT: ViewStyle = {
 
 export const WelcomeScreen: Component = observer(function WelcomeScreen() {
   const navigation = useNavigation()
-  const { userStore } = useStores()
-  console.tron.log(userStore.user)
+  const { eventStore, userStore } = useStores()
+  const { timelineStore } = useStores()
   const nextScreen = () => navigation.navigate("demo")
-
-  const getUser = () => {
-    userStore.getUser(2)
-    console.tron.log('Get user')
-  }
 
   const logOut = () => {
     try {
@@ -96,6 +90,10 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
       console.error(error)
     }
   }
+
+  const getTimelines = async() => timelineStore.getTimelines()
+
+  const getEvents = async() => eventStore.getEvents()
 
   return (
     <View style={FULL}>
@@ -120,9 +118,11 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
-          <Button
+          <ButtonNative onPress={getTimelines} title="Get Timelines" />
+          <ButtonNative onPress={getEvents} title="Get Events" />
+          <ButtonNative
             onPress={logOut}
-            text="Logout"
+            title="Logout"
           />
           <Button
             style={CONTINUE}

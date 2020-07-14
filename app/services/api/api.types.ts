@@ -47,3 +47,18 @@ export interface Timeline {
 
 export type GetTimelinesResult = { kind: "ok"; timelines: Timeline[] } | GeneralApiProblem
 export type GetTimelineResult = { kind: "ok"; timelines: Timeline } | GeneralApiProblem
+
+/**
+ * Event
+ */
+export interface Event {
+  id: number
+  title: string
+  description: string
+  timeline: number
+  createdAt: string
+  updatedAt: string
+}
+
+export type GetEventsResult = { kind: "ok"; events: Event[] } | GeneralApiProblem
+export type GetEventResult = { kind: "ok"; event: Event } | GeneralApiProblem

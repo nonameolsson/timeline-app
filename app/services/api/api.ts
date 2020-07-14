@@ -69,6 +69,7 @@ export class Api {
     try {
       const rawUsers = response.data
       const resultUsers: Types.User[] = rawUsers.map(convertUser)
+
       return { kind: "ok", users: resultUsers }
     } catch {
       return { kind: "bad-data" }
@@ -102,6 +103,7 @@ export class Api {
         provider: response.data.provider,
         role: response.data.role,
       }
+
       return { kind: "ok", user: resultUser }
     } catch {
       return { kind: "bad-data" }
@@ -141,6 +143,7 @@ export class Api {
           role: response.data.user.role,
         }
       }
+
       return { kind: "ok", data: rawLogin }
     } catch {
       return { kind: "bad-data" }
@@ -172,7 +175,43 @@ export class Api {
     try {
       const rawTimelines = response.data
       const resultTimelines: Types.Timeline[] = rawTimelines.map(convertTimeline)
+
       return { kind: "ok", timelines: resultTimelines }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
+   * Gets a list of all events.
+   */
+  async getEvents(): Promise<Types.GetEventsResult> {
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.get(`/events`)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    const convertEvent = raw => {
+      return {
+        id: raw.id,
+        title: raw.title,
+        description: raw.description,
+        timeline: raw.timeline.id,
+        createdAt: raw.created_at,
+        updatedAt: raw.updated_at
+      }
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const rawEvents = response.data
+      const resultEvents: Types.Event[] = rawEvents.map(convertEvent)
+
+      return { kind: "ok", events: resultEvents }
     } catch {
       return { kind: "bad-data" }
     }

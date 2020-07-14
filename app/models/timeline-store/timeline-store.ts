@@ -14,14 +14,19 @@ export const TimelineStoreModel = types
   .extend(withEnvironment)
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
+    resetStore: () => {
+      self.timelines.replace([])
+    },
     saveTimelines: (timelineSnapshot: TimelineSnapshot[]) => {
       const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => TimelineModel.create(timeline))
+
       self.timelines.replace(timelinesModel)
     }
   }))
   .actions(self => ({
     getTimelines: flow(function * () {
       const result: GetTimelinesResult = yield self.environment.api.getTimelines()
+
       if (result.kind === "ok") {
         self.saveTimelines(result.timelines)
       } else {

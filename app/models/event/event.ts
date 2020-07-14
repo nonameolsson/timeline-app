@@ -9,6 +9,9 @@ export const EventModel = types
     id: types.identifierNumber,
     title: types.string,
     description: types.string,
+    timeline: types.number,
+    createdAt: types.string,
+    updatedAt: types.string
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
