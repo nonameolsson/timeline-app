@@ -13,6 +13,9 @@
   "errors": {
     "invalidEmail": "Invalid email address."
   },
+  "homeScreen": {
+    "header": "Timelines"
+  },
   "welcomeScreen": {
     "poweredBy": "POWERED BY BOWSER",
     "readyForLaunch": "Ready for launch.",

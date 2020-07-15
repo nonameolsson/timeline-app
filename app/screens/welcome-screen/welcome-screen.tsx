@@ -99,6 +99,8 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
     setIsLoading(false)
   }, [])
 
+  const navigateToHome = () => navigation.navigate("home")
+
   const getTimelines = async() => timelineStore.getAllTimelines()
 
   const getEvents = async() => eventStore.getEvents()
@@ -139,6 +141,12 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
           <Button style={CONTINUE} textStyle={CONTINUE_TEXT}
             onPress={logOut}
             text="Logout"
+          />
+          <Button
+            style={CONTINUE}
+            textStyle={CONTINUE_TEXT}
+            text="Home"
+            onPress={navigateToHome}
           />
           <Button
             style={CONTINUE}
