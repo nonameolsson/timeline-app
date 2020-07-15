@@ -5,5 +5,16 @@ Authorization: Bearer {{token}}
 
 ###
 
+GET http://localhost:1337/timelines/?user.id=1
+Authorization: Bearer {{token}}
+
+###
+
 GET http://localhost:1337/events
 Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:1337/users
+Authorization: Bearer {{token}}
+
