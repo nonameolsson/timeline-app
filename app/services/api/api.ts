@@ -47,6 +47,9 @@ export class Api {
 
   /**
    * Gets a list of users.
+   *
+   * @returns {Promise<Types.GetUsersResult>}
+   * @memberof Api
    */
   async getUsers(): Promise<Types.GetUsersResult> {
     // make the api call
@@ -77,9 +80,12 @@ export class Api {
   }
 
   /**
-   * Gets a single user by ID
-   */
-
+ * Gets a single user by ID
+ *
+ * @param {number} id
+ * @returns {Promise<Types.GetUserResult>}
+ * @memberof Api
+ */
   async getUser(id: number): Promise<Types.GetUserResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`, null, { headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk0MjE2ODE2LCJleHAiOjE1OTY4MDg4MTZ9.LuPgVDDzBrJsHyxJ39RPeq_7qf900rxtb8Hr4Vc7NqY' } })
@@ -111,12 +117,13 @@ export class Api {
   }
 
   /**
-   * Login a user with identifier and password
-   *
-   * @param identifier Could be something like e-mail or username
-   * @param password The password used to login
-   */
-
+ * Login a user with identifier and password
+ *
+ * @param {string} identifier Could be something like e-mail or username
+ * @param {string} password The password used to login
+ * @returns {Promise<Types.GetLoginResult>}
+ * @memberof Api
+ */
   async login(identifier: string, password: string): Promise<Types.GetLoginResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.post(`/auth/local`, { identifier, password })
@@ -152,8 +159,11 @@ export class Api {
 
   /**
    * Gets a list of all timelines.
+   *
+   * @returns {Promise<Types.GetTimelinesResult>}
+   * @memberof Api
    */
-  async getTimelines(): Promise<Types.GetTimelinesResult> {
+  async getAllTimelines(): Promise<Types.GetTimelinesResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.get(`/timelines`)
 
@@ -183,7 +193,46 @@ export class Api {
   }
 
   /**
+   * Get all timelines for a specific user.
+   *
+   * @param {number} userId
+   * @returns {Promise<Types.GetTimelinesResult>}
+   * @memberof Api
+   */
+  async getTimelinesByUser(userId: number): Promise<Types.GetTimelinesResult> {
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.get(`/timelines/?user.id=${userId}`)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    const convertTimeline = raw => {
+      return {
+        id: raw.id,
+        title: raw.title,
+        description: raw.description
+      }
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const rawTimelines = response.data
+      const resultTimelines: Types.Timeline[] = rawTimelines.map(convertTimeline)
+
+      return { kind: "ok", timelines: resultTimelines }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
    * Gets a list of all events.
+   *
+   * @returns {Promise<Types.GetEventsResult>}
+   * @memberof Api
    */
   async getEvents(): Promise<Types.GetEventsResult> {
     // make the api call

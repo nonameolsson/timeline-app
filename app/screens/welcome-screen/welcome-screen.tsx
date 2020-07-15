@@ -94,12 +94,12 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
 
   useEffect(() => {
     setIsLoading(true)
-    timelineStore.getTimelines()
+    timelineStore.getTimelinesByUser(userStore.user.id)
     eventStore.getEvents()
     setIsLoading(false)
   }, [])
 
-  const getTimelines = async() => timelineStore.getTimelines()
+  const getTimelines = async() => timelineStore.getAllTimelines()
 
   const getEvents = async() => eventStore.getEvents()
 

@@ -24,8 +24,17 @@ export const TimelineStoreModel = types
     }
   }))
   .actions(self => ({
-    getTimelines: flow(function * () {
-      const result: GetTimelinesResult = yield self.environment.api.getTimelines()
+    getTimelinesByUser: flow(function * (userId: number) {
+      const result: GetTimelinesResult = yield self.environment.api.getTimelinesByUser(userId)
+
+      if (result.kind === "ok") {
+        self.saveTimelines(result.timelines)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+    getAllTimelines: flow(function * () {
+      const result: GetTimelinesResult = yield self.environment.api.getAllTimelines()
 
       if (result.kind === "ok") {
         self.saveTimelines(result.timelines)
