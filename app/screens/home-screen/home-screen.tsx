@@ -28,16 +28,15 @@ export const HomeScreen: Component = observer(function HomeScreen() {
   }, [])
 
   const openTimeline = (timeline: Timeline): void => {
-    console.tron.log(timeline)
     // const params: ITimelineScreenParams = { timeline }
-
     // navigation.navigate("Timeline", params)
+    navigation.navigate("timeline", { timelineId: timeline.id })
   }
 
   const renderTimelines = (): JSX.Element => {
     /** Array containing a JSX Element for the each timeline */
     const timelines = []
-    timelineStore.timelines.forEach(timeline => {
+    timelineStore.byId.forEach(timeline => {
       const line: JSX.Element = (
         <TouchableHighlight
           key={timeline.id}
@@ -76,7 +75,7 @@ export const HomeScreen: Component = observer(function HomeScreen() {
             <Text>Your timelines</Text>
             {isLoading ? (
               <Text>Loading...</Text>
-            ) : timelineStore.timelines.length > 0 ? (
+            ) : timelineStore.allIds.length > 0 ? (
               renderTimelines()
             ) : (
               renderEmptyState()

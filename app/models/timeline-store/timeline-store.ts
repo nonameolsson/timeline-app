@@ -9,18 +9,29 @@ import { TimelineSnapshot, Timeline, TimelineModel } from "../timeline/timeline"
 export const TimelineStoreModel = types
   .model("TimelineStore")
   .props({
-    timelines: types.optional(types.array(TimelineModel), [])
+    allIds: types.array(types.number),
+    byId: types.map(TimelineModel),
+    // timelines: types.optional(types.array(TimelineModel), [])
   })
   .extend(withEnvironment)
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    getTimeline: (id: string) => {
+      return self.byId.get(id)
+    }
+  }))
   .actions(self => ({
     resetStore: () => {
-      self.timelines.replace([])
+      // self.timelines.replace([])
+      self.allIds.clear()
+      self.byId.clear()
     },
-    saveTimelines: (timelineSnapshot: TimelineSnapshot[]) => {
+    addTimelinesToStore: (timelineSnapshot: TimelineSnapshot[]) => {
       const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => TimelineModel.create(timeline))
 
-      self.timelines.replace(timelinesModel)
+      timelinesModel.forEach(timeline => {
+        self.byId.set(timeline.id.toString(), timeline)
+        self.allIds.push(timeline.id)
+      })
     }
   }))
   .actions(self => ({
@@ -28,7 +39,7 @@ export const TimelineStoreModel = types
       const result: GetTimelinesResult = yield self.environment.api.getTimelinesByUser(userId)
 
       if (result.kind === "ok") {
-        self.saveTimelines(result.timelines)
+        self.addTimelinesToStore(result.timelines)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
@@ -37,7 +48,7 @@ export const TimelineStoreModel = types
       const result: GetTimelinesResult = yield self.environment.api.getAllTimelines()
 
       if (result.kind === "ok") {
-        self.saveTimelines(result.timelines)
+        self.addTimelinesToStore(result.timelines)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }

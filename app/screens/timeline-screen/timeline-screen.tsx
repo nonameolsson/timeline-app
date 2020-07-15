@@ -10,20 +10,23 @@ const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
 }
 
-export const TimelineScreen: Component = observer(function TimelineScreen() {
+export const TimelineScreen: Component = observer(function TimelineScreen({ route }) {
   // Pull in one of our MST stores
   const { eventStore, timelineStore } = useStores()
 
   // Pull in navigation via hook
-  // const navigation = useNavigation()
+  const navigation = useNavigation()
+
+  const { timelineId } = route.params
+  const timeline = timelineStore.getTimeline(timelineId)
 
   // useEffect(() => {
   //   // Start listening to changes in Firestore
-  //   eventStore.startListeningToEvents(timeline.id)
-  // }, [eventStore, timeline.id])
+  //   timelineStore.getTimeline(timelineId)
+  // }, [])
 
   // FIXME: Related issue #32
-  const deleteTimeline = (): void => {
+  const deleteTimeline = () => {
     console.tron.log('deleteTimelien')
     // timelineStore.deleteTimelineFromFirebase(timeline.id)
     // goBack()
@@ -32,7 +35,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   const showDeleteModal = () => {
     Alert.alert(
       'Delete timeline',
-      `Do you want to delete ${timeline.name}?`,
+      `Do you want to delete ${timeline.title}?`,
       [
         {
           text: 'No',
@@ -49,24 +52,24 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   }
 
   const renderEvents = () => {
-    const eventIds = timelineStore.getEventIdsInTimeline(timeline.id) // Get the IDs of events from a timeline
-    const eventsInStore = eventIds.map(event => eventStore.byId.get(event)) // Get the Event from EventStore
+    // const eventIds = timelineStore.getEventIdsInTimeline(timeline.id) // Get the IDs of events from a timeline
+    // const eventsInStore = eventIds.map(event => eventStore.byId.get(event)) // Get the Event from EventStore
 
-    const eventsToRender = eventsInStore.map(event => {
-      return (
-        <TouchableHighlight key={event.id} style={styles.events} onPress={(): void => openEvent(event)}>
-          <View>
-            <Text>{event.name}</Text>
-          </View>
-        </TouchableHighlight>
-      )
-    })
+    // const eventsToRender = eventsInStore.map(event => {
+    //   return (
+    //     <TouchableHighlight key={event.id} style={styles.events} onPress={(): void => openEvent(event)}>
+    //       <View>
+    //         <Text>{event.name}</Text>
+    //       </View>
+    //     </TouchableHighlight>
+    //   )
+    // })
 
-    return <ScrollView>{eventsToRender}</ScrollView>
+    // return <ScrollView>{eventsToRender}</ScrollView>
   }
 
   // FIXME: Issue #33
-  const goToEditTimelineScreen = (): void => {
+  const goToEditTimelineScreen = () => {
     console.tron.log('goToEditTimelineScreen')
     // const params: ICreateTimelineScreenParams = {
     //   action: 'edit',
@@ -80,11 +83,11 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     <Screen style={ROOT} preset="scroll">
       <View>
         <Text>{`ID: ${timeline.id}`}</Text>
-        <Text>{`Created by: ${timeline.createdBy}`}</Text>
-        <Text>{`Name: ${timeline.name}`}</Text>
-        <Button title="Edit timeline" onPress={(): void => goToEditTimelineScreen()} />
-        <Button title="Delete timeline" onPress={(): void => showDeleteModal()} />
-        <Button title="Add new event" onPress={(): boolean => navigate('AddEvent', { timelineId: timeline.id })} />
+        {/* <Text>{`Created by: ${timeline.createdBy}`}</Text> */}
+        <Text>{`Name: ${timeline.title}`}</Text>
+        <Button title="Edit timeline" onPress={() => goToEditTimelineScreen()} />
+        <Button title="Delete timeline" onPress={() => showDeleteModal()} />
+        <Button title="Add new event" onPress={() => navigation.navigate('AddEvent', { timelineId: timeline.id })} />
         <Text>Events:</Text>
         {renderEvents()}
       </View>
