@@ -81,7 +81,7 @@ export const HomeScreen: Component = observer(function HomeScreen() {
             ) : (
               renderEmptyState()
             )}
-            <Button title="Create timeline" onPress={() => openTimeline()} />
+            <Button title="Create timeline" onPress={() => undefined} />
           </>
         ) : (
           <Text>Logging in...</Text>
