@@ -12,7 +12,7 @@ const ROOT: ViewStyle = {
 
 export const TimelineScreen: Component = observer(function TimelineScreen({ route }) {
   // Pull in one of our MST stores
-  const { eventStore, timelineStore } = useStores()
+  const { timelineStore } = useStores()
 
   // Pull in navigation via hook
   const navigation = useNavigation()
@@ -52,20 +52,17 @@ export const TimelineScreen: Component = observer(function TimelineScreen({ rout
   }
 
   const renderEvents = () => {
-    // const eventIds = timelineStore.getEventIdsInTimeline(timeline.id) // Get the IDs of events from a timeline
-    // const eventsInStore = eventIds.map(event => eventStore.byId.get(event)) // Get the Event from EventStore
+    const eventsToRender = timeline.events.map(event => {
+      return (
+        <TouchableHighlight key={event.id} style={styles.events} onPress={(): void => openEvent(event)}>
+          <View style={{ backgroundColor: 'green', color: 'white' }}>
+            <Text>{event.title}</Text>
+          </View>
+        </TouchableHighlight>
+      )
+    })
 
-    // const eventsToRender = eventsInStore.map(event => {
-    //   return (
-    //     <TouchableHighlight key={event.id} style={styles.events} onPress={(): void => openEvent(event)}>
-    //       <View>
-    //         <Text>{event.name}</Text>
-    //       </View>
-    //     </TouchableHighlight>
-    //   )
-    // })
-
-    // return <ScrollView>{eventsToRender}</ScrollView>
+    return <ScrollView>{eventsToRender}</ScrollView>
   }
 
   // FIXME: Issue #33
@@ -88,6 +85,8 @@ export const TimelineScreen: Component = observer(function TimelineScreen({ rout
         <Button title="Edit timeline" onPress={() => goToEditTimelineScreen()} />
         <Button title="Delete timeline" onPress={() => showDeleteModal()} />
         <Button title="Add new event" onPress={() => navigation.navigate('AddEvent', { timelineId: timeline.id })} />
+        <Button title="Back" onPress={() => navigation.goBack()} />
+
         <Text>Events:</Text>
         {renderEvents()}
       </View>

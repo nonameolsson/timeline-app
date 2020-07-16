@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { Event as EventData } from "services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -28,3 +29,14 @@ type EventType = Instance<typeof EventModel>
 export interface Event extends EventType {}
 type EventSnapshotType = SnapshotOut<typeof EventModel>
 export interface EventSnapshot extends EventSnapshotType {}
+
+export const EventModelFromData = (event: EventData): Event => {
+  return EventModel.create({
+    id: event.id,
+    title: event.title,
+    description: event.description,
+    timeline: event.timeline,
+    createdAt: event.created_at,
+    updatedAt: event.updated_at
+  })
+}

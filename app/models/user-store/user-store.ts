@@ -28,7 +28,6 @@ export const UserStoreModel = types
       self.jwt = jwt
     },
     saveUser: (userSnapshot: UserSnapshot) => {
-      console.tron.log(userSnapshot)
       const userModel: User = UserModel.create(userSnapshot) // create model instances from the plain objects
       self.user = userModel // Replace the existing data with the new data
     }

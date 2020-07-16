@@ -20,11 +20,11 @@ export const HomeScreen: Component = observer(function HomeScreen() {
   // Pull in navigation via hook
   const navigation = useNavigation()
 
+  // Create async getTimelines()
   useEffect(() => {
     setIsLoading(true)
-    timelineStore.getTimelinesByUser(userStore.user.id)
-    // eventStore.getEvents()
-    setIsLoading(false)
+
+    timelineStore.getTimelinesByUser(userStore.user.id).then(() => setIsLoading(false))
   }, [])
 
   const openTimeline = (timeline: Timeline): void => {
@@ -36,7 +36,7 @@ export const HomeScreen: Component = observer(function HomeScreen() {
   const renderTimelines = (): JSX.Element => {
     /** Array containing a JSX Element for the each timeline */
     const timelines = []
-    timelineStore.byId.forEach(timeline => {
+    timelineStore.timelines.forEach(timeline => {
       const line: JSX.Element = (
         <TouchableHighlight
           key={timeline.id}
@@ -75,7 +75,7 @@ export const HomeScreen: Component = observer(function HomeScreen() {
             <Text>Your timelines</Text>
             {isLoading ? (
               <Text>Loading...</Text>
-            ) : timelineStore.allIds.length > 0 ? (
+            ) : timelineStore.timelines.length > 0 ? (
               renderTimelines()
             ) : (
               renderEmptyState()

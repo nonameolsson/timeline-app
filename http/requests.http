@@ -1,6 +1,13 @@
-@token =
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk0OTAwODk5LCJleHAiOjE1OTc0OTI4OTl9.FN2mItD6ydMFhPPmE0Thr3uvxh6I8xYs4oQUJKT4QKU
+
+###
 
 GET http://localhost:1337/timelines
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:1337/timelines/4
 Authorization: Bearer {{token}}
 
 ###
@@ -15,6 +22,20 @@ Authorization: Bearer {{token}}
 
 ###
 
+GET http://localhost:1337/events/1
+Authorization: Bearer {{token}}
+###
+
+GET http://localhost:1337/events?timeline.id=3
+Authorization: Bearer {{token}}
+
+###
+
 GET http://localhost:1337/users
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:1337/users/1
 Authorization: Bearer {{token}}
 

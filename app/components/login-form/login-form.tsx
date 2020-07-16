@@ -94,13 +94,14 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
       >
         SUPER LOGIN
       </Button>
-      <Button
-        disabled={!formState.isValid || formState.isSubmitting}
-        style={styles.signInButton}
-        onPress={handleSubmit(onSubmit)}
-      >
-        {formState.isSubmitting ? 'LOADING...' : 'SIGN IN'}
-      </Button>
+      {/* <Button
+      //   disabled={!formState.isValid || formState.isSubmitting}
+      //   style={styles.signInButton}
+      //   onPress={handleSubmit(onSubmit)}
+      // >
+      //   {formState.isSubmitting ? 'LOADING...' : 'SIGN IN'}
+      // </Button>
+      */}
     </>
   )
 }

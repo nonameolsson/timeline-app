@@ -209,20 +209,33 @@ export class Api {
       if (problem) return problem
     }
 
-    const convertTimeline = raw => {
-      return {
-        id: raw.id,
-        title: raw.title,
-        description: raw.description
-      }
-    }
+    // const convertTimeline = (raw: Types.Timeline) => {
+    //   const events = raw.events.map(event => {
+    //     return {
+    //       id: event.id,
+    //       title: event.title,
+    //       description: event.description,
+    //       createdAt: event.created_at,
+    //       updatedAt: event.updated_at
+    //     }
+    //   })
+
+    //   return {
+    //     id: raw.id,
+    //     title: raw.title,
+    //     description: raw.description,
+    //     events: events,
+    //     createdAt: raw.created_at,
+    //     updatedAt: raw.updated_at
+    //   }
+    // }
 
     // transform the data into the format we are expecting
     try {
       const rawTimelines = response.data
-      const resultTimelines: Types.Timeline[] = rawTimelines.map(convertTimeline)
+      // const resultTimelines: Types.Timeline[] = rawTimelines.map(convertTimeline)
 
-      return { kind: "ok", timelines: resultTimelines }
+      return { kind: "ok", timelines: rawTimelines }
     } catch {
       return { kind: "bad-data" }
     }
