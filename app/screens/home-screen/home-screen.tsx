@@ -20,18 +20,17 @@ export const HomeScreen: Component = observer(function HomeScreen() {
   // Pull in navigation via hook
   const navigation = useNavigation()
 
+  // Create async getTimelines()
   useEffect(() => {
     setIsLoading(true)
-    timelineStore.getTimelinesByUser(userStore.user.id)
-    // eventStore.getEvents()
-    setIsLoading(false)
+
+    timelineStore.getTimelinesByUser(userStore.user.id).then(() => setIsLoading(false))
   }, [])
 
   const openTimeline = (timeline: Timeline): void => {
-    console.tron.log(timeline)
     // const params: ITimelineScreenParams = { timeline }
-
     // navigation.navigate("Timeline", params)
+    navigation.navigate("timeline", { timelineId: timeline.id })
   }
 
   const renderTimelines = (): JSX.Element => {

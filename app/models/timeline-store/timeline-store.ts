@@ -1,7 +1,8 @@
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 import { withEnvironment } from "../extensions/with-environment"
 import { GetTimelinesResult } from "services/api"
-import { TimelineSnapshot, Timeline, TimelineModel } from "../timeline/timeline"
+import { TimelineSnapshot, Timeline, TimelineModel, TimelineModelFromData } from "../timeline/timeline"
+import * as Types from "services/api/api.types"
 
 /**
  * Model description here for TypeScript hints.
@@ -9,26 +10,31 @@ import { TimelineSnapshot, Timeline, TimelineModel } from "../timeline/timeline"
 export const TimelineStoreModel = types
   .model("TimelineStore")
   .props({
-    timelines: types.optional(types.array(TimelineModel), [])
+    timelines: types.array(TimelineModel)
   })
   .extend(withEnvironment)
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    getTimeline: (id: number) => {
+      return self.timelines.find(timeline => timeline.id === id)
+    },
+  }))
   .actions(self => ({
     resetStore: () => {
-      self.timelines.replace([])
+      self.timelines.clear()
     },
-    saveTimelines: (timelineSnapshot: TimelineSnapshot[]) => {
-      const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => TimelineModel.create(timeline))
+    addTimelinesToStore: (timelineSnapshot: Types.Timeline[]) => {
+      const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => TimelineModelFromData(timeline))
 
-      self.timelines.replace(timelinesModel)
+      // timelinesModel.forEach(timeline => self.timelines.push(timeline))
+      self.timelines.replace(timelinesModel) // NOTE: Offline data might be lost
     }
   }))
   .actions(self => ({
     getTimelinesByUser: flow(function * (userId: number) {
-      const result: GetTimelinesResult = yield self.environment.api.getTimelinesByUser(userId)
+      const result: Types.GetTimelinesResult = yield self.environment.api.getTimelinesByUser(userId)
 
       if (result.kind === "ok") {
-        self.saveTimelines(result.timelines)
+        self.addTimelinesToStore(result.timelines)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
@@ -37,7 +43,7 @@ export const TimelineStoreModel = types
       const result: GetTimelinesResult = yield self.environment.api.getAllTimelines()
 
       if (result.kind === "ok") {
-        self.saveTimelines(result.timelines)
+        self.addTimelinesToStore(result.timelines)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }

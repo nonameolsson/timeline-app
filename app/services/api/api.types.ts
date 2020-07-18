@@ -42,7 +42,11 @@ export interface Timeline {
   id: number
   title: string
   description: string
-  // events: any
+  events: Event[]
+  // eslint-disable-next-line camelcase
+  created_at: string
+  // eslint-disable-next-line camelcase
+  updated_at: string
 }
 
 export type GetTimelinesResult = { kind: "ok"; timelines: Timeline[] } | GeneralApiProblem
@@ -56,8 +60,10 @@ export interface Event {
   title: string
   description: string
   timeline: number
-  createdAt: string
-  updatedAt: string
+  // eslint-disable-next-line camelcase
+  created_at: string
+  // eslint-disable-next-line camelcase
+  updated_at: string
 }
 
 export type GetEventsResult = { kind: "ok"; events: Event[] } | GeneralApiProblem

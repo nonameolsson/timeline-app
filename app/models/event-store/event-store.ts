@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
-import { EventModel, Event, EventSnapshot } from "../event/event"
+import { EventModel, Event, EventSnapshot, EventModelFromData } from "../event/event"
 import { withEnvironment } from "../extensions/with-environment"
-import { GetEventsResult } from "../../services/api"
+import { GetEventsResult, Timeline } from "../../services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -9,18 +9,38 @@ import { GetEventsResult } from "../../services/api"
 export const EventStoreModel = types
   .model("EventStore")
   .props({
-    events: types.optional(types.array(EventModel), [])
+    allIds: types.array(types.number),
+    byId: types.map(EventModel)
+    // events: types.optional(types.array(EventModel), [])
   })
   .extend(withEnvironment)
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    getEventsByTimeline: (id: string) => {
+      return self.byId.get(id)
+    }
+  }))
   .actions(self => ({
     resetStore: () => {
-      self.events.replace([])
+      self.allIds.clear()
+      self.byId.clear()
     },
-    saveEvents: (eventSnapshot: EventSnapshot[]) => {
-      const eventsModel: Event[] = eventSnapshot.map(event => EventModel.create(event))
+    addEventsFromTimeline: (timeline: Timeline) => {
+      console.tron.log('addEventsFromTimeline', timeline)
 
-      self.events.replace(eventsModel)
+      const eventsModel: Event[] = timeline.events.map(event => EventModelFromData(event))
+
+      eventsModel.forEach(event => {
+        self.byId.set(event.id.toString(), event)
+        self.allIds.push(event.id)
+      })
+    },
+    addEventsToStore: (eventSnapshot: EventSnapshot[]) => {
+      const eventsModel: Event[] = eventSnapshot.map(event => EventModelFromData(event))
+
+      eventsModel.forEach(event => {
+        self.byId.set(event.id.toString(), event)
+        self.allIds.push(event.id)
+      })
     }
   }))
   .actions(self => ({
@@ -28,7 +48,7 @@ export const EventStoreModel = types
       const result: GetEventsResult = yield self.environment.api.getEvents()
 
       if (result.kind === "ok") {
-        self.saveEvents(result.events)
+        self.addEventsToStore(result.events)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }

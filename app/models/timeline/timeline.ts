@@ -1,5 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { EventModel } from "../event/event"
+import { Timeline as TimelineData } from "services/api"
+import { EventModel, EventModelFromData } from "models/event/event"
 
 /**
  * Model description here for TypeScript hints.
@@ -10,7 +11,9 @@ export const TimelineModel = types
     id: types.identifierNumber,
     title: types.string,
     description: types.string,
-    // events: types.map(EventModel)
+    events: types.array(EventModel),
+    createdAt: types.string,
+    updatedAt: types.string
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -27,3 +30,14 @@ type TimelineType = Instance<typeof TimelineModel>
 export interface Timeline extends TimelineType {}
 type TimelineSnapshotType = SnapshotOut<typeof TimelineModel>
 export interface TimelineSnapshot extends TimelineSnapshotType {}
+
+export const TimelineModelFromData = (timeline: TimelineData): Timeline => {
+  return TimelineModel.create({
+    id: timeline.id,
+    title: timeline.title,
+    description: timeline.description,
+    events: timeline.events.map(event => EventModelFromData(event)),
+    createdAt: timeline.created_at,
+    updatedAt: timeline.updated_at
+  })
+}
