@@ -1,7 +1,8 @@
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 import { withEnvironment } from "../extensions/with-environment"
 import { GetTimelinesResult } from "services/api"
-import { TimelineSnapshot, Timeline, TimelineModel, TimelineModelFromData } from "../timeline/timeline"
+import { Timeline, TimelineModel, TimelineModelFromData } from "../timeline/timeline"
+import { EventSnapshot } from "../event/event"
 import * as Types from "services/api/api.types"
 
 /**
@@ -14,6 +15,12 @@ export const TimelineStoreModel = types
   })
   .extend(withEnvironment)
   .views(self => ({
+    getEventFromTimeline: (timelineId: number, eventId: number): EventSnapshot => {
+      const timeline = self.timelines.find(timeline => timeline.id === timelineId)
+
+      return timeline.events.find(event => event.id === eventId)
+    },
+
     getTimeline: (id: number) => {
       return self.timelines.find(timeline => timeline.id === id)
     },
