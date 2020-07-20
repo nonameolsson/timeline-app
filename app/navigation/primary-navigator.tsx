@@ -6,7 +6,7 @@
  */
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import { HomeScreen, TimelineScreen, WelcomeScreen, DemoScreen } from "../screens"
+import { EventScreen, HomeScreen, TimelineScreen, WelcomeScreen, DemoScreen } from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -24,7 +24,8 @@ export type PrimaryParamList = {
   welcome: undefined
   demo: undefined
   home: undefined
-  timeline: undefined
+  timeline: { timelineId: number }
+  event: { timelineId: number; eventId: number }
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -41,6 +42,7 @@ export function PrimaryNavigator() {
     >
       <Stack.Screen name="home" component={HomeScreen} />
       <Stack.Screen name="timeline" component={TimelineScreen} />
+      <Stack.Screen name="event" component={EventScreen} />
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
     </Stack.Navigator>

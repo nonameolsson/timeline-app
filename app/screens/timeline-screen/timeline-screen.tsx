@@ -1,23 +1,27 @@
-import React, { useEffect, useState, FunctionComponent as Component } from "react"
+import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle, View, Button, ScrollView, TouchableHighlight, Alert } from "react-native"
-import { Screen, Text } from "../../components"
-import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../models"
-import { color } from "../../theme"
+import { Screen, Text } from "components"
+import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
+import { useStores } from "models"
+import { color } from "theme"
 import { styles } from './timeline-screen.styles'
+import { PrimaryParamList } from "navigation"
+
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.black,
 }
 
-export const TimelineScreen: Component = observer(function TimelineScreen({ route }) {
+type TimelineScreenRouteProp = RouteProp<PrimaryParamList, 'timeline'>;
+
+export const TimelineScreen: Component = observer(function TimelineScreen() {
   // Pull in one of our MST stores
   const { timelineStore } = useStores()
 
   // Pull in navigation via hook
   const navigation = useNavigation()
+  const { params: { timelineId } } = useRoute<TimelineScreenRouteProp>()
 
-  const { timelineId } = route.params
   const timeline = timelineStore.getTimeline(timelineId)
 
   // useEffect(() => {
@@ -47,14 +51,15 @@ export const TimelineScreen: Component = observer(function TimelineScreen({ rout
     )
   }
 
-  const openEvent = (event: Event) => {
-    // navigation.navigate('Event', { event })
+  const openEvent = (eventId: number) => {
+    navigation.navigate('event', { timelineId, eventId })
   }
 
   const renderEvents = () => {
     const eventsToRender = timeline.events.map(event => {
+      console.tron.log('event', event.id)
       return (
-        <TouchableHighlight key={event.id} style={styles.events} onPress={(): void => openEvent(event)}>
+        <TouchableHighlight key={event.id} style={styles.events} onPress={(): void => openEvent(event.id)}>
           <View style={{ backgroundColor: 'green', color: 'white' }}>
             <Text>{event.title}</Text>
           </View>
