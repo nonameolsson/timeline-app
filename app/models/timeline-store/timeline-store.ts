@@ -1,8 +1,8 @@
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
-import { withEnvironment } from "../extensions/with-environment"
-import { GetTimelinesResult } from "services/api"
-import { Timeline, TimelineModel, TimelineModelFromData } from "../timeline/timeline"
+
 import { EventSnapshot } from "../event/event"
+import { Timeline, TimelineModel, TimelineModelFromData } from "../timeline/timeline"
+import { withEnvironment } from "../extensions/with-environment"
 import * as Types from "services/api/api.types"
 
 /**
@@ -32,8 +32,13 @@ export const TimelineStoreModel = types
     addTimelinesToStore: (timelineSnapshot: Types.Timeline[]) => {
       const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => TimelineModelFromData(timeline))
 
-      // timelinesModel.forEach(timeline => self.timelines.push(timeline))
       self.timelines.replace(timelinesModel) // NOTE: Offline data might be lost
+    },
+    updateTimelineInStore: (timelineSnapshot: Types.Timeline) => {
+      const timelineModel: Timeline = TimelineModelFromData(timelineSnapshot)
+      console.tron.log('updateTimelineInStore')
+      console.tron.log(timelineModel)
+      // self.timelines.replace(timelineModel)
     }
   }))
   .actions(self => ({
@@ -47,10 +52,19 @@ export const TimelineStoreModel = types
       }
     }),
     getAllTimelines: flow(function * () {
-      const result: GetTimelinesResult = yield self.environment.api.getAllTimelines()
+      const result: Types.GetTimelinesResult = yield self.environment.api.getAllTimelines()
 
       if (result.kind === "ok") {
         self.addTimelinesToStore(result.timelines)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+    updateTimeline: flow(function * (timeline: Timeline) {
+      const result: Types.PostTimelineResult = yield self.environment.api.updateTimeline(timeline)
+
+      if (result.kind === "ok") {
+        self.updateTimelineInStore(result.timeline)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }

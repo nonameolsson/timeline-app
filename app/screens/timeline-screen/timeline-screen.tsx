@@ -57,7 +57,6 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
 
   const renderEvents = () => {
     const eventsToRender = timeline.events.map(event => {
-      console.tron.log('event', event.id)
       return (
         <TouchableHighlight key={event.id} style={styles.events} onPress={(): void => openEvent(event.id)}>
           <View style={{ backgroundColor: 'green', color: 'white' }}>
@@ -70,15 +69,8 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     return <ScrollView>{eventsToRender}</ScrollView>
   }
 
-  // FIXME: Issue #33
   const goToEditTimelineScreen = () => {
-    console.tron.log('goToEditTimelineScreen')
-    // const params: ICreateTimelineScreenParams = {
-    //   action: 'edit',
-    //   timeline
-    // }
-
-    // navigate('CreateTimeline', params)
+    navigation.navigate('editTimeline', { timeline })
   }
 
   return (

@@ -1,4 +1,4 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk0OTAwODk5LCJleHAiOjE1OTc0OTI4OTl9.FN2mItD6ydMFhPPmE0Thr3uvxh6I8xYs4oQUJKT4QKU
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk1MjI4MDczLCJleHAiOjE1OTc4MjAwNzN9.NYyCjJ5HxOI_X731mOoq-wDAnqxiZ8H2rW1V3RwdQTk
 
 ###
 
@@ -7,8 +7,20 @@ Authorization: Bearer {{token}}
 
 ###
 
-GET http://localhost:1337/timelines/4
+GET http://localhost:1337/timelines/1
 Authorization: Bearer {{token}}
+
+###
+
+PUT http://localhost:1337/timelines/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Kalles linje",
+  "description": "En riktigt spännande historia!"
+}
+
 
 ###
 
