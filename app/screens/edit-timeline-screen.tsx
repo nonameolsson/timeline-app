@@ -1,14 +1,12 @@
 import { Layout } from '@ui-kitten/components'
 import { observer } from "mobx-react-lite"
-import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useState } from "react"
 import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native"
 
-import { PrimaryParamList } from "navigation"
+import { PrimaryRouteProp, PrimaryStackNavigationProp } from "navigation"
 import { useStores } from "models"
 import { EditTimelineForm, EditTimelineFormData } from 'components/edit-timeline-form/edit-timeline-form'
-
-type TimelineScreenRouteProp = RouteProp<PrimaryParamList, 'editTimeline'>
 
 const styles = StyleSheet.create({
   activityIndicator: {
@@ -26,14 +24,16 @@ const styles = StyleSheet.create({
 
 export const EditTimelineScreen: Component = observer(() => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const navigation = useNavigation<PrimaryStackNavigationProp<"editTimeline">>()
+  const { params: { id } } = useRoute<PrimaryRouteProp<"editTimeline">>()
+
   const { timelineStore } = useStores()
-  const navigation = useNavigation()
-  const { params: { id } } = useRoute<TimelineScreenRouteProp>()
   const timeline = timelineStore.getTimeline(id)
 
   const onSubmit = async (data: EditTimelineFormData) => {
     setIsLoading(true)
-    await timelineStore.updateTimeline(data)
+    await timeline.updateTimeline({ ...data, id })
     setIsLoading(false)
     navigation.goBack()
   }

@@ -6,6 +6,7 @@ import { Button, Layout, Text, List, ListItem } from "@ui-kitten/components"
 import { useStores, Timeline } from "models"
 import { styles } from "./home-screen.styles"
 import { SafeAreaView } from "react-native"
+import { PrimaryStackNavigationProp } from "navigation"
 
 export const HomeScreen: Component = observer(function HomeScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -14,13 +15,13 @@ export const HomeScreen: Component = observer(function HomeScreen() {
   const { userStore, timelineStore } = useStores()
 
   // Pull in navigation via hook
-  const navigation = useNavigation()
+  const navigation = useNavigation<PrimaryStackNavigationProp<"home">>()
 
   // Create async getTimelines()
   useEffect(() => {
     setIsLoading(true)
 
-    timelineStore.getTimelinesByUser(userStore.user.id).then(() => setIsLoading(false))
+    timelineStore.getTimelines(userStore.user.id).then(() => setIsLoading(false))
   }, [])
 
   const openTimeline = (id: string, title: string): void => {

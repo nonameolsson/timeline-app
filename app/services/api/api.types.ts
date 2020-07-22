@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import { GeneralApiProblem } from "./api-problem"
 
 export interface Role {
@@ -43,30 +45,45 @@ export interface Timeline {
   title: string
   description: string
   events: Event[]
-  // eslint-disable-next-line camelcase
   created_at: string
-  // eslint-disable-next-line camelcase
+  updated_at: string
+}
+
+export interface EventTimeline {
+  id: number
+  title: string
+  description: string
+  user: number
+  created_at: string
   updated_at: string
 }
 
 export type GetTimelinesResult = { kind: "ok"; timelines: Timeline[] } | GeneralApiProblem
 export type GetTimelineResult = { kind: "ok"; timelines: Timeline } | GeneralApiProblem
 
-export type PostTimelineResult = { kind: "ok"; timeline: Timeline } | GeneralApiProblem
+export type PutTimelineResult = { kind: "ok"; timeline: Timeline } | GeneralApiProblem
 
 /**
  * Event
  */
 export interface Event {
-  id: number
+  id: string
+  title: string
+  description: string
+  timeline: EventTimeline
+  created_at: string
+  updated_at: string
+}
+
+export interface TimelineEvent {
+  id: string
   title: string
   description: string
   timeline: number
-  // eslint-disable-next-line camelcase
   created_at: string
-  // eslint-disable-next-line camelcase
   updated_at: string
 }
 
 export type GetEventsResult = { kind: "ok"; events: Event[] } | GeneralApiProblem
 export type GetEventResult = { kind: "ok"; event: Event } | GeneralApiProblem
+export type PutEventResult = { kind: "ok"; event: Event } | GeneralApiProblem
