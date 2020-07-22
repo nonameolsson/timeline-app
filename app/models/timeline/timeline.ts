@@ -49,6 +49,9 @@ export const TimelineModel = types
       self.updatedAt = updated_at
       self.title = title
       self.description = description
+    },
+    deleteEventFromStore: (event: Types.Event) => {
+
     }
   }))
   /**
@@ -60,6 +63,15 @@ export const TimelineModel = types
 
       if (result.kind === "ok") {
         self.updateTimelineInStore(result.timeline)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+    deleteEvent: flow(function * (id: string) {
+      const result: Types.DeleteEventResult = yield self.environment.api.deleteEvent(id)
+
+      if (result.kind === "ok") {
+        self.deleteEventFromStore(result.event)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }

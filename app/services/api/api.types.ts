@@ -87,3 +87,4 @@ export interface TimelineEvent {
 export type GetEventsResult = { kind: "ok"; events: Event[] } | GeneralApiProblem
 export type GetEventResult = { kind: "ok"; event: Event } | GeneralApiProblem
 export type PutEventResult = { kind: "ok"; event: Event } | GeneralApiProblem
+export type DeleteEventResult = { kind: "ok"; event: Event } | GeneralApiProblem

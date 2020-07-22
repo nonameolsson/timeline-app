@@ -34,7 +34,7 @@ Authorization: Bearer {{token}}
 
 ###
 
-GET http://localhost:1337/events/5
+GET http://localhost:1337/events/6
 Authorization: Bearer {{token}}
 
 ###
@@ -47,6 +47,12 @@ Content-Type: application/json
   "title": "new title",
   "description": "new description"
 }
+
+###
+
+DELETE http://localhost:1337/events/4
+Authorization: Bearer {{token}}
+Content-Type: application/json
 
 ###
 
