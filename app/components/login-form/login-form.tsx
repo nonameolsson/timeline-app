@@ -2,6 +2,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { Button, Input, useStyleSheet } from '@ui-kitten/components'
 import { Text } from 'react-native'
 import React, { FunctionComponent } from 'react'
+import { yupResolver } from '@hookform/resolvers'
 
 /** Import types here */
 import { FormData } from './login-form.types'
@@ -18,20 +19,13 @@ interface LoginFormProps {
 export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, error, loading }) => {
   const styles = useStyleSheet(themedStyles)
 
-  const { control, formState, setValue, handleSubmit, errors } = useForm<FormData>({
-    validationSchema: LoginSchema,
-    mode: 'onChange',
-    submitFocusError: true
+  const { control, formState, handleSubmit, errors } = useForm<FormData>({
+    resolver: yupResolver(LoginSchema),
+    mode: 'onBlur'
   })
 
   const onSubmit = ({ email, password }): void => {
     handleLogin(email, password)
-  }
-
-  const superSubmit = () => handleLogin('zetajaz@gmail.com', 'password')
-
-  const handleChange = (fieldName: string, value: any, validate = false): void => {
-    setValue(fieldName, value, validate)
   }
 
   /**
@@ -42,44 +36,47 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
   return (
     <>
       <Controller
-        as={
+        control={control}
+        name="email"
+        render={({ onChange, onBlur, value }) => (
           <Input
             autoCapitalize="none"
             autoCompleteType="email"
             autoCorrect={false}
-            caption={errors.email && errors.email.message.toString()}
+            caption={errors.email && errors.email.message}
             disabled={formState.isSubmitting}
-            keyboardAppearance="dark"
             keyboardType="email-address"
+            onBlur={onBlur}
+            onChangeText={value => onChange(value)}
             placeholder="E-mail address"
+            status={errors.email ? 'danger' : 'basic'}
             style={styles.captionTextStyle}
             textContentType="emailAddress"
+            value={value}
           />
-        }
-        control={control}
-        defaultValue=""
-        name="email"
-        onChangeText={(text: string) => handleChange('email', text, true)}
+        )}
       />
       <Controller
-        as={
+        control={control}
+        name="password"
+        render={({ onChange, onBlur, value }) => (
           <Input
             autoCapitalize="none"
-            caption={errors.password && errors.password.message.toString()}
+            caption={errors.password && errors.password.message}
             disabled={formState.isSubmitting}
             keyboardAppearance="dark"
             keyboardType="visible-password"
+            onBlur={onBlur}
+            onChangeText={value => onChange(value)}
             placeholder="Password"
             secureTextEntry={true}
             spellCheck={false}
+            status={errors.password ? 'danger' : 'basic'}
             style={styles.passwordInput}
             textContentType="password"
+            value={value}
           />
-        }
-        control={control}
-        defaultValue=""
-        name="password"
-        onChangeText={(text: string) => handleChange('password', text, true)}
+        )}
       />
       {/* TODO: Activate this
         <View style={styles.forgotPasswordButton}>
@@ -89,19 +86,12 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
       </View> */}
       <Text style={styles.loginErrorText}>{error || ''}</Text>
       <Button
+        disabled={!formState.isValid || formState.isSubmitting}
         style={styles.signInButton}
-        onPress={superSubmit}
+        onPress={handleSubmit(onSubmit)}
       >
-        SUPER LOGIN
+        {formState.isSubmitting ? 'LOADING...' : 'SIGN IN'}
       </Button>
-      {/* <Button
-      //   disabled={!formState.isValid || formState.isSubmitting}
-      //   style={styles.signInButton}
-      //   onPress={handleSubmit(onSubmit)}
-      // >
-      //   {formState.isSubmitting ? 'LOADING...' : 'SIGN IN'}
-      // </Button>
-      */}
     </>
   )
 }

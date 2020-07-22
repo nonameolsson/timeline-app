@@ -18,14 +18,20 @@ export const TimelineStoreModel = types
     hasTimelines: () => {
       return self.timelines.size > 0
     },
-    getEventFromTimeline: (id: string, eventId: number): EventSnapshot => {
+    getEventFromTimeline: (id: string, eventId: number): EventSnapshot | undefined => {
       const timeline = self.timelines.get(id)
+
+      if (!timeline) throw new Error(`No timeline with id ${id} was found`)
 
       return timeline.events.find(event => event.id === eventId)
     },
 
-    getTimeline: (id: string) => {
-      return self.timelines.get(id)
+    getTimeline: (id: string): Timeline => {
+      const timeline = self.timelines.get(id)
+
+      if (!timeline) throw new Error(`No timeline with id ${id} was found`)
+
+      return timeline
     },
     getTimelinesArray: () => {
       const arr = Array.from(self.timelines)

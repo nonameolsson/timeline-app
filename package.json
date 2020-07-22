@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@eva-design/eva": "^2.0.0",
+    "@hookform/resolvers": "^0.0.6",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.1.5",
@@ -169,6 +170,7 @@
       "no-unused-vars": 0,
       "no-undef": 0,
       "quotes": 0,
+      "react/display-name": 0,
       "react/no-unescaped-entities": 0,
       "react/prop-types": "off",
       "react-native/no-raw-text": 0,

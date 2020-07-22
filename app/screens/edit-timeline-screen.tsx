@@ -1,21 +1,20 @@
-import { Button, Input, Text, Layout } from '@ui-kitten/components'
-import { Controller, useForm } from 'react-hook-form'
+import { Layout } from '@ui-kitten/components'
 import { observer } from "mobx-react-lite"
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
-import React, { FunctionComponent as Component } from "react"
-import { SafeAreaView, StyleSheet } from "react-native"
+import React, { FunctionComponent as Component, useState } from "react"
+import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native"
 
 import { PrimaryParamList } from "navigation"
 import { useStores } from "models"
+import { EditTimelineForm, EditTimelineFormData } from 'components/edit-timeline-form/edit-timeline-form'
 
-type TimelineScreenRouteProp = RouteProp<PrimaryParamList, 'editTimeline'>;
-
-type FormData = {
-  title: string,
-  description: string,
-}
+type TimelineScreenRouteProp = RouteProp<PrimaryParamList, 'editTimeline'>
 
 const styles = StyleSheet.create({
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
   },
@@ -25,59 +24,27 @@ const styles = StyleSheet.create({
   }
 })
 
-export const EditTimelineScreen: Component = observer(function EditTimelineScreen() {
+export const EditTimelineScreen: Component = observer(() => {
+  const [isLoading, setIsLoading] = useState(false)
   const { timelineStore } = useStores()
   const navigation = useNavigation()
   const { params: { id } } = useRoute<TimelineScreenRouteProp>()
   const timeline = timelineStore.getTimeline(id)
 
-  const { control, handleSubmit } = useForm<FormData>({
-    defaultValues: {
-      title: timeline.title,
-      description: timeline.description
-    }
-  })
-
-  const onSubmit = async data => {
-    const updatedData = {
-      id: timeline.id,
-      title: data.title,
-      description: data.description,
-    }
-
-    await timelineStore.updateTimeline(updatedData)
+  const onSubmit = async (data: EditTimelineFormData) => {
+    setIsLoading(true)
+    await timelineStore.updateTimeline(data)
+    setIsLoading(false)
     navigation.goBack()
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <Layout style={styles.layout}>
-        <Controller
-          control={control}
-          name="title"
-          label='Title'
-          render={({ onChange, onBlur, value }) => (
-            <Input
-              onBlur={onBlur}
-              onChangeText={value => onChange(value)}
-              value={value}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="description"
-          label='Description'
-          render={({ onChange, onBlur, value }) => (
-            <Input
-              onBlur={onBlur}
-              onChangeText={value => onChange(value)}
-              value={value}
-            />
-          )}
-        />
-
-        <Button onPress={handleSubmit(onSubmit)}>Save</Button>
+        {isLoading
+          ? <ActivityIndicator style={styles.activityIndicator} />
+          : <EditTimelineForm timeline={timeline} onSubmit={onSubmit} />
+        }
       </Layout>
     </SafeAreaView>
   )

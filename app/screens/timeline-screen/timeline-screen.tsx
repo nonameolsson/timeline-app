@@ -1,4 +1,4 @@
-import React, { FunctionComponent as Component, useEffect } from "react"
+import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, SafeAreaView } from "react-native"
 import { useNavigation, RouteProp, useFocusEffect, useRoute } from "@react-navigation/native"
@@ -10,7 +10,7 @@ import { PrimaryParamList } from "navigation"
 
 type TimelineScreenRouteProp = RouteProp<PrimaryParamList, 'timeline'>;
 
-export const TimelineScreen: Component = observer(function TimelineScreen() {
+export const TimelineScreen: Component = observer(() => {
   // Pull in one of our MST stores
   const { timelineStore } = useStores()
 
@@ -71,7 +71,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     <SafeAreaView style={styles.container}>
       <Layout style={styles.layout}>
         <Card>
-          <Text>{`Description: ${timeline.description}`}</Text>
+          <Text>{timeline.description}</Text>
         </Card>
         <Button onPress={() => goToEditTimelineScreen()}>Edit timeline</Button>
         <Button onPress={() => showDeleteModal()}>Delete timeline</Button>
