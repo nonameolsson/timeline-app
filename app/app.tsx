@@ -11,7 +11,10 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
+import { ApplicationProvider, IconRegistry } from "@ui-kitten/components"
+import { EvaIconsPack } from '@ui-kitten/eva-icons'
 import { NavigationContainerRef } from "@react-navigation/native"
+import { observer } from "mobx-react-lite"
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
 import * as eva from '@eva-design/eva'
 import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
@@ -31,7 +34,6 @@ import { RootStore, RootStoreProvider, setupRootStore } from "./models"
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from "react-native-screens"
-import { ApplicationProvider } from "@ui-kitten/components"
 
 enableScreens()
 
@@ -40,7 +42,7 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 /**
  * This is the root component of our app.
  */
-const App: Component<{}> = () => {
+const App: Component<{}> = observer(() => {
   const navigationRef = useRef<NavigationContainerRef>()
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
 
@@ -67,18 +69,21 @@ const App: Component<{}> = () => {
 
   // otherwise, we're ready to render the app
   return (
-    <ApplicationProvider {...eva} theme={eva.dark}>
+    <>
+      <IconRegistry icons={EvaIconsPack} />
       <RootStoreProvider value={rootStore}>
-        <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-          <RootNavigator
-            ref={navigationRef}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
-        </SafeAreaProvider>
+        <ApplicationProvider {...eva} theme={eva[rootStore.uiStore.theme]}>
+          <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
+            <RootNavigator
+              ref={navigationRef}
+              initialState={initialNavigationState}
+              onStateChange={onNavigationStateChange}
+            />
+          </SafeAreaProvider>
+        </ApplicationProvider>
       </RootStoreProvider>
-    </ApplicationProvider>
+    </>
   )
-}
+})
 
 export default App

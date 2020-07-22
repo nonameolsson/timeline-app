@@ -1,37 +1,43 @@
 import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, View, Button, ScrollView, TouchableHighlight, Alert } from "react-native"
-import { Screen, Text } from "components"
-import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
-import { useStores } from "models"
-import { color } from "theme"
+import { Alert, SafeAreaView } from "react-native"
+import { useNavigation, RouteProp, useFocusEffect, useRoute } from "@react-navigation/native"
+import { Button, List, ListItem, Text, Layout, Card } from '@ui-kitten/components'
+
+import { Event, useStores } from "models"
 import { styles } from './timeline-screen.styles'
 import { PrimaryParamList } from "navigation"
 
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-}
-
 type TimelineScreenRouteProp = RouteProp<PrimaryParamList, 'timeline'>;
 
-export const TimelineScreen: Component = observer(function TimelineScreen() {
+export const TimelineScreen: Component = observer(() => {
   // Pull in one of our MST stores
   const { timelineStore } = useStores()
 
   // Pull in navigation via hook
   const navigation = useNavigation()
-  const { params: { timelineId } } = useRoute<TimelineScreenRouteProp>()
+  const { params: { id } } = useRoute<TimelineScreenRouteProp>()
 
-  const timeline = timelineStore.getTimeline(timelineId)
+  let timeline = timelineStore.getTimeline(id)
 
-  // useEffect(() => {
-  //   // Start listening to changes in Firestore
-  //   timelineStore.getTimeline(timelineId)
-  // }, [])
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused
+
+      // Get the latest data from the store. This is neccessary to get the latest title after editing the timeline in EditTimelineScreen.
+      timeline = timelineStore.getTimeline(id)
+      navigation.setOptions({ title: timeline.title })
+
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+        timeline = timelineStore.getTimeline(id)
+      }
+    }, [])
+  )
 
   // FIXME: Related issue #32
   const deleteTimeline = () => {
-    console.tron.log('deleteTimelien')
     // timelineStore.deleteTimelineFromFirebase(timeline.id)
     // goBack()
   }
@@ -52,49 +58,29 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   }
 
   const openEvent = (eventId: number) => {
-    navigation.navigate('event', { timelineId, eventId })
+    navigation.navigate('event', { timelineId: id, eventId })
   }
 
-  const renderEvents = () => {
-    const eventsToRender = timeline.events.map(event => {
-      console.tron.log('event', event.id)
-      return (
-        <TouchableHighlight key={event.id} style={styles.events} onPress={(): void => openEvent(event.id)}>
-          <View style={{ backgroundColor: 'green', color: 'white' }}>
-            <Text>{event.title}</Text>
-          </View>
-        </TouchableHighlight>
-      )
-    })
+  const renderItem = ({ item, index }: { item: Event; index: number }) => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />
 
-    return <ScrollView>{eventsToRender}</ScrollView>
-  }
-
-  // FIXME: Issue #33
   const goToEditTimelineScreen = () => {
-    console.tron.log('goToEditTimelineScreen')
-    // const params: ICreateTimelineScreenParams = {
-    //   action: 'edit',
-    //   timeline
-    // }
-
-    // navigate('CreateTimeline', params)
+    navigation.navigate('editTimeline', { id: timeline.id })
   }
 
   return (
-    <Screen style={ROOT} preset="scroll">
-      <View>
-        <Text>{`ID: ${timeline.id}`}</Text>
-        {/* <Text>{`Created by: ${timeline.createdBy}`}</Text> */}
-        <Text>{`Name: ${timeline.title}`}</Text>
-        <Button title="Edit timeline" onPress={() => goToEditTimelineScreen()} />
-        <Button title="Delete timeline" onPress={() => showDeleteModal()} />
-        <Button title="Add new event" onPress={() => navigation.navigate('AddEvent', { timelineId: timeline.id })} />
-        <Button title="Back" onPress={() => navigation.goBack()} />
+    <SafeAreaView style={styles.container}>
+      <Layout style={styles.layout}>
+        <Card>
+          <Text>{timeline.description}</Text>
+        </Card>
+        <Button onPress={() => goToEditTimelineScreen()}>Edit timeline</Button>
+        <Button onPress={() => showDeleteModal()}>Delete timeline</Button>
 
-        <Text>Events:</Text>
-        {renderEvents()}
-      </View>
-    </Screen>
+        <Button onPress={() => navigation.navigate('AddEvent', { timelineId: timeline.id })}>Add new event</Button>
+
+        <Text category="h4">Events</Text>
+        <List data={timeline.events} renderItem={renderItem} />
+      </Layout>
+    </SafeAreaView>
   )
 })

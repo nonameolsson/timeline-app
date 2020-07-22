@@ -2,6 +2,7 @@ import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
+import { Timeline } from "models"
 
 /**
  * Manages all requests to the API.
@@ -236,6 +237,32 @@ export class Api {
       // const resultTimelines: Types.Timeline[] = rawTimelines.map(convertTimeline)
 
       return { kind: "ok", timelines: rawTimelines }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
+   * Update a specific timeline
+   *
+   * @returns {Promise<Types.GetTimelinesResult>}
+   * @memberof Api
+   */
+  async updateTimeline(timeline): Promise<Types.PostTimelineResult> { // TODO: Add correct type for timeline
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.put(`/timelines/${timeline.id}`, timeline)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const resultTimeline: Types.Timeline = response.data
+
+      return { kind: "ok", timeline: resultTimeline }
     } catch {
       return { kind: "bad-data" }
     }

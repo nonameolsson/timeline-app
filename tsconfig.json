@@ -23,12 +23,7 @@
       "screens/*": ["./screens/*"],
       "services/*": ["./services/*"],
       "utils/*": ["./utils/*"]
-    },
-    "plugins": [
-      {
-        "name": "@divyenduz/ts-graphql-plugin"
-      }
-    ]
+    }
   },
   "exclude": ["node_modules"],
   "include": ["index.js", "app", "test", "storybook"]

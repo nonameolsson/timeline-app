@@ -1,8 +1,8 @@
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
-import { withEnvironment } from "../extensions/with-environment"
-import { GetTimelinesResult } from "services/api"
-import { Timeline, TimelineModel, TimelineModelFromData } from "../timeline/timeline"
+
 import { EventSnapshot } from "../event/event"
+import { Timeline, TimelineModel, TimelineModelFromData } from "../timeline/timeline"
+import { withEnvironment } from "../extensions/with-environment"
 import * as Types from "services/api/api.types"
 
 /**
@@ -11,31 +11,51 @@ import * as Types from "services/api/api.types"
 export const TimelineStoreModel = types
   .model("TimelineStore")
   .props({
-    timelines: types.array(TimelineModel)
+    timelines: types.map(TimelineModel)
   })
   .extend(withEnvironment)
   .views(self => ({
-    getEventFromTimeline: (timelineId: number, eventId: number): EventSnapshot => {
-      const timeline = self.timelines.find(timeline => timeline.id === timelineId)
+    hasTimelines: () => {
+      return self.timelines.size > 0
+    },
+    getEventFromTimeline: (id: string, eventId: number): EventSnapshot | undefined => {
+      const timeline = self.timelines.get(id)
+
+      if (!timeline) throw new Error(`No timeline with id ${id} was found`)
 
       return timeline.events.find(event => event.id === eventId)
     },
 
-    getTimeline: (id: number) => {
-      return self.timelines.find(timeline => timeline.id === id)
+    getTimeline: (id: string): Timeline => {
+      const timeline = self.timelines.get(id)
+
+      if (!timeline) throw new Error(`No timeline with id ${id} was found`)
+
+      return timeline
     },
+    getTimelinesArray: () => {
+      const arr = Array.from(self.timelines)
+      const modifiedArr = arr.map(item => item[1])
+
+      return modifiedArr
+    }
   }))
+  // Following actions will be called with data received from the API and modify the store.
   .actions(self => ({
     resetStore: () => {
       self.timelines.clear()
     },
     addTimelinesToStore: (timelineSnapshot: Types.Timeline[]) => {
       const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => TimelineModelFromData(timeline))
+      timelinesModel.forEach(timeline => self.timelines.set(timeline.id, timeline))
+    },
+    updateTimelineInStore: (timelineSnapshot: Types.Timeline) => {
+      const timelineModel: Timeline = TimelineModelFromData(timelineSnapshot)
 
-      // timelinesModel.forEach(timeline => self.timelines.push(timeline))
-      self.timelines.replace(timelinesModel) // NOTE: Offline data might be lost
+      self.timelines.put(timelineModel)
     }
   }))
+  // Following actions will send requests to the API, and call actions defined in the first action definition
   .actions(self => ({
     getTimelinesByUser: flow(function * (userId: number) {
       const result: Types.GetTimelinesResult = yield self.environment.api.getTimelinesByUser(userId)
@@ -47,10 +67,19 @@ export const TimelineStoreModel = types
       }
     }),
     getAllTimelines: flow(function * () {
-      const result: GetTimelinesResult = yield self.environment.api.getAllTimelines()
+      const result: Types.GetTimelinesResult = yield self.environment.api.getAllTimelines()
 
       if (result.kind === "ok") {
         self.addTimelinesToStore(result.timelines)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+    updateTimeline: flow(function * (timeline) { // FIXME: Add correct type for timeline
+      const result: Types.PostTimelineResult = yield self.environment.api.updateTimeline(timeline)
+
+      if (result.kind === "ok") {
+        self.updateTimelineInStore(result.timeline)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }

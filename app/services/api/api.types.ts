@@ -39,7 +39,7 @@ export type GetLoginResult = { kind: "ok"; data: Login } | GeneralApiProblem
  * Timeline
  */
 export interface Timeline {
-  id: number
+  id: string
   title: string
   description: string
   events: Event[]
@@ -51,6 +51,8 @@ export interface Timeline {
 
 export type GetTimelinesResult = { kind: "ok"; timelines: Timeline[] } | GeneralApiProblem
 export type GetTimelineResult = { kind: "ok"; timelines: Timeline } | GeneralApiProblem
+
+export type PostTimelineResult = { kind: "ok"; timeline: Timeline } | GeneralApiProblem
 
 /**
  * Event

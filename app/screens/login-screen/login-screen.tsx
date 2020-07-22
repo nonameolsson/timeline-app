@@ -12,16 +12,16 @@ import { styles } from "./login-screen.styles"
 export const LoginScreen: Component = observer(function LoginScreen() {
   const { userStore } = useStores()
   const [isLoading, setIsLoading] = React.useState(false)
-  const [error, setError] = React.useState<string>(undefined)
+  const [error, setError] = React.useState<string | null>(null)
 
   const onLogin = async (identifier: string, password: string) => {
     setIsLoading(true)
-    setError(undefined)
+    setError(null)
 
     try {
       const error = await userStore.login(identifier, password)
 
-      setError(translate(`login.errors.${error.kind}`))
+      setError(translate(`login.errors.${error?.kind}`))
       setIsLoading(false)
     } catch (err) {
       console.tron.error('login error', err)

@@ -38,7 +38,6 @@ export const UserStoreModel = types
 
       // Empty stores
       self.resetStore()
-      root.eventStore.resetStore()
       root.timelineStore.resetStore()
 
       // Reset Apisauce

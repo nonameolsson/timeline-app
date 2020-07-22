@@ -8,7 +8,7 @@ import { EventModel, EventModelFromData } from "models/event/event"
 export const TimelineModel = types
   .model("Timeline")
   .props({
-    id: types.identifierNumber,
+    id: types.identifier,
     title: types.string,
     description: types.string,
     events: types.array(EventModel),
@@ -33,7 +33,7 @@ export interface TimelineSnapshot extends TimelineSnapshotType {}
 
 export const TimelineModelFromData = (timeline: TimelineData): Timeline => {
   return TimelineModel.create({
-    id: timeline.id,
+    id: timeline.id.toString(),
     title: timeline.title,
     description: timeline.description,
     events: timeline.events.map(event => EventModelFromData(event)),
