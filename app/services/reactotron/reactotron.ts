@@ -147,9 +147,15 @@ export class Reactotron {
       })
 
       Tron.onCustomCommand({
-        title: "Log in",
-        command: "logIn",
+        title: "Log in as Kalle",
+        command: "logInKalle",
         handler: () => this.rootStore.userStore.login("kalle@timeline.app", "password")
+      })
+
+      Tron.onCustomCommand({
+        title: "Log in as Jasmin",
+        command: "logInJasmin",
+        handler: () => this.rootStore.userStore.login("zetajaz@gmail.com", "password")
       })
 
       Tron.onCustomCommand({
@@ -180,6 +186,13 @@ export class Reactotron {
           console.tron.log("Going back")
           RootNavigation.goBack()
         },
+      })
+
+      Tron.onCustomCommand({
+        title: 'Toggle theme',
+        description: 'Toggles between light and dark theme',
+        command: 'toggleTheme',
+        handler: () => this.rootStore.uiStore.toggleTheme()
       })
 
       // clear if we should

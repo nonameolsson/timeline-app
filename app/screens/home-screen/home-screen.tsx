@@ -1,15 +1,11 @@
 import React, { useEffect, useState, FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, View, TouchableHighlight, ScrollView, Button } from "react-native"
-import { Screen, Text } from "components"
 import { useNavigation } from "@react-navigation/native"
-import { useStores, Timeline } from "models"
-import { color } from "theme"
-import { styles } from "./home-screen.styles"
+import { Button, Layout, Text, List, ListItem } from "@ui-kitten/components"
 
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
-}
+import { useStores, Timeline } from "models"
+import { styles } from "./home-screen.styles"
+import { SafeAreaView } from "react-native"
 
 export const HomeScreen: Component = observer(function HomeScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -27,32 +23,8 @@ export const HomeScreen: Component = observer(function HomeScreen() {
     timelineStore.getTimelinesByUser(userStore.user.id).then(() => setIsLoading(false))
   }, [])
 
-  const openTimeline = (timeline: Timeline): void => {
-    // const params: ITimelineScreenParams = { timeline }
-    // navigation.navigate("Timeline", params)
-    navigation.navigate("timeline", { timelineId: timeline.id })
-  }
-
-  const renderTimelines = (): JSX.Element => {
-    /** Array containing a JSX Element for the each timeline */
-    const timelines = []
-    timelineStore.timelines.forEach(timeline => {
-      const line: JSX.Element = (
-        <TouchableHighlight
-          key={timeline.id}
-          style={styles.events}
-          onPress={(): void => openTimeline(timeline)}
-        >
-          <View>
-            <Text>{timeline.title}</Text>
-          </View>
-        </TouchableHighlight>
-      )
-
-      timelines.push(line)
-    })
-
-    return <ScrollView>{timelines}</ScrollView>
+  const openTimeline = (id: string, title: string): void => {
+    navigation.navigate("timeline", { id, title })
   }
 
   const renderEmptyState = () => <Text>Please create a timeline first.</Text>
@@ -65,28 +37,28 @@ export const HomeScreen: Component = observer(function HomeScreen() {
     }
   }
 
+  const renderItem = ({ item, index }: { item: Timeline; index: number }) => <ListItem onPress={() => openTimeline(item.id, item.title)} key={index} title={item.title} description={item.description} />
+
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" tx="homeScreen.header" />
-      {/* <View style={styles.container}> */}
-      <View>
+    <SafeAreaView style={styles.container}>
+      <Layout style={styles.layout}>
         {userStore.isLoggedIn ? (
           <>
-            <Text>Your timelines</Text>
+            <Text category="h2">Your timelines</Text>
             {isLoading ? (
               <Text>Loading...</Text>
-            ) : timelineStore.timelines.length > 0 ? (
-              renderTimelines()
+            ) : timelineStore.hasTimelines ? (
+              <List data={timelineStore.getTimelinesArray()} renderItem={renderItem} />
             ) : (
               renderEmptyState()
             )}
-            <Button title="Create timeline" onPress={() => undefined} />
+            <Button onPress={() => undefined}>Create timeline</Button>
           </>
         ) : (
           <Text>Logging in...</Text>
         )}
-        <Button title="Log out" onPress={(): void => logOut()} />
-      </View>
-    </Screen>
+        <Button onPress={(): void => logOut()}>Log out</Button>
+      </Layout>
+    </SafeAreaView>
   )
 })

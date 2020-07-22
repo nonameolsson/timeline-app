@@ -1,4 +1,4 @@
-import { EventStoreModel } from "../event-store/event-store"
+import { UiStoreModel } from "../ui-store/ui-store"
 import { TimelineStoreModel } from "../timeline-store/timeline-store"
 import { UserStoreModel } from "../user-store/user-store"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
@@ -8,10 +8,9 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
  */
 // prettier-ignore
 export const RootStoreModel = types.model("RootStore").props({
-  eventStore: types.optional(EventStoreModel, {}),
+  uiStore: types.optional(UiStoreModel, { theme: 'dark' }),
   timelineStore: types.optional(TimelineStoreModel, {}),
-  userStore: types.optional(UserStoreModel, {}),
-
+  userStore: types.optional(UserStoreModel, {})
 })
 
 /**

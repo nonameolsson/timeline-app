@@ -11,36 +11,45 @@ import * as Types from "services/api/api.types"
 export const TimelineStoreModel = types
   .model("TimelineStore")
   .props({
-    timelines: types.array(TimelineModel)
+    timelines: types.map(TimelineModel)
   })
   .extend(withEnvironment)
   .views(self => ({
-    getEventFromTimeline: (timelineId: number, eventId: number): EventSnapshot => {
-      const timeline = self.timelines.find(timeline => timeline.id === timelineId)
+    hasTimelines: () => {
+      return self.timelines.size > 0
+    },
+    getEventFromTimeline: (id: string, eventId: number): EventSnapshot => {
+      const timeline = self.timelines.get(id)
 
       return timeline.events.find(event => event.id === eventId)
     },
 
-    getTimeline: (id: number) => {
-      return self.timelines.find(timeline => timeline.id === id)
+    getTimeline: (id: string) => {
+      return self.timelines.get(id)
     },
+    getTimelinesArray: () => {
+      const arr = Array.from(self.timelines)
+      const modifiedArr = arr.map(item => item[1])
+
+      return modifiedArr
+    }
   }))
+  // Following actions will be called with data received from the API and modify the store.
   .actions(self => ({
     resetStore: () => {
       self.timelines.clear()
     },
     addTimelinesToStore: (timelineSnapshot: Types.Timeline[]) => {
       const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => TimelineModelFromData(timeline))
-
-      self.timelines.replace(timelinesModel) // NOTE: Offline data might be lost
+      timelinesModel.forEach(timeline => self.timelines.set(timeline.id, timeline))
     },
     updateTimelineInStore: (timelineSnapshot: Types.Timeline) => {
       const timelineModel: Timeline = TimelineModelFromData(timelineSnapshot)
-      console.tron.log('updateTimelineInStore')
-      console.tron.log(timelineModel)
-      // self.timelines.replace(timelineModel)
+
+      self.timelines.put(timelineModel)
     }
   }))
+  // Following actions will send requests to the API, and call actions defined in the first action definition
   .actions(self => ({
     getTimelinesByUser: flow(function * (userId: number) {
       const result: Types.GetTimelinesResult = yield self.environment.api.getTimelinesByUser(userId)
@@ -60,7 +69,7 @@ export const TimelineStoreModel = types
         __DEV__ && console.tron.log(result.kind)
       }
     }),
-    updateTimeline: flow(function * (timeline: Timeline) {
+    updateTimeline: flow(function * (timeline) { // FIXME: Add correct type for timeline
       const result: Types.PostTimelineResult = yield self.environment.api.updateTimeline(timeline)
 
       if (result.kind === "ok") {

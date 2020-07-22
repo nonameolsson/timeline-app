@@ -7,7 +7,6 @@
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import { EventScreen, HomeScreen, TimelineScreen, WelcomeScreen, DemoScreen, EditTimelineScreen } from "screens"
-import { Timeline } from "models"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -25,29 +24,52 @@ export type PrimaryParamList = {
   welcome: undefined
   demo: undefined
   home: undefined
-  timeline: { timelineId: number }
+  timeline: { id: string, title }
   event: { timelineId: number; eventId: number }
-  editTimeline: { timeline: Timeline }
+  editTimeline: { id: string }
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<PrimaryParamList>()
 
-export function PrimaryNavigator() {
+export const PrimaryNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="home"
       screenOptions={{
-        headerShown: false,
-        gestureEnabled: true,
+        headerShown: true,
+        gestureEnabled: true
       }}
     >
-      <Stack.Screen name="home" component={HomeScreen} />
-      <Stack.Screen name="timeline" component={TimelineScreen} />
-      <Stack.Screen name="event" component={EventScreen} />
-      <Stack.Screen name="editTimeline" component={EditTimelineScreen} />
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
+      <Stack.Screen
+        name="home"
+        component={HomeScreen}
+        options={() => ({ headerShown: false, title: 'Timelines' })}
+      />
+      <Stack.Screen
+        name="timeline"
+        component={TimelineScreen}
+        options={({ route }) => ({
+          title: route.params.title
+        })}
+      />
+      <Stack.Screen
+        name="editTimeline"
+        component={EditTimelineScreen}
+        options={({ title: 'Edit' })}
+      />
+      <Stack.Screen
+        name="event"
+        component={EventScreen}
+      />
+      <Stack.Screen
+        name="welcome"
+        component={WelcomeScreen}
+      />
+      <Stack.Screen
+        name="demo"
+        component={DemoScreen}
+      />
     </Stack.Navigator>
   )
 }

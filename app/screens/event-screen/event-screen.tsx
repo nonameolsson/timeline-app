@@ -1,15 +1,11 @@
 import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, Button } from "react-native"
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
-import { Screen, Text } from "components"
-import { useStores } from "models"
-import { color } from "theme"
-import { PrimaryParamList } from "navigation"
+import { Layout, Text } from '@ui-kitten/components'
 
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black
-}
+import { useStores } from "models"
+import { PrimaryParamList } from "navigation"
+import { styles } from './event-screen-styles'
 
 type EventScreenRouteProp = RouteProp<PrimaryParamList, 'event'>;
 
@@ -24,10 +20,9 @@ export const EventScreen: Component = observer(function EventScreen() {
   const event = timelineStore.getEventFromTimeline(timelineId, eventId)
 
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" text={event.title} />
-      <Text text={event.description} />
-      <Button title="Back" onPress={() => navigation.goBack()} />
-    </Screen>
+    <Layout style={styles.container}>
+      <Text>{event.title}</Text>
+      <Text>{event.description}</Text>
+    </Layout>
   )
 })

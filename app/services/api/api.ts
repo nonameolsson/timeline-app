@@ -248,12 +248,9 @@ export class Api {
    * @returns {Promise<Types.GetTimelinesResult>}
    * @memberof Api
    */
-  async updateTimeline(timeline: Timeline): Promise<Types.PostTimelineResult> {
-    console.tron.log('updateTimeline')
+  async updateTimeline(timeline): Promise<Types.PostTimelineResult> { // TODO: Add correct type for timeline
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.put(`/timelines/${timeline.id}`, timeline)
-    console.tron.log('updateTimeline')
-    console.tron.log(response)
 
     // the typical ways to die when calling an api
     if (!response.ok) {

@@ -1,37 +1,84 @@
-import React, { FunctionComponent as Component } from "react"
+import { Button, Input, Text, Layout } from '@ui-kitten/components'
+import { Controller, useForm } from 'react-hook-form'
 import { observer } from "mobx-react-lite"
-import { ViewStyle, TextInput, Button } from "react-native"
-import { Screen, Text } from "components"
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native"
-import { useStores } from "models"
-import { color } from "theme"
-import { PrimaryParamList } from "navigation"
+import React, { FunctionComponent as Component } from "react"
+import { SafeAreaView, StyleSheet } from "react-native"
 
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.angry,
-}
+import { PrimaryParamList } from "navigation"
+import { useStores } from "models"
 
 type TimelineScreenRouteProp = RouteProp<PrimaryParamList, 'editTimeline'>;
 
+type FormData = {
+  title: string,
+  description: string,
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  layout: {
+    flex: 1,
+    padding: 16
+  }
+})
+
 export const EditTimelineScreen: Component = observer(function EditTimelineScreen() {
-  // Pull in one of our MST stores
   const { timelineStore } = useStores()
-
-  // Pull in navigation via hook
   const navigation = useNavigation()
-  const { params: { timeline } } = useRoute<TimelineScreenRouteProp>()
+  const { params: { id } } = useRoute<TimelineScreenRouteProp>()
+  const timeline = timelineStore.getTimeline(id)
 
-  const save = () => {
-    timelineStore.updateTimeline({ ...timeline, description: 'herp derp' })
+  const { control, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      title: timeline.title,
+      description: timeline.description
+    }
+  })
+
+  const onSubmit = async data => {
+    const updatedData = {
+      id: timeline.id,
+      title: data.title,
+      description: data.description,
+    }
+
+    await timelineStore.updateTimeline(updatedData)
+    navigation.goBack()
   }
 
   return (
-    <Screen style={ROOT} preset="scroll">
-      <Text preset="header" tx="editEventScreen.header" />
-      <TextInput value={timeline.title} />
-      <TextInput value={timeline.description} />
-      <Button title="Save" onPress={() => save()} />
-      <Button title="Back" onPress={() => navigation.goBack()} />
-    </Screen>
+    <SafeAreaView style={styles.container}>
+      <Layout style={styles.layout}>
+        <Controller
+          control={control}
+          name="title"
+          label='Title'
+          render={({ onChange, onBlur, value }) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="description"
+          label='Description'
+          render={({ onChange, onBlur, value }) => (
+            <Input
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+            />
+          )}
+        />
+
+        <Button onPress={handleSubmit(onSubmit)}>Save</Button>
+      </Layout>
+    </SafeAreaView>
   )
 })
