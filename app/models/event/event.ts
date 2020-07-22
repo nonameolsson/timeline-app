@@ -1,5 +1,7 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { Event as EventData } from "services/api"
+/* eslint-disable @typescript-eslint/camelcase */
+import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
+import { withEnvironment } from "models/extensions/with-environment"
+import * as Types from "services/api/api.types"
 
 /**
  * Model description here for TypeScript hints.
@@ -7,15 +9,39 @@ import { Event as EventData } from "services/api"
 export const EventModel = types
   .model("Event")
   .props({
-    id: types.identifierNumber,
+    id: types.identifier,
     title: types.string,
     description: types.string,
     timeline: types.number,
     createdAt: types.string,
     updatedAt: types.string
   })
+  .extend(withEnvironment)
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  // Following actions will be called with data received from the API and modify the store.
+  .actions(self => ({
+    updateEventInStore: (eventSnapshot: Types.Event) => {
+      const { title, description, created_at, timeline, updated_at } = eventSnapshot
+
+      self.title = title
+      self.description = description
+      self.updatedAt = updated_at
+      self.createdAt = created_at
+      self.timeline = timeline.id
+    }
+  }))
+  // Following actions will send requests to the API, and call actions defined in the first action definition
+  .actions(self => ({
+    updateEvent: flow(function * (event: { id: string, title: string, description: string }) {
+      const result: Types.PutEventResult = yield self.environment.api.updateEvent(event)
+
+      if (result.kind === "ok") {
+        self.updateEventInStore(result.event)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+  }))
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -30,9 +56,9 @@ export interface Event extends EventType {}
 type EventSnapshotType = SnapshotOut<typeof EventModel>
 export interface EventSnapshot extends EventSnapshotType {}
 
-export const EventModelFromData = (event: EventData): Event => {
+export const EventModelFromData = (event: Types.TimelineEvent) => {
   return EventModel.create({
-    id: event.id,
+    id: event.id.toString(),
     title: event.title,
     description: event.description,
     timeline: event.timeline,

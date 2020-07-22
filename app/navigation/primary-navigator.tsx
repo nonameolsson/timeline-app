@@ -5,8 +5,9 @@
  * You'll likely spend most of your time in this file.
  */
 import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
-import { EventScreen, HomeScreen, TimelineScreen, WelcomeScreen, DemoScreen, EditTimelineScreen } from "screens"
+import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack"
+import { EventScreen, EditEventScreen, HomeScreen, TimelineScreen, WelcomeScreen, DemoScreen, EditTimelineScreen } from "screens"
+import { RouteProp } from "@react-navigation/native"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -25,9 +26,29 @@ export type PrimaryParamList = {
   demo: undefined
   home: undefined
   timeline: { id: string, title }
-  event: { timelineId: number; eventId: number }
   editTimeline: { id: string }
+  event: { timelineId: string; eventId: string }
+  editEvent: { timelineId: string, eventId: string }
 }
+
+/**
+ * Utility type to make it easier to use with `useNavigation()`
+ *
+ * **Example usage**:
+ * ```typescript
+ * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
+ * ```
+ */
+export type PrimaryStackNavigationProp<T extends keyof PrimaryParamList> = StackNavigationProp<PrimaryParamList, T>
+/**
+ * Utility type to make it easier to use with `useRoute()`
+ *
+ * **Example usage**:
+ * ```typescript
+ * const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
+ * ```
+ */
+export type PrimaryRouteProp<T extends keyof PrimaryParamList> = RouteProp<PrimaryParamList, T>
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createStackNavigator<PrimaryParamList>()
@@ -61,6 +82,11 @@ export const PrimaryNavigator = () => {
       <Stack.Screen
         name="event"
         component={EventScreen}
+      />
+      <Stack.Screen
+        name="editEvent"
+        component={EditEventScreen}
+        options={({ title: 'Edit' })}
       />
       <Stack.Screen
         name="welcome"

@@ -1,12 +1,11 @@
 import React, { FunctionComponent as Component, useEffect, useState } from "react"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import { View, ViewStyle, TextStyle, SafeAreaView } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing, typography } from "../../theme"
-import { useStores } from "../../models/root-store/root-store-context"
-
-const bowserLogo = require("./bowser.png")
+import { useStores } from "../../models/root-store/root-store-context"
+import { PrimaryStackNavigationProp } from "navigation"
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
@@ -42,17 +41,7 @@ const TITLE: TextStyle = {
   lineHeight: 38,
   textAlign: "center",
 }
-const ALMOST: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 26,
-  fontStyle: "italic",
-}
-const BOWSER: ImageStyle = {
-  alignSelf: "center",
-  marginVertical: spacing[5],
-  maxWidth: "100%",
-}
+
 const CONTENT: TextStyle = {
   ...TEXT,
   color: "#BAB6C8",
@@ -78,8 +67,8 @@ const FOOTER_CONTENT: ViewStyle = {
 }
 
 export const WelcomeScreen: Component = observer(function WelcomeScreen() {
-  const navigation = useNavigation()
-  const { eventStore, userStore } = useStores()
+  const navigation = useNavigation<PrimaryStackNavigationProp<"welcome">>()
+  const { userStore } = useStores()
   const { timelineStore } = useStores()
   const nextScreen = () => navigation.navigate("demo")
   const [isLoading, setIsLoading] = useState(false)
@@ -94,16 +83,13 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
 
   useEffect(() => {
     setIsLoading(true)
-    timelineStore.getTimelinesByUser(userStore.user.id)
-    eventStore.getEvents()
+    timelineStore.getTimelines(userStore.user.id)
     setIsLoading(false)
   }, [])
 
   const navigateToHome = () => navigation.navigate("home")
 
   const getTimelines = async() => timelineStore.getAllTimelines()
-
-  const getEvents = async() => eventStore.getEvents()
 
   return (
     <View style={FULL}>
@@ -114,30 +100,25 @@ export const WelcomeScreen: Component = observer(function WelcomeScreen() {
           <Text style={TITLE} text="Timelines" />
         </Text>
 
-        {isLoading ? (
+        {isLoading && (
           <Text style={CONTENT}>
             Loading...
           </Text>
-        ) : (
-          timelineStore.timelines.map(timeline => <Text key={timeline.id}>{timeline.title} - {timeline.description}</Text>)
         )}
 
         <Text style={TITLE_WRAPPER}>
           <Text style={TITLE} text="Events" />
         </Text>
 
-        {isLoading ? (
+        {isLoading && (
           <Text style={CONTENT}>
             Loading...
           </Text>
-        ) : (
-          eventStore.events.map(event => <Text key={event.id}>{event.title} - {event.description}</Text>)
         )}
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
           <Button style={CONTINUE} textStyle={CONTINUE_TEXT} onPress={getTimelines} text="Get Timelines" />
-          <Button style={CONTINUE} textStyle={CONTINUE_TEXT} onPress={getEvents} text="Get Events" />
           <Button style={CONTINUE} textStyle={CONTINUE_TEXT}
             onPress={logOut}
             text="Logout"

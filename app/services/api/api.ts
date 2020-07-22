@@ -2,7 +2,6 @@ import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
-import { Timeline } from "models"
 
 /**
  * Manages all requests to the API.
@@ -210,31 +209,9 @@ export class Api {
       if (problem) return problem
     }
 
-    // const convertTimeline = (raw: Types.Timeline) => {
-    //   const events = raw.events.map(event => {
-    //     return {
-    //       id: event.id,
-    //       title: event.title,
-    //       description: event.description,
-    //       createdAt: event.created_at,
-    //       updatedAt: event.updated_at
-    //     }
-    //   })
-
-    //   return {
-    //     id: raw.id,
-    //     title: raw.title,
-    //     description: raw.description,
-    //     events: events,
-    //     createdAt: raw.created_at,
-    //     updatedAt: raw.updated_at
-    //   }
-    // }
-
     // transform the data into the format we are expecting
     try {
       const rawTimelines = response.data
-      // const resultTimelines: Types.Timeline[] = rawTimelines.map(convertTimeline)
 
       return { kind: "ok", timelines: rawTimelines }
     } catch {
@@ -248,7 +225,7 @@ export class Api {
    * @returns {Promise<Types.GetTimelinesResult>}
    * @memberof Api
    */
-  async updateTimeline(timeline): Promise<Types.PostTimelineResult> { // TODO: Add correct type for timeline
+  async updateTimeline(timeline: { id: string, title: string, description: string }): Promise<Types.PutTimelineResult> { // TODO: Add correct type for timeline
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.put(`/timelines/${timeline.id}`, timeline)
 
@@ -284,23 +261,38 @@ export class Api {
       if (problem) return problem
     }
 
-    const convertEvent = raw => {
-      return {
-        id: raw.id,
-        title: raw.title,
-        description: raw.description,
-        timeline: raw.timeline.id,
-        createdAt: raw.created_at,
-        updatedAt: raw.updated_at
-      }
+    // transform the data into the format we are expecting
+    try {
+      const rawEvents = response.data
+      // const resultEvents: Types.Event[] = rawEvents.map(convertEvent)
+
+      return { kind: "ok", events: rawEvents }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
+   * Update a specific event
+   *
+   * @returns {Promise<Types.PutEventResult>}
+   * @memberof Api
+   */
+  async updateEvent(event: { id: string, title: string, description: string }): Promise<Types.PutEventResult> { // TODO: Add correct type for event
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.put(`/events/${event.id}`, event)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const rawEvents = response.data
-      const resultEvents: Types.Event[] = rawEvents.map(convertEvent)
+      const resultEvent: Types.Event = response.data
 
-      return { kind: "ok", events: resultEvents }
+      return { kind: "ok", event: resultEvent }
     } catch {
       return { kind: "bad-data" }
     }

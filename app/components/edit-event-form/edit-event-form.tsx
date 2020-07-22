@@ -1,41 +1,43 @@
-import React, { FunctionComponent as Component } from "react"
+import { Button as HeaderButton } from "react-native"
 import { Controller, useForm } from "react-hook-form"
 import { Input } from "@ui-kitten/components"
-import { yupResolver } from "@hookform/resolvers"
-
-import { Timeline } from "models"
-import { EditTimelineFormSchema } from "./edit-timeline-form.validation"
 import { useNavigation } from "@react-navigation/native"
-import { Button as HeaderButton } from "react-native"
+import { yupResolver } from "@hookform/resolvers"
+import React, { FunctionComponent as Component } from "react"
+
+import { EditEventFormSchema } from "./edit-event-form.validation"
+import { Event } from "models"
 import { PrimaryStackNavigationProp } from "navigation"
 
-export interface EditTimelineFormProps {
-  timeline: Timeline
-  onSubmit: (data: EditTimelineFormData) => void
-}
-
-export type EditTimelineFormData = {
+export type EditEventeFormData = {
   title: string,
   description: string,
 }
 
+export interface EditEventFormProps {
+  event: Event
+  onSubmit: (data: EditEventeFormData) => void
+}
+
 /**
- * Form used when editing a timeline.
+ * This is a React functional component, ready to
+ *
+ * Component description here for TypeScript tips.
  */
-export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, onSubmit }) => {
-  const navigation = useNavigation<PrimaryStackNavigationProp<"editTimeline">>()
-  const { control, errors, formState, handleSubmit } = useForm<EditTimelineFormData>({
-    resolver: yupResolver(EditTimelineFormSchema),
+export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }) => {
+  const navigation = useNavigation<PrimaryStackNavigationProp<"editEvent">>()
+  const { control, errors, formState, handleSubmit } = useForm<EditEventeFormData>({
+    resolver: yupResolver(EditEventFormSchema),
     mode: 'onChange',
     defaultValues: {
-      title: timeline?.title,
-      description: timeline?.description
+      title: event.title,
+      description: event.description
     }
   })
 
   const localSubmit = async (data) => {
     const updatedData = {
-      id: timeline.id,
+      id: event.id,
       title: data.title,
       description: data.description,
     }
