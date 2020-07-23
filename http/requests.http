@@ -39,6 +39,18 @@ Authorization: Bearer {{token}}
 
 ###
 
+POST http://localhost:1337/events
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "asfgsdfgsdfg sdfg sdf",
+  "description": "sdfgsdf sdfg sdf gsdfg!",
+  "timeline": "2"
+}
+
+###
+
 PUT http://localhost:1337/events/5
 Authorization: Bearer {{token}}
 Content-Type: application/json

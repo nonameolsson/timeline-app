@@ -159,6 +159,17 @@ export class Reactotron {
       })
 
       Tron.onCustomCommand({
+        title: "Delete event",
+        description: "Deletes an event ",
+        command: "deleteEvent",
+        handler: () => {
+          console.tron.log("deletingEvent")
+          const timeline = this.rootStore.timelineStore.getTimeline(2)
+          timeline.deleteEvent(71)
+        },
+      })
+
+      Tron.onCustomCommand({
         title: "Reset Root Store",
         description: "Resets the MST store",
         command: "resetStore",

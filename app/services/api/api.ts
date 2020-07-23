@@ -318,7 +318,7 @@ export class Api {
     try {
       const resultEvent: Types.Event = response.data
 
-      return { kind: "ok", event: resultEvent }
+      return { kind: "ok", event: resultEvent.id.toString() }
     } catch {
       return { kind: "bad-data" }
     }

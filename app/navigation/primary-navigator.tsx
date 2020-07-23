@@ -27,7 +27,7 @@ export type PrimaryParamList = {
   home: undefined
   timeline: { id: string, title }
   editTimeline: { id: string }
-  event: { timelineId: string; eventId: string }
+  event: { timelineId: string; eventId: string, onDelete: (id: string) => void }
   editEvent: { timelineId: string, eventId: string }
 }
 
