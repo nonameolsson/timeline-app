@@ -1,5 +1,4 @@
-import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
-import { Timeline as TimelineRawData } from "services/api"
+import { destroy, Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 import { Event, EventModel, EventModelFromData } from "models/event/event"
 import { withEnvironment } from "models/extensions/with-environment"
 import * as Types from "services/api/api.types"
@@ -23,11 +22,7 @@ export const TimelineModel = types
      * Get a specific event from a timeline
      */
     getEvent: (id: string): Event => {
-      const event = self.events.find(event => event.id === id)
-
-      if (!event) throw new Error(`No timeline with id ${id} was found`)
-
-      return event
+      return self.events.find(event => event.id === id.toString())
     },
 
     /**
@@ -37,12 +32,8 @@ export const TimelineModel = types
       return self.events
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
-/**
-   * Following actions will be called with data received from the API and modify the store.
-   */
-  .actions(self => ({
-    updateTimelineInStore: (timelineSnapshot: Types.Timeline) => {
-      // const timelineModel: Timeline = TimelineModelFromData(timelineSnapshot)
+  .actions(self => {
+    const updateTimelineInStore = (timelineSnapshot: Types.Timeline) => {
       const { created_at, description, id, title, updated_at } = timelineSnapshot
 
       self.createdAt = created_at
@@ -50,21 +41,36 @@ export const TimelineModel = types
       self.title = title
       self.description = description
     }
-  }))
-  /**
-   * Following actions will send requests to the API, and call actions defined in the first action definition
-   */
-  .actions(self => ({
-    updateTimeline: flow(function * (timeline: { id: string, title: string, description: string }) {
+
+    const deleteEventFromStore = (eventId: string) => {
+      const eventToDelete = self.getEvent(eventId)
+      destroy(eventToDelete)
+    }
+    const updateTimeline = flow(function * (timeline: { id: string, title: string, description: string }) {
       const result: Types.PutTimelineResult = yield self.environment.api.updateTimeline(timeline)
 
       if (result.kind === "ok") {
-        self.updateTimelineInStore(result.timeline)
+        updateTimelineInStore(result.timeline)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
     })
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+
+    const deleteEvent = flow(function * (id: string) {
+      const result: Types.DeleteEventResult = yield self.environment.api.deleteEvent(id)
+
+      if (result.kind === "ok") {
+        deleteEventFromStore(result.event)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    })
+
+    return {
+      updateTimeline,
+      deleteEvent
+    }
+  })
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).

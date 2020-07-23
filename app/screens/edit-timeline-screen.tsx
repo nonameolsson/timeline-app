@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export const EditTimelineScreen: Component = observer(() => {
+export const EditTimelineScreen: Component = observer(function EditTimelineScreen () {
   const [isLoading, setIsLoading] = useState(false)
 
   const navigation = useNavigation<PrimaryStackNavigationProp<"editTimeline">>()

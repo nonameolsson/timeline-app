@@ -1,5 +1,5 @@
-import React, { FunctionComponent as Component, useCallback, useLayoutEffect } from "react"
-import { observer } from "mobx-react-lite"
+import React, { FunctionComponent as Component, useLayoutEffect, useRef, useEffect } from "react"
+import { useObserver } from "mobx-react-lite"
 import { Button as HeaderButton, SafeAreaView } from "react-native"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import { List, ListItem, Text, Layout, Card } from '@ui-kitten/components'
@@ -7,32 +7,36 @@ import { List, ListItem, Text, Layout, Card } from '@ui-kitten/components'
 import { Event, useStores } from "models"
 import { styles } from './timeline-screen.styles'
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
+import { autorun } from "mobx"
 
-export const TimelineScreen: Component = observer(() => {
+const useTitle = (id) => {
+  if (id) {
+    const { timelineStore } = useStores()
+    const titleRef = useRef('')
+    const navigation = useNavigation()
+
+    useEffect(() => {
+      const dispose = autorun(() => {
+        const timeline = timelineStore.getTimeline(id)
+        titleRef.current = timeline.title
+      })
+      return dispose
+    }, [id])
+
+    useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
+  }
+}
+
+export const TimelineScreen: Component = () => {
   // Pull in one of our MST stores
   const { timelineStore } = useStores()
 
   // Pull in navigation via hook
   const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
-  const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
+  const { params: { id, deleteEvent } } = useRoute<PrimaryRouteProp<"timeline">>()
 
-  let timeline = timelineStore.getTimeline(id)
-  const events = timeline.getEvents()
-
-  useFocusEffect(
-    useCallback(() => {
-      // Do something when the screen is focused
-
-      // Get the latest data from the store. This is neccessary to get the latest title after editing the timeline in EditTimelineScreen.
-      timeline = timelineStore.getTimeline(id)
-      navigation.setOptions({ title: timeline.title })
-
-      return () => {
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
-      }
-    }, [])
-  )
+  const timeline = timelineStore.timelines.get(id)
+  useTitle(id)
 
   const goToEditTimelineScreen = () => {
     navigation.navigate('editTimeline', { id: timeline.id })
@@ -46,46 +50,35 @@ export const TimelineScreen: Component = observer(() => {
     })
   }, [navigation])
 
-  // FIXME: Related issue #32
-  const deleteTimeline = () => {
-    // timelineStore.deleteTimelineFromFirebase(timeline.id)
-    // goBack()
-  }
+  React.useEffect(() => {
+    if (deleteEvent) {
+      // Post updated, do something with `route.params.post`
+      // For example, send the post to the server
+      timeline.deleteEvent(deleteEvent)
+    }
+  }, [deleteEvent])
 
-  // const showDeleteModal = () => {
-  //   Alert.alert(
-  //     'Delete timeline',
-  //     `Do you want to delete ${timeline.title}?`,
-  //     [
-  //       {
-  //         text: 'No',
-  //         style: 'cancel'
-  //       },
-  //       { text: 'Yes', onPress: () => deleteTimeline() }
-  //     ],
-  //     { cancelable: false }
-  //   )
-  // }
+  return useObserver(() => {
+    const openEvent = (eventId: string) => {
+      navigation.navigate('event', { timelineId: id, eventId })
+    }
 
-  const openEvent = (eventId: string) => {
-    navigation.navigate('event', { timelineId: id, eventId })
-  }
+    const renderItem = ({ item, index }: { item: Event; index: number }) => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />
 
-  const renderItem = ({ item, index }: { item: Event; index: number }) => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />
+    return (
+      <SafeAreaView style={styles.container}>
+        <Layout style={styles.layout}>
+          <Card>
+            <Text>{timeline.description}</Text>
+          </Card>
+          {/* <Button onPress={() => showDeleteModal()}>Delete timeline</Button> */}
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <Layout style={styles.layout}>
-        <Card>
-          <Text>{timeline.description}</Text>
-        </Card>
-        {/* <Button onPress={() => showDeleteModal()}>Delete timeline</Button> */}
+          {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
 
-        {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
-
-        <Text category="h4">Events</Text>
-        <List data={events} renderItem={renderItem} />
-      </Layout>
-    </SafeAreaView>
-  )
-})
+          <Text category="h4">Events - {timeline.events.length}</Text>
+          <List data={timeline.events} renderItem={renderItem} />
+        </Layout>
+      </SafeAreaView>
+    )
+  })
+}

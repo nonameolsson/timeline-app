@@ -1,11 +1,11 @@
 import React, { FunctionComponent as Component, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute } from "@react-navigation/native"
+import { Alert, StyleSheet, SafeAreaView, ActivityIndicator } from "react-native"
+import { Layout, Button } from "@ui-kitten/components"
 
 import { EditEventForm } from "components"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
-import { StyleSheet, SafeAreaView, ActivityIndicator } from "react-native"
-import { Layout } from "@ui-kitten/components"
 import { useStores } from "models"
 
 const styles = StyleSheet.create({
@@ -34,7 +34,6 @@ export const EditEventScreen: Component = observer(function EditEventScreen() {
   const event = timeline.getEvent(eventId)
 
   const onSubmit = async (data: { id: string, title: string, description: string }) => {
-  // const onSubmit = async (data: EditTimelineFormData) => {
     setIsLoading(true)
     await event.updateEvent(data)
     setIsLoading(false)

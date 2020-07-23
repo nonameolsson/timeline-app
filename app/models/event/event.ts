@@ -18,9 +18,9 @@ export const EventModel = types
   })
   .extend(withEnvironment)
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  // Following actions will be called with data received from the API and modify the store.
-  .actions(self => ({
-    updateEventInStore: (eventSnapshot: Types.Event) => {
+  // Following actions will send requests to the API, and call actions defined in the first action definition
+  .actions(self => {
+    const updateEventInStore = (eventSnapshot: Types.Event) => {
       const { title, description, created_at, timeline, updated_at } = eventSnapshot
 
       self.title = title
@@ -29,19 +29,21 @@ export const EventModel = types
       self.createdAt = created_at
       self.timeline = timeline.id
     }
-  }))
-  // Following actions will send requests to the API, and call actions defined in the first action definition
-  .actions(self => ({
-    updateEvent: flow(function * (event: { id: string, title: string, description: string }) {
+
+    const updateEvent = flow(function * (event: { id: string, title: string, description: string }) {
       const result: Types.PutEventResult = yield self.environment.api.updateEvent(event)
 
       if (result.kind === "ok") {
-        self.updateEventInStore(result.event)
+        updateEventInStore(result.event)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    }),
-  }))
+    })
+
+    return {
+      updateEvent
+    }
+  })
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).

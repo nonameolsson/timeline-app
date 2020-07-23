@@ -25,7 +25,8 @@ export type PrimaryParamList = {
   welcome: undefined
   demo: undefined
   home: undefined
-  timeline: { id: string, title }
+  // NOTE: Timeline interfaces should only be optional when goint BACK to TimelineScreen from EventScreen. Fix this.
+  timeline: { id?: string, title?: string, deleteEvent?: string }
   editTimeline: { id: string }
   event: { timelineId: string; eventId: string }
   editEvent: { timelineId: string, eventId: string }

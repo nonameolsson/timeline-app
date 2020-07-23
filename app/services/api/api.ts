@@ -297,4 +297,30 @@ export class Api {
       return { kind: "bad-data" }
     }
   }
+
+  /**
+   * Update a specific event
+   *
+   * @returns {Promise<Types.DeleteEventResult>}
+   * @memberof Api
+   */
+  async deleteEvent(id: string): Promise<Types.DeleteEventResult> { // TODO: Add correct type for event
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.delete(`/events/${id}`)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const resultEvent: Types.Event = response.data
+
+      return { kind: "ok", event: resultEvent.id.toString() }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
 }
