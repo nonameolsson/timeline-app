@@ -10,19 +10,23 @@ import { Button as HeaderButton, Alert } from "react-native"
 import { autorun } from "mobx"
 
 const useTitle = (timelineId, eventId) => {
-  const { timelineStore } = useStores()
-  const titleRef = useRef('')
-  const navigation = useNavigation()
+  if (eventId) {
+    const { timelineStore } = useStores()
+    const titleRef = useRef('')
+    const navigation = useNavigation()
 
-  useEffect(() => {
-    const dispose = autorun(() => {
-      const timeline = timelineStore.getTimeline(timelineId)
-      const event = timeline.getEvent(eventId)
-      titleRef.current = event.title
-    })
-    return dispose
-  }, [eventId])
-  useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
+    useEffect(() => {
+      const dispose = autorun(() => {
+        const timeline = timelineStore.getTimeline(timelineId)
+        const event = timeline.getEvent(eventId)
+
+        if (event) titleRef.current = event.title
+      })
+
+      return dispose
+    }, [eventId])
+    useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
+  }
 }
 
 export const EventScreen: Component = () => {
@@ -31,28 +35,13 @@ export const EventScreen: Component = () => {
 
   // Pull in navigation via hook
   const navigation = useNavigation<PrimaryStackNavigationProp<"event">>()
-  const { params: { eventId, timelineId, onDelete } } = useRoute<PrimaryRouteProp<"event">>()
+  const { params: { eventId, timelineId } } = useRoute<PrimaryRouteProp<"event">>()
 
   // Get current timeline and event
   const timeline = timelineStore.getTimeline(timelineId)
   const event = timeline.getEvent(eventId)
 
   useTitle(timeline.id, eventId)
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     // Do something when the screen is focused
-
-  //     // Get the latest data from the store. This is neccessary to get the latest title after editing the timeline in EditTimelineScreen.
-  //     event = timeline.getEvent(eventId)
-  //     navigation.setOptions({ title: event.title })
-
-  //     return () => {
-  //       // Do something when the screen is unfocused
-  //       // Useful for cleanup functions
-  //     }
-  //   }, [])
-  // )
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -62,11 +51,7 @@ export const EventScreen: Component = () => {
     })
   }, [navigation])
 
-  const deleteEvent = async () => {
-    navigation.navigate('timeline')
-    onDelete(event.id)
-    // await timeline.deleteEvent(event.id)
-  }
+  const deleteEvent = () => navigation.navigate('timeline', { deleteEvent: event.id })
 
   const showDeleteAlert = () => {
     Alert.alert(
@@ -84,12 +69,11 @@ export const EventScreen: Component = () => {
     )
   }
 
-  return useObserver(() => ((
+  return (
     <Layout style={styles.container}>
       <Text>{event.title}</Text>
       <Text>{event.description}</Text>
       <Button onPress={showDeleteAlert}>Delete</Button>
     </Layout>
-  ))
   )
 }

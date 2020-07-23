@@ -10,18 +10,21 @@ import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { autorun } from "mobx"
 
 const useTitle = (id) => {
-  const { timelineStore } = useStores()
-  const titleRef = useRef('')
-  const navigation = useNavigation()
+  if (id) {
+    const { timelineStore } = useStores()
+    const titleRef = useRef('')
+    const navigation = useNavigation()
 
-  useEffect(() => {
-    const dispose = autorun(() => {
-      const timeline = timelineStore.getTimeline(id)
-      titleRef.current = timeline.title
-    })
-    return dispose
-  }, [id])
-  useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
+    useEffect(() => {
+      const dispose = autorun(() => {
+        const timeline = timelineStore.getTimeline(id)
+        titleRef.current = timeline.title
+      })
+      return dispose
+    }, [id])
+
+    useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
+  }
 }
 
 export const TimelineScreen: Component = () => {
@@ -30,7 +33,7 @@ export const TimelineScreen: Component = () => {
 
   // Pull in navigation via hook
   const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
-  const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
+  const { params: { id, deleteEvent } } = useRoute<PrimaryRouteProp<"timeline">>()
 
   const timeline = timelineStore.timelines.get(id)
   useTitle(id)
@@ -47,11 +50,17 @@ export const TimelineScreen: Component = () => {
     })
   }, [navigation])
 
-  return useObserver(() => {
-    const deleteEvent = (eventId: string) => timeline.deleteEvent(eventId)
+  React.useEffect(() => {
+    if (deleteEvent) {
+      // Post updated, do something with `route.params.post`
+      // For example, send the post to the server
+      timeline.deleteEvent(deleteEvent)
+    }
+  }, [deleteEvent])
 
+  return useObserver(() => {
     const openEvent = (eventId: string) => {
-      navigation.navigate('event', { timelineId: id, eventId, onDelete: deleteEvent })
+      navigation.navigate('event', { timelineId: id, eventId })
     }
 
     const renderItem = ({ item, index }: { item: Event; index: number }) => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />
