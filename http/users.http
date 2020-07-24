@@ -1,0 +1,12 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk1MjI4MDczLCJleHAiOjE1OTc4MjAwNzN9.NYyCjJ5HxOI_X731mOoq-wDAnqxiZ8H2rW1V3RwdQTk
+
+###
+
+GET http://localhost:1337/users
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:1337/users/1
+Authorization: Bearer {{token}}
+

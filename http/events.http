@@ -1,0 +1,43 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk1MjI4MDczLCJleHAiOjE1OTc4MjAwNzN9.NYyCjJ5HxOI_X731mOoq-wDAnqxiZ8H2rW1V3RwdQTk
+
+GET http://localhost:1337/events
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:1337/events/1
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:1337/events?timeline.id=3
+Authorization: Bearer {{token}}
+
+###
+
+POST http://localhost:1337/events
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Semester",
+  "description": "Nu åker vi!!",
+  "timeline": "2"
+}
+
+###
+
+PUT http://localhost:1337/events/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "new title",
+  "description": "new description"
+}
+
+###
+
+DELETE http://localhost:1337/events/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
