@@ -7,6 +7,7 @@
 // side effect of breaking other tooling like mobile-center and react-native-rename.
 //
 // It's easier just to leave it here.
+require("react-native").unstable_enableLogBox()
 import App from "./app/app.tsx"
 
 // Should we show storybook instead of our app?
