@@ -1,8 +1,8 @@
 import React, { FunctionComponent as Component, useLayoutEffect, useRef, useEffect } from "react"
 import { useObserver } from "mobx-react-lite"
-import { Button as HeaderButton, SafeAreaView } from "react-native"
+import { Button as HeaderButton, SafeAreaView, Alert } from "react-native"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
-import { List, ListItem, Text, Layout, Card } from '@ui-kitten/components'
+import { List, ListItem, Text, Layout, Card, Button } from '@ui-kitten/components'
 
 import { Event, useStores } from "models"
 import { styles } from './timeline-screen.styles'
@@ -18,7 +18,7 @@ const useTitle = (id) => {
     useEffect(() => {
       const dispose = autorun(() => {
         const timeline = timelineStore.getTimeline(id)
-        titleRef.current = timeline.title
+        if (timeline) titleRef.current = timeline.title
       })
       return dispose
     }, [id])
@@ -58,6 +58,24 @@ export const TimelineScreen: Component = () => {
     }
   }, [deleteEvent])
 
+  const deleteTimeline = () => navigation.navigate('home', { deleteTimeline: timeline.id })
+
+  const showDeleteAlert = () => {
+    Alert.alert(
+      "Delete event",
+      "Do you really want to delete the timeline?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => deleteTimeline() }
+      ],
+      { cancelable: false }
+    )
+  }
+
   return useObserver(() => {
     const openEvent = (eventId: string) => {
       navigation.navigate('event', { timelineId: id, eventId })
@@ -71,7 +89,7 @@ export const TimelineScreen: Component = () => {
           <Card>
             <Text>{timeline.description}</Text>
           </Card>
-          {/* <Button onPress={() => showDeleteModal()}>Delete timeline</Button> */}
+          <Button onPress={() => showDeleteAlert()}>Delete timeline</Button>
 
           {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
 

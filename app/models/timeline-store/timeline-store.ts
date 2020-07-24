@@ -47,6 +47,7 @@ export const TimelineStoreModel = types
     resetStore: () => {
       self.timelines.clear()
     },
+
     addTimelinesToStore: (timelineSnapshot: Types.Timeline[]) => {
       const timelineModelFromSnapshot = (timeline) => {
         return TimelineModel.create({
@@ -61,6 +62,10 @@ export const TimelineStoreModel = types
 
       const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => timelineModelFromSnapshot(timeline))
       timelinesModel.forEach(timeline => self.timelines.set(timeline.id, timeline))
+    },
+
+    deleteTimelineFromStore: (timelineId: string) => {
+      self.timelines.delete(timelineId)
     }
   }))
   /**
@@ -75,7 +80,17 @@ export const TimelineStoreModel = types
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    })
+    }),
+
+    deleteTimeline: flow(function * (timelineId: string) {
+      const result: Types.DeleteTimelineResult = yield self.environment.api.deleteTimeline(timelineId)
+
+      if (result.kind === "ok") {
+        self.deleteTimelineFromStore(timelineId)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
   }))
 
 /**

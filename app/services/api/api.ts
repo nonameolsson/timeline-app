@@ -246,6 +246,32 @@ export class Api {
   }
 
   /**
+   * Delete a timeline
+   *
+   * @returns {Promise<Types.deleteTimelinesResult>}
+   * @memberof Api
+   */
+  async deleteTimeline(timelineId: string): Promise<Types.DeleteTimelineResult> { // TODO: Add correct type for timeline
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.delete(`/timelines/${timelineId}`)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const resultTimeline: Types.Timeline = response.data
+
+      return { kind: "ok", timeline: resultTimeline }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
    * Gets a list of all events.
    *
    * @returns {Promise<Types.GetEventsResult>}

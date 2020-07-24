@@ -24,7 +24,7 @@ import { RouteProp } from "@react-navigation/native"
 export type PrimaryParamList = {
   welcome: undefined
   demo: undefined
-  home: undefined
+  home: { deleteTimeline?: string }
   // NOTE: Timeline interfaces should only be optional when goint BACK to TimelineScreen from EventScreen. Fix this.
   timeline: { id?: string, title?: string, deleteEvent?: string }
   editTimeline: { id: string }

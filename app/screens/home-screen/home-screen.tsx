@@ -1,12 +1,12 @@
 import React, { useEffect, useState, FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { Button, Layout, Text, List, ListItem } from "@ui-kitten/components"
 
 import { useStores, Timeline } from "models"
 import { styles } from "./home-screen.styles"
 import { SafeAreaView } from "react-native"
-import { PrimaryStackNavigationProp } from "navigation"
+import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 
 export const HomeScreen: Component = observer(function HomeScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -16,6 +16,7 @@ export const HomeScreen: Component = observer(function HomeScreen() {
 
   // Pull in navigation via hook
   const navigation = useNavigation<PrimaryStackNavigationProp<"home">>()
+  const { params } = useRoute<PrimaryRouteProp<"home">>()
 
   // Create async getTimelines()
   useEffect(() => {
@@ -23,6 +24,14 @@ export const HomeScreen: Component = observer(function HomeScreen() {
 
     timelineStore.getTimelines(userStore.user.id).then(() => setIsLoading(false))
   }, [])
+
+  useEffect(() => {
+    if (params?.deleteTimeline) {
+      // Post updated, do something with `params.post`
+      // For example, send the post to the server
+      timelineStore.deleteTimeline(params?.deleteTimeline)
+    }
+  }, [params?.deleteTimeline])
 
   const openTimeline = (id: string, title: string): void => {
     navigation.navigate("timeline", { id, title })
