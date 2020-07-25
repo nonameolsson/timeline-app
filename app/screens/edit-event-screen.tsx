@@ -1,18 +1,14 @@
-import React, { FunctionComponent as Component, useState } from "react"
+import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute } from "@react-navigation/native"
-import { Alert, StyleSheet, SafeAreaView, ActivityIndicator } from "react-native"
-import { Layout, Button } from "@ui-kitten/components"
+import { StyleSheet, SafeAreaView } from "react-native"
+import { Layout } from "@ui-kitten/components"
 
-import { EditEventForm } from "components"
+import { EditEventForm, EditEventeFormData as EditEventFormData } from "components"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { useStores } from "models"
 
 const styles = StyleSheet.create({
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   container: {
     flex: 1,
   },
@@ -23,8 +19,6 @@ const styles = StyleSheet.create({
 })
 
 export const EditEventScreen: Component = observer(function EditEventScreen() {
-  const [isLoading, setIsLoading] = useState(false)
-
   const navigation = useNavigation<PrimaryStackNavigationProp<"editEvent">>()
   const { params: { eventId, timelineId } } = useRoute<PrimaryRouteProp<"editEvent">>()
 
@@ -33,20 +27,26 @@ export const EditEventScreen: Component = observer(function EditEventScreen() {
   const timeline = timelineStore.getTimeline(timelineId)
   const event = timeline.getEvent(eventId)
 
-  const onSubmit = async (data: { id: string, title: string, description: string }) => {
-    setIsLoading(true)
-    await event.updateEvent(data)
-    setIsLoading(false)
-    navigation.goBack()
+  const onSubmit = async ({ title, description }: EditEventFormData) => {
+    navigation.navigate('event', {
+      eventId: event.id, // FIXME: This should not be required when going back
+      timelineId: timelineId, // FIXME: This should not be required when going back
+      action: {
+        type: 'EDIT_EVENT',
+        payload: {
+          id: event.id,
+          title,
+          description
+        }
+      }
+    })
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <Layout style={styles.layout}>
-        {isLoading
-          ? <ActivityIndicator style={styles.activityIndicator} />
-          : <EditEventForm event={event} onSubmit={onSubmit} />
-        }
+        <EditEventForm event={event} onSubmit={onSubmit} />
+
       </Layout>
     </SafeAreaView>
   )

@@ -1,15 +1,16 @@
-import React, { FunctionComponent as Component, useLayoutEffect, useRef, useEffect } from "react"
+import React, { FunctionComponent as Component, useLayoutEffect, useRef, useEffect, useCallback } from "react"
 import { useObserver } from "mobx-react-lite"
 import { Button as HeaderButton, SafeAreaView, Alert } from "react-native"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import { List, ListItem, Text, Layout, Card, Button } from '@ui-kitten/components'
 
-import { Event, useStores } from "models"
+import { Event, useStores, Timeline } from "models"
 import { styles } from './timeline-screen.styles'
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { autorun } from "mobx"
 
-const useTitle = (id) => {
+const useTitle = (id: string) => {
+  console.tron.log('useTitle')
   if (id) {
     const { timelineStore } = useStores()
     const titleRef = useRef('')
@@ -18,10 +19,10 @@ const useTitle = (id) => {
     useEffect(() => {
       const dispose = autorun(() => {
         const timeline = timelineStore.getTimeline(id)
-        if (timeline) titleRef.current = timeline.title
+        titleRef.current = timeline.title
       })
       return dispose
-    }, [id])
+    }, [id, timelineStore])
 
     useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
   }
@@ -33,14 +34,14 @@ export const TimelineScreen: Component = () => {
 
   // Pull in navigation via hook
   const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
-  const { params: { id, deleteEvent } } = useRoute<PrimaryRouteProp<"timeline">>()
+  const { params } = useRoute<PrimaryRouteProp<"timeline">>()
+  const timeline = timelineStore.timelines.get(params.id) as Timeline
 
-  const timeline = timelineStore.timelines.get(id)
-  useTitle(id)
+  useTitle(params.id)
 
-  const goToEditTimelineScreen = () => {
+  const goToEditTimelineScreen = useCallback(() => {
     navigation.navigate('editTimeline', { id: timeline.id })
-  }
+  }, [navigation, timeline.id])
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -48,22 +49,14 @@ export const TimelineScreen: Component = () => {
         <HeaderButton title="Edit" onPress={goToEditTimelineScreen} />
       ),
     })
-  }, [navigation])
+  }, [goToEditTimelineScreen, navigation, timeline.id])
 
-  React.useEffect(() => {
-    if (deleteEvent) {
-      // Post updated, do something with `route.params.post`
-      // For example, send the post to the server
-      timeline.deleteEvent(deleteEvent)
-    }
-  }, [deleteEvent])
-
-  const deleteTimeline = () => navigation.navigate('home', { deleteTimeline: timeline.id })
+  const deleteTimeline = () => navigation.navigate('home', { action: { type: 'DELETE_TIMELINE', meta: { id: timeline.id } } })
 
   const showDeleteAlert = () => {
     Alert.alert(
       "Delete event",
-      "Do you really want to delete the timeline?",
+      "Do you really want to delete the timeline and all of the events?",
       [
         {
           text: "Cancel",
@@ -76,9 +69,25 @@ export const TimelineScreen: Component = () => {
     )
   }
 
+  React.useEffect(() => {
+    console.tron.log(params.action)
+    switch (params.action?.type) {
+      case 'DELETE_EVENT':
+        timeline.deleteEvent(params.action.meta.id)
+        break
+
+      case 'EDIT_TIMELINE':
+        timeline.updateTimeline(params.action.payload)
+        break
+
+      default:
+        break
+    }
+  }, [params.action, timeline])
+
   return useObserver(() => {
     const openEvent = (eventId: string) => {
-      navigation.navigate('event', { timelineId: id, eventId })
+      navigation.navigate('event', { timelineId: timeline.id, eventId })
     }
 
     const renderItem = ({ item, index }: { item: Event; index: number }) => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />
@@ -87,7 +96,7 @@ export const TimelineScreen: Component = () => {
       <SafeAreaView style={styles.container}>
         <Layout style={styles.layout}>
           <Card>
-            <Text>{timeline.description}</Text>
+            {/* <Text>{timeline.description}</Text> */}
           </Card>
           <Button onPress={() => showDeleteAlert()}>Delete timeline</Button>
 

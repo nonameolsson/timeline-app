@@ -1,18 +1,19 @@
 import React, { useEffect, useState, FunctionComponent as Component } from "react"
-import { observer } from "mobx-react-lite"
+import { useObserver } from "mobx-react-lite"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { Button, Layout, Text, List, ListItem } from "@ui-kitten/components"
 
-import { useStores, Timeline } from "models"
+import { useStores, Timeline, User } from "models"
 import { styles } from "./home-screen.styles"
-import { SafeAreaView } from "react-native"
+import { ActivityIndicator, SafeAreaView } from "react-native"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 
-export const HomeScreen: Component = observer(function HomeScreen() {
+export const HomeScreen: Component = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  // Pull in one of our MST stores
+  // Fix to get correct type
   const { userStore, timelineStore } = useStores()
+  const user = useStores().userStore.user as User
 
   // Pull in navigation via hook
   const navigation = useNavigation<PrimaryStackNavigationProp<"home">>()
@@ -22,16 +23,26 @@ export const HomeScreen: Component = observer(function HomeScreen() {
   useEffect(() => {
     setIsLoading(true)
 
-    timelineStore.getTimelines(userStore.user.id).then(() => setIsLoading(false))
+    timelineStore.getTimelines(user.id).then(() => setIsLoading(false))
   }, [])
 
+  const deleteAllTheThings = async (timeline: Timeline) => {
+    const id = params.action?.meta.id as string // FIXME: Improve type
+
+    await timeline.deleteAllEvents()
+    await timelineStore.deleteTimeline(id)
+  }
+
   useEffect(() => {
-    if (params?.deleteTimeline) {
+    if (params?.action?.type === 'DELETE_TIMELINE') {
       // Post updated, do something with `params.post`
       // For example, send the post to the server
-      timelineStore.deleteTimeline(params?.deleteTimeline)
+      setIsLoading(true)
+      const timeline = timelineStore.getTimeline(params.action?.meta.id)
+      deleteAllTheThings(timeline)
+      setIsLoading(false)
     }
-  }, [params?.deleteTimeline])
+  }, [params])
 
   const openTimeline = (id: string, title: string): void => {
     navigation.navigate("timeline", { id, title })
@@ -49,20 +60,19 @@ export const HomeScreen: Component = observer(function HomeScreen() {
 
   const renderItem = ({ item, index }: { item: Timeline; index: number }) => <ListItem onPress={() => openTimeline(item.id, item.title)} key={index} title={item.title} description={item.description} />
 
-  return (
+  return useObserver(() => (
     <SafeAreaView style={styles.container}>
       <Layout style={styles.layout}>
-        {userStore.isLoggedIn ? (
+        {userStore.isLoggedIn() ? (
           <>
             <Text category="h2">Your timelines</Text>
-            {isLoading ? (
-              <Text>Loading...</Text>
-            ) : timelineStore.hasTimelines ? (
-              <List data={timelineStore.getTimelinesArray()} renderItem={renderItem} />
-            ) : (
-              renderEmptyState()
-            )}
-            <Button onPress={() => undefined}>Create timeline</Button>
+            {isLoading ? <ActivityIndicator />
+              : timelineStore.hasTimelines() ? (
+                <List data={timelineStore.getTimelinesArray()} renderItem={renderItem} />
+              ) : (
+                renderEmptyState()
+              )}
+            <Button onPress={() => setIsLoading(!isLoading)}>Create timeline</Button>
           </>
         ) : (
           <Text>Logging in...</Text>
@@ -70,5 +80,5 @@ export const HomeScreen: Component = observer(function HomeScreen() {
         <Button onPress={(): void => logOut()}>Log out</Button>
       </Layout>
     </SafeAreaView>
-  )
-})
+  ))
+}

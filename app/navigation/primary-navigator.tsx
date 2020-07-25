@@ -8,6 +8,7 @@ import React from "react"
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack"
 import { EventScreen, EditEventScreen, HomeScreen, TimelineScreen, WelcomeScreen, DemoScreen, EditTimelineScreen } from "screens"
 import { RouteProp } from "@react-navigation/native"
+import { DeleteTimelineAction, DeleteEventAction, EditTimelineAction, EditEventAction } from './types'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -24,11 +25,17 @@ import { RouteProp } from "@react-navigation/native"
 export type PrimaryParamList = {
   welcome: undefined
   demo: undefined
-  home: { deleteTimeline?: string }
+  home: {
+    action?: DeleteTimelineAction
+  }
   // NOTE: Timeline interfaces should only be optional when goint BACK to TimelineScreen from EventScreen. Fix this.
-  timeline: { id?: string, title?: string, deleteEvent?: string }
+  timeline: {
+    id: string
+    title: string
+    action?: DeleteEventAction | EditTimelineAction
+  }
   editTimeline: { id: string }
-  event: { timelineId: string; eventId: string }
+  event: { timelineId: string; eventId: string, action?: EditEventAction }
   editEvent: { timelineId: string, eventId: string }
 }
 
