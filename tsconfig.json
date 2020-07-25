@@ -4,6 +4,9 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "app",
     "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "isolatedModules": true,
     "jsx": "react-native",
     "module": "es2015",
     "moduleResolution": "node",
@@ -15,6 +18,7 @@
     "target": "esnext",
     "lib": ["esnext"],
     "skipLibCheck": true,
+    "strict": true,
     "paths": {
       "config/*": ["./config/*"],
       "theme/*": ["./theme/*"],

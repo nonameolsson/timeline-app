@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 
-import { EventSnapshot, EventModelFromData } from "../event/event"
+import { EventModelFromData, Event } from "../event/event"
 import { Timeline, TimelineModel } from "../timeline/timeline"
 import { withEnvironment } from "../extensions/with-environment"
 import * as Types from "services/api/api.types"
@@ -18,15 +18,16 @@ export const TimelineStoreModel = types
     hasTimelines: () => {
       return self.timelines.size > 0
     },
-    getEventFromTimeline: (id: string, eventId: string): EventSnapshot | undefined => {
+    getEventFromTimeline: (id: string, eventId: string): Event | undefined => {
       const timeline = self.timelines.get(id)
 
+      if (!timeline) return undefined
       // if (!timeline) throw new Error(`No timeline with id ${id} was found`)
 
       return timeline.events.find(event => event.id === eventId)
     },
 
-    getTimeline: (id: string): Timeline => {
+    getTimeline: (id: string): Timeline | undefined => {
       const timeline = self.timelines.get(id)
 
       // if (!timeline) throw new Error(`No timeline with id ${id} was found`)
@@ -47,6 +48,7 @@ export const TimelineStoreModel = types
     resetStore: () => {
       self.timelines.clear()
     },
+
     addTimelinesToStore: (timelineSnapshot: Types.Timeline[]) => {
       const timelineModelFromSnapshot = (timeline) => {
         return TimelineModel.create({
@@ -61,6 +63,10 @@ export const TimelineStoreModel = types
 
       const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => timelineModelFromSnapshot(timeline))
       timelinesModel.forEach(timeline => self.timelines.set(timeline.id, timeline))
+    },
+
+    deleteTimelineFromStore: (timelineId: string) => {
+      self.timelines.delete(timelineId)
     }
   }))
   /**
@@ -75,7 +81,17 @@ export const TimelineStoreModel = types
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    })
+    }),
+
+    deleteTimeline: flow(function * (timelineId: string) {
+      const result: Types.DeleteTimelineResult = yield self.environment.api.deleteTimeline(timelineId)
+
+      if (result.kind === "ok") {
+        self.deleteTimelineFromStore(timelineId)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
   }))
 
 /**

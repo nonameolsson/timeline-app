@@ -2,7 +2,8 @@
   "login": {
     "errors": {
       "rejected": "Wrong e-mail or password.",
-      "cannot-connect": "Cannot connect to server. Please check your internet connection."
+      "cannot-connect": "Cannot connect to server. Please check your internet connection.",
+      "timeout": "Timeout. Please check your internet connection and try again."
     }
   },
   "common": {

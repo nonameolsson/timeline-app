@@ -10,7 +10,7 @@ export class Api {
   /**
    * The underlying apisauce instance which performs the requests.
    */
-  apisauce: ApisauceInstance
+  apisauce!: ApisauceInstance
 
   /**
    * Configurable options.
@@ -88,7 +88,7 @@ export class Api {
  */
   async getUser(id: number): Promise<Types.GetUserResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`, null, { headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk0MjE2ODE2LCJleHAiOjE1OTY4MDg4MTZ9.LuPgVDDzBrJsHyxJ39RPeq_7qf900rxtb8Hr4Vc7NqY' } })
+    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`, {}, { headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk0MjE2ODE2LCJleHAiOjE1OTY4MDg4MTZ9.LuPgVDDzBrJsHyxJ39RPeq_7qf900rxtb8Hr4Vc7NqY' } })
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -228,6 +228,32 @@ export class Api {
   async updateTimeline(timeline: { id: string, title: string, description: string }): Promise<Types.PutTimelineResult> { // TODO: Add correct type for timeline
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.put(`/timelines/${timeline.id}`, timeline)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const resultTimeline: Types.Timeline = response.data
+
+      return { kind: "ok", timeline: resultTimeline }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
+   * Delete a timeline
+   *
+   * @returns {Promise<Types.deleteTimelinesResult>}
+   * @memberof Api
+   */
+  async deleteTimeline(timelineId: string): Promise<Types.DeleteTimelineResult> { // TODO: Add correct type for timeline
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.delete(`/timelines/${timelineId}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
