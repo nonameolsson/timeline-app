@@ -44,7 +44,7 @@ export const TimelineModel = types
     },
 
     deleteEventFromStore: (eventId: string) => {
-      const eventToDelete = self.getEvent(eventId)
+      const eventToDelete = self.getEvent(eventId) as Event // TODO: Should we use type casting or make sure higher in the tree it will be an Event?
       destroy(eventToDelete)
     }
   }))

@@ -10,22 +10,21 @@ import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { autorun } from "mobx"
 
 const useTitle = (id: string) => {
-  console.tron.log('useTitle')
-  if (id) {
-    const { timelineStore } = useStores()
-    const titleRef = useRef('')
-    const navigation = useNavigation()
+  const { timelineStore } = useStores()
+  const titleRef = useRef('')
+  const navigation = useNavigation()
 
-    useEffect(() => {
-      const dispose = autorun(() => {
-        const timeline = timelineStore.getTimeline(id)
+  useEffect(() => {
+    const dispose = autorun(() => {
+      const timeline = timelineStore.getTimeline(id)
+      if (timeline) {
         titleRef.current = timeline.title
-      })
-      return dispose
-    }, [id, timelineStore])
+      }
+    })
+    return dispose
+  }, [id, timelineStore])
 
-    useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
-  }
+  useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
 }
 
 export const TimelineScreen: Component = () => {
@@ -43,6 +42,8 @@ export const TimelineScreen: Component = () => {
     navigation.navigate('editTimeline', { id: timeline.id })
   }, [navigation, timeline.id])
 
+  const deleteTimeline = () => navigation.navigate('home', { action: { type: 'DELETE_TIMELINE', meta: { id: timeline.id } } })
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -51,7 +52,20 @@ export const TimelineScreen: Component = () => {
     })
   }, [goToEditTimelineScreen, navigation, timeline.id])
 
-  const deleteTimeline = () => navigation.navigate('home', { action: { type: 'DELETE_TIMELINE', meta: { id: timeline.id } } })
+  useEffect(() => {
+    switch (params.action?.type) {
+      case 'DELETE_EVENT':
+        timeline.deleteEvent(params.action.meta.id)
+        break
+
+      case 'EDIT_TIMELINE':
+        timeline.updateTimeline(params.action.payload)
+        break
+
+      default:
+        break
+    }
+  }, [params.action, timeline])
 
   const showDeleteAlert = () => {
     Alert.alert(
@@ -69,22 +83,6 @@ export const TimelineScreen: Component = () => {
     )
   }
 
-  React.useEffect(() => {
-    console.tron.log(params.action)
-    switch (params.action?.type) {
-      case 'DELETE_EVENT':
-        timeline.deleteEvent(params.action.meta.id)
-        break
-
-      case 'EDIT_TIMELINE':
-        timeline.updateTimeline(params.action.payload)
-        break
-
-      default:
-        break
-    }
-  }, [params.action, timeline])
-
   return useObserver(() => {
     const openEvent = (eventId: string) => {
       navigation.navigate('event', { timelineId: timeline.id, eventId })
@@ -96,7 +94,7 @@ export const TimelineScreen: Component = () => {
       <SafeAreaView style={styles.container}>
         <Layout style={styles.layout}>
           <Card>
-            {/* <Text>{timeline.description}</Text> */}
+            <Text>{timeline.description}</Text>
           </Card>
           <Button onPress={() => showDeleteAlert()}>Delete timeline</Button>
 
