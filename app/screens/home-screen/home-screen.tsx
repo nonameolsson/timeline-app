@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FunctionComponent as Component } from "react"
+import React, { useEffect, useState, FunctionComponent as Component, useCallback } from "react"
 import { useObserver } from "mobx-react-lite"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { Button, Layout, Text, List, ListItem } from "@ui-kitten/components"
@@ -14,7 +14,7 @@ export const HomeScreen: Component = () => {
   // Fix to get correct type
   const { userStore, timelineStore } = useStores()
   const user = useStores().userStore.user as User
-
+  console.tron.log('HomeScreen', user)
   // Pull in navigation via hook
   const navigation = useNavigation<PrimaryStackNavigationProp<"home">>()
   const { params } = useRoute<PrimaryRouteProp<"home">>()
@@ -23,26 +23,34 @@ export const HomeScreen: Component = () => {
   useEffect(() => {
     setIsLoading(true)
 
-    timelineStore.getTimelines(user.id).then(() => setIsLoading(false))
+    // timelineStore.getTimelines(user.id).then(() => setIsLoading(false))
   }, [])
 
-  const deleteAllTheThings = async (timeline: Timeline) => {
-    const id = params.action?.meta.id as string // FIXME: Improve type
+  const deleteAllTheThings = useCallback(async (timelineId: string) => {
+  // const deleteAllTheThings = useCallback(async (timelineId: string) => {
+    const timeline = timelineStore.getTimeline(timelineId)
+    if (timeline) {
+      // const id = params.action?.meta.id as string // FIXME: Improve type
 
-    await timeline.deleteAllEvents()
-    await timelineStore.deleteTimeline(id)
-  }
+      // await timeline.deleteAllEvents()
+      // await timelineStore.deleteTimeline(id)
+    }
+  }, [timelineStore])
 
   useEffect(() => {
-    if (params?.action?.type === 'DELETE_TIMELINE') {
-      // Post updated, do something with `params.post`
-      // For example, send the post to the server
-      setIsLoading(true)
-      const timeline = timelineStore.getTimeline(params.action?.meta.id)
-      deleteAllTheThings(timeline)
-      setIsLoading(false)
-    }
-  }, [params])
+    // if (params && params.action) {
+    //   switch (params.action.type) {
+    //     case 'DELETE_TIMELINE':
+    //       setIsLoading(true)
+    //       deleteAllTheThings(params.action.meta.id)
+    //       setIsLoading(false)
+    //       break
+
+    //     default:
+    //       break
+    //   }
+    // }
+  }, [deleteAllTheThings, params, timelineStore])
 
   const openTimeline = (id: string, title: string): void => {
     navigation.navigate("timeline", { id, title })
@@ -58,27 +66,28 @@ export const HomeScreen: Component = () => {
     }
   }
 
-  const renderItem = ({ item, index }: { item: Timeline; index: number }) => <ListItem onPress={() => openTimeline(item.id, item.title)} key={index} title={item.title} description={item.description} />
-
-  return useObserver(() => (
-    <SafeAreaView style={styles.container}>
-      <Layout style={styles.layout}>
-        {userStore.isLoggedIn() ? (
-          <>
-            <Text category="h2">Your timelines</Text>
-            {isLoading ? <ActivityIndicator />
-              : timelineStore.hasTimelines() ? (
-                <List data={timelineStore.getTimelinesArray()} renderItem={renderItem} />
-              ) : (
-                renderEmptyState()
-              )}
-            <Button onPress={() => setIsLoading(!isLoading)}>Create timeline</Button>
-          </>
-        ) : (
-          <Text>Logging in...</Text>
-        )}
-        <Button onPress={(): void => logOut()}>Log out</Button>
-      </Layout>
-    </SafeAreaView>
-  ))
+  return useObserver(() => {
+    const renderItem = ({ item, index }: { item: Timeline; index: number }) => <ListItem onPress={() => openTimeline(item.id, item.title)} key={index} title={item.title} description={item.description} />
+    return (
+      <SafeAreaView style={styles.container}>
+        <Layout style={styles.layout}>
+          {userStore.isLoggedIn() ? (
+            <>
+              <Text category="h2">Your timelines</Text>
+              {isLoading ? <ActivityIndicator />
+                : timelineStore.hasTimelines() ? (
+                  <List data={timelineStore.getTimelinesArray()} renderItem={renderItem} />
+                ) : (
+                  renderEmptyState()
+                )}
+              <Button onPress={() => setIsLoading(!isLoading)}>Create timeline</Button>
+            </>
+          ) : (
+            <Text>Logging in...</Text>
+          )}
+          <Button onPress={(): void => logOut()}>Log out</Button>
+        </Layout>
+      </SafeAreaView>
+    )
+  })
 }
