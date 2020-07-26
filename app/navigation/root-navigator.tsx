@@ -31,8 +31,6 @@ const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = observer(function RootStack() {
   const { userStore } = useStores()
-  console.tron.log('RootStack')
-  console.tron.log(userStore.user)
 
   return (
     <Stack.Navigator

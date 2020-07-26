@@ -36,6 +36,17 @@ export const TimelineScreen: Component = () => {
   const { params } = useRoute<PrimaryRouteProp<"timeline">>()
   const timeline = timelineStore.timelines.get(params.id) as Timeline
 
+  useFocusEffect(
+    React.useCallback(() => {
+      console.tron.log('FOCUS TIMELINESCREEN')
+
+      return () => {
+        // isActive = false
+        console.tron.log('UNFOCUS TIMELINESCREEN')
+      }
+    }, [])
+  )
+
   useTitle(params.id)
 
   const goToEditTimelineScreen = useCallback(() => {
