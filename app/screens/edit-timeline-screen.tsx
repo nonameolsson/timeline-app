@@ -5,9 +5,10 @@ import React, { FunctionComponent as Component } from "react"
 import { SafeAreaView, StyleSheet } from "react-native"
 
 import { PrimaryRouteProp, PrimaryStackNavigationProp } from "navigation"
-import { useStores } from "models"
+import { useStores, Timeline } from "models"
 import { EditTimelineForm, EditTimelineFormData } from 'components/edit-timeline-form/edit-timeline-form'
 
+// TODO: Move to separate file
 const styles = StyleSheet.create({
   activityIndicator: {
     flex: 1,
@@ -27,12 +28,12 @@ export const EditTimelineScreen: Component = observer(function EditTimelineScree
   const { params: { id } } = useRoute<PrimaryRouteProp<"editTimeline">>()
 
   const { timelineStore } = useStores()
-  const timeline = timelineStore.getTimeline(id)
+  const timeline = timelineStore.getTimeline(id) as Timeline
 
   const onSubmit = async (formData: EditTimelineFormData) => {
     navigation.navigate('timeline', {
       id: timeline.id, // FIXME: This should not be required when going back
-      title: timeline.title, // FIXME: This should not be required when going back
+      title: formData.title, // FIXME: This should not be required when going back
       action: {
         type: 'EDIT_TIMELINE',
         payload: {
