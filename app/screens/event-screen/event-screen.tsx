@@ -21,9 +21,12 @@ const useTitle = (timelineId, eventId) => {
 
       // If something happens in MST and the timeline has been removed, navigate back to avoid a crash.
       // FIXME: This doesn't feel as the correct way to avoid a crash.
-      if (!timeline) navigation.goBack()
+      if (!timeline) {
+        navigation.goBack()
+        return
+      }
 
-      const event = timeline?.getEvent(eventId)
+      const event = timeline.getEvent(eventId)
 
       if (event) titleRef.current = event.title
     })
@@ -31,6 +34,28 @@ const useTitle = (timelineId, eventId) => {
     return dispose
   }, [eventId, navigation, timelineId, timelineStore])
   useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
+}
+
+const useHeaderRight = (timelineId, eventId) => {
+  const { timelineStore } = useStores()
+  const navigation = useNavigation()
+  const timeline = timelineStore.getTimeline(timelineId)
+  const event = timelineStore.getEventFromTimeline(timelineId, eventId)
+
+  useLayoutEffect(() => {
+    if (!timeline || !event) {
+      navigation.goBack()
+      return
+    }
+
+    const id = timeline.id
+
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderButton title="Edit" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId: id })} />
+      ),
+    })
+  }, [event, navigation, timeline])
 }
 
 export const EventScreen: Component = () => {
@@ -49,37 +74,6 @@ export const EventScreen: Component = () => {
   if (!timeline) navigation.goBack()
 
   const event = timeline?.getEvent(params.eventId) as Event
-
-  useTitle(timeline?.id, params.eventId)
-
-  useEffect(() => {
-    if (params.action) {
-      switch (params.action.type) {
-        case 'EDIT_EVENT':
-          event.updateEvent(params.action.payload)
-          break
-
-        default:
-          break
-      }
-    }
-  }, [params.action, event])
-
-  useEffect(() => {
-    if (!event) navigation.goBack()
-  }, [navigation, event])
-
-  useLayoutEffect(() => {
-    if (!timeline) navigation.goBack()
-
-    const id = timeline?.id as string
-
-    navigation.setOptions({
-      headerRight: () => (
-        <HeaderButton title="Edit" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId: id })} />
-      ),
-    })
-  }, [event.id, navigation, timeline])
 
   const deleteEvent = () => {
     navigation.navigate('timeline', {
@@ -109,6 +103,25 @@ export const EventScreen: Component = () => {
       { cancelable: false }
     )
   }
+
+  useTitle(timeline?.id, params?.eventId)
+
+  useHeaderRight(timeline?.id, params.eventId)
+
+  useEffect(() => {
+    switch (params.action?.type) {
+      case 'EDIT_EVENT':
+        event.updateEvent(params.action.payload)
+        break
+
+      default:
+        break
+    }
+  }, [params.action, event])
+
+  useEffect(() => {
+    if (!event) navigation.goBack()
+  }, [navigation, event])
 
   return useObserver(() => (
     <Layout style={styles.container}>

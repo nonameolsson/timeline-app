@@ -20,3 +20,10 @@ export const RootStoreProvider = RootStoreContext.Provider
  * or less likely: `const rootStore = useStores()`
  */
 export const useStores = () => useContext(RootStoreContext)
+
+export type MapStore<T> = (store: RootStore) => T
+
+export const useInject = <T>(mapStore: MapStore<T>) => {
+  const store = useStores()
+  return mapStore(store)
+}
