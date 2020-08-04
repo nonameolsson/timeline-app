@@ -105,23 +105,20 @@ export const TimelineScreen: Component = () => {
       {() => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />}
     </Observer>
   )
-  return useObserver(() => {
-    const timeline = timelineStore.getTimeline(params.id) as Timeline
+  return useObserver(() => (
+    <SafeAreaView style={styles.container}>
+      <Layout style={styles.layout}>
+        <Card>
+          <Text>{timeline.description}</Text>
+        </Card>
 
-    return (
-      <SafeAreaView style={styles.container}>
-        <Layout style={styles.layout}>
-          <Card>
-            <Text>{timeline.description}</Text>
-          </Card>
+        <Button onPress={() => showDeleteAlert()}>Delete timeline</Button>
 
-          <Button onPress={() => showDeleteAlert()}>Delete timeline</Button>
-
-          {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
-          <Text category="h4">Events - {timeline.events.length}</Text>
-          <List data={timeline.events} renderItem={renderItem} />
-        </Layout>
-      </SafeAreaView>
-    )
-  })
+        {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
+        <Text category="h4">Events - {timeline.events.length}</Text>
+        <List data={timelineStore.getTimeline(params.id)?.events} renderItem={renderItem} />
+      </Layout>
+    </SafeAreaView>
+  )
+  )
 }
