@@ -5,7 +5,7 @@
  * will use once logged in.
  */
 import React from "react"
-import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
+import { NavigationContainer, NavigationContainerRef, DarkTheme } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { PrimaryNavigator } from "./primary-navigator"
 import { AuthNavigator } from "./auth-navigator"
@@ -66,7 +66,7 @@ export const RootNavigator = React.forwardRef<
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {
   return (
-    <NavigationContainer {...props} ref={ref}>
+    <NavigationContainer {...props} ref={ref} theme={DarkTheme}>
       <RootStack />
     </NavigationContainer>
   )

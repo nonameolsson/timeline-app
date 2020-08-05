@@ -1,6 +1,5 @@
 import { Controller, useForm } from 'react-hook-form'
-import { Button, Input, useStyleSheet } from '@ui-kitten/components'
-import { Text } from 'react-native'
+import { Button, Card, TextInput, Text, DarkTheme, useTheme, HelperText } from 'react-native-paper'
 import React, { FunctionComponent } from 'react'
 import { yupResolver } from '@hookform/resolvers'
 
@@ -9,16 +8,16 @@ import { FormData } from './login-form.types'
 
 import { themedStyles } from './login-form.styles'
 import { LoginSchema } from './login-form.validation'
+import { View } from 'react-native'
+import { color } from 'theme/'
 
 interface LoginFormProps {
   handleLogin: (email: string, password: string) => void
-  error?: string
+  errorText?: string
   loading: boolean
 }
 
-export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, error, loading }) => {
-  const styles = useStyleSheet(themedStyles)
-
+export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, errorText, loading }) => {
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
     resolver: yupResolver(LoginSchema),
     mode: 'onBlur'
@@ -27,6 +26,10 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
   const onSubmit = ({ email, password }): void => {
     handleLogin(email, password)
   }
+
+  const {
+    colors: { error },
+  } = useTheme()
 
   /**
    * TODO: Implement this
@@ -38,44 +41,60 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
       <Controller
         control={control}
         name="email"
-        render={({ onChange, onBlur, value }) => (
-          <Input
+        render={({ onChange, onBlur, value }) => (<>
+          <TextInput
             autoCapitalize="none"
             autoCompleteType="email"
             autoCorrect={false}
-            caption={errors.email && errors.email.message}
+            label="E-mail"
+            left={
+              <TextInput.Icon
+                name="email"
+              />
+            }
+            // label={errors.email && errors.email.message}
             disabled={formState.isSubmitting}
             keyboardType="email-address"
             onBlur={onBlur}
             onChangeText={value => onChange(value)}
-            placeholder="E-mail address"
-            status={errors.email ? 'danger' : 'basic'}
-            style={styles.captionTextStyle}
+            error={!!errors.email}
             textContentType="emailAddress"
             value={value}
+            style={{ marginTop: 64 }}
           />
+          <HelperText type="error" visible={!!errors.email}>
+            {errors.email?.message}
+          </HelperText></>
         )}
       />
       <Controller
         control={control}
         name="password"
-        render={({ onChange, onBlur, value }) => (
-          <Input
+        render={({ onChange, onBlur, value }) => (<>
+          <TextInput
             autoCapitalize="none"
-            caption={errors.password && errors.password.message}
+            // label={errors.password && errors.password.message}
             disabled={formState.isSubmitting}
             keyboardAppearance="dark"
             keyboardType="visible-password"
             onBlur={onBlur}
+            left={
+              <TextInput.Icon
+                name="key"
+              />
+            }
             onChangeText={value => onChange(value)}
-            placeholder="Password"
+            label="Password"
             secureTextEntry={true}
             spellCheck={false}
-            status={errors.password ? 'danger' : 'basic'}
-            style={styles.passwordInput}
+            error={!!errors.password}
             textContentType="password"
             value={value}
+            style={{ marginTop: 16 }}
           />
+          <HelperText type="error" visible={!!errors.password}>
+            {errors.password?.message}
+          </HelperText></>
         )}
       />
       {/* TODO: Activate this
@@ -84,13 +103,15 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
           <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
         </TouchableOpacity>
       </View> */}
-      <Text style={styles.loginErrorText}>{error || ''}</Text>
+
+      <Text style={{ textAlign: 'center', marginBottom: 16, color: error }}>{errorText || ''}</Text>
       <Button
         disabled={!formState.isValid || formState.isSubmitting}
-        style={styles.signInButton}
         onPress={handleSubmit(onSubmit)}
+        mode="outlined"
+        loading={formState.isSubmitting}
       >
-        {formState.isSubmitting ? 'LOADING...' : 'SIGN IN'}
+        SIGN IN
       </Button>
     </>
   )

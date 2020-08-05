@@ -11,13 +11,16 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components"
-import { EvaIconsPack } from '@ui-kitten/eva-icons'
 import { NavigationContainerRef } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
-import * as eva from '@eva-design/eva'
 import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
+
+import {
+  DarkTheme as PaperDarkTheme,
+  Provider as PaperProvider,
+  DefaultTheme,
+} from 'react-native-paper'
 
 import { initFonts } from "./theme/fonts"
 import * as storage from "./utils/storage"
@@ -69,20 +72,17 @@ const App: Component<{}> = observer(() => {
 
   // otherwise, we're ready to render the app
   return (
-    <>
-      <IconRegistry icons={EvaIconsPack} />
+    <PaperProvider theme={DefaultTheme}>
       <RootStoreProvider value={rootStore}>
-        <ApplicationProvider {...eva} theme={eva[rootStore.uiStore.theme]}>
-          <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-            <RootNavigator
-              ref={navigationRef}
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-          </SafeAreaProvider>
-        </ApplicationProvider>
+        <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
+          <RootNavigator
+            ref={navigationRef}
+            initialState={initialNavigationState}
+            onStateChange={onNavigationStateChange}
+          />
+        </SafeAreaProvider>
       </RootStoreProvider>
-    </>
+    </PaperProvider>
   )
 })
 

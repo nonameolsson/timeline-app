@@ -1,15 +1,19 @@
-import React, { useState, FunctionComponent as Component, useCallback } from "react"
-import { Observer, observer } from "mobx-react-lite"
+import { ActivityIndicator, SafeAreaView, View } from "react-native"
+import { Appbar, Button, FAB, Text, List, useTheme } from "react-native-paper"
+import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import { Button, Text, ListItem, Layout, List } from "@ui-kitten/components"
+import React, { useState, FunctionComponent as Component, useCallback } from "react"
 
-import { useStores, Timeline } from "models"
-import { styles } from "./home-screen.styles"
+import { useStores } from "models"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
-import { SafeAreaView, ActivityIndicator } from 'react-native'
+import { styles } from "./home-screen.styles"
 
 export const HomeScreen: Component = observer(function HomeScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  const {
+    colors: { background, primary },
+  } = useTheme()
 
   // Fix to get correct type
   const { userStore, timelineStore } = useStores()
@@ -63,31 +67,44 @@ export const HomeScreen: Component = observer(function HomeScreen() {
     }
   }
 
-  const renderItem = ({ item, index }: { item: Timeline; index: number }) => (
-    <Observer>
-      {() => <ListItem onPress={() => openTimeline(item.id, item.title)} key={index} title={item.title} description={item.description} />}
-    </Observer>
-  )
+  const renderList = () => {
+    return timelineStore.getTimelinesArray().map(timeline => (
+      <List.Item
+        title={timeline.title}
+        key={timeline.id}
+        onPress={() => openTimeline(timeline.id, timeline.title)}
+        description={timeline.description}
+        left={props => <List.Icon {...props} icon="folder" />}
+      />
+    ))
+  }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Layout style={styles.layout}>
+    <SafeAreaView style={styles.screen}>
+      <Appbar>
+        <Appbar.Content title="Timeline" />
+      </Appbar>
+      <View style={[styles.container, { backgroundColor: background }]}>
         {userStore.isLoggedIn() ? (
           <>
-            <Text category="h2">Your timelines</Text>
+            <Text>Your timelines</Text>
             {isLoading
               ? <ActivityIndicator />
               : timelineStore.hasTimelines()
-                ? <List data={timelineStore.getTimelinesArray()} renderItem={(renderItem)} />
-                : (renderEmptyState()
-                )}
-            <Button onPress={() => setIsLoading(!isLoading)}>Create timeline</Button>
+                ? renderList()
+                : renderEmptyState()
+            }
+            <FAB
+              icon="plus"
+              style={[styles.fab, { backgroundColor: primary }]}
+              onPress={() => setIsLoading(!isLoading)}
+            />
           </>
         ) : (
           <Text>Logging in...</Text>
-        )}
+        )}s
         <Button onPress={(): void => logOut()}>Log out</Button>
-      </Layout>
+      </View>
     </SafeAreaView>
   )
 })
