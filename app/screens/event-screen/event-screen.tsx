@@ -1,4 +1,4 @@
-import React, { FunctionComponent as Component, useLayoutEffect, useRef, useEffect } from "react"
+import React, { FunctionComponent as Component, useLayoutEffect, useRef, useEffect, useCallback } from "react"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 import { Button, Layout, Text } from '@ui-kitten/components'
 
@@ -8,9 +8,10 @@ import { styles } from './event-screen-styles'
 import { Button as HeaderButton, Alert } from "react-native"
 import { autorun } from "mobx"
 import { useObserver } from 'mobx-react-lite'
+import { useEffectWithStore } from 'utils/hooks'
 
 // FIXME: Move to helper utility in navigation
-const useTitle = (timelineId, eventId) => {
+const useTitle = (timelineId: string, eventId: string) => {
   const { timelineStore } = useStores()
   const titleRef = useRef('')
   const navigation = useNavigation()
@@ -69,11 +70,14 @@ export const EventScreen: Component = () => {
   // Get current timeline and event
   const timeline = timelineStore.getTimeline(params.timelineId)
 
-  // If something happens in MST and the timeline has been removed, navigate back to avoid a crash.
-  // FIXME: This doesn't feel as the correct way to avoid a crash.
-  if (!timeline) navigation.goBack()
-
   const event = timeline?.getEvent(params.eventId) as Event
+  // const event = (timelineId: string, eventId: string): Event => {
+  //   const timeline = timelineStore.getTimeline(timelineId)
+
+  //   if (!timeline) return
+
+  //   return timeline.getEvent(eventId)
+  // }
 
   const deleteEvent = () => {
     navigation.navigate('timeline', {
@@ -104,30 +108,34 @@ export const EventScreen: Component = () => {
     )
   }
 
+  // TODO: Migrate to useEffectWithStore()
   useTitle(timeline?.id, params?.eventId)
 
+  // TODO: Migrate to useEffectWithStore()
   useHeaderRight(timeline?.id, params.eventId)
 
-  useEffect(() => {
-    switch (params.action?.type) {
-      case 'EDIT_EVENT':
+  useEffectWithStore(
+
+    () => timelineStore.getTimeline(params.timelineId),
+    herp => {
+      if (!herp) return
+
+      if (params.action?.type === 'EDIT_EVENT') {
         event.updateEvent(params.action.payload)
-        break
+      }
+    },
+    [params, event],
+  )
 
-      default:
-        break
-    }
-  }, [params.action, event])
+  return useObserver(() => {
+    if (!timeline) return null
 
-  useEffect(() => {
-    if (!event) navigation.goBack()
-  }, [navigation, event])
-
-  return useObserver(() => (
-    <Layout style={styles.container}>
-      <Text>{event.title}</Text>
-      <Text>{event.description}</Text>
-      <Button onPress={showDeleteAlert}>Delete</Button>
-    </Layout>
-  ))
+    return (
+      <Layout style={styles.container}>
+        <Text>{event.title}</Text>
+        <Text>{event.description}</Text>
+        <Button onPress={showDeleteAlert}>Delete</Button>
+      </Layout>
+    )
+  })
 }

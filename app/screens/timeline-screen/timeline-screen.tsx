@@ -1,13 +1,14 @@
-import React, { FunctionComponent as Component, useLayoutEffect, useRef, useEffect, useCallback } from "react"
-import { Observer, useObserver } from "mobx-react-lite"
+import { autorun, reaction } from "mobx"
 import { Button as HeaderButton, SafeAreaView, Alert } from "react-native"
-import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import { List, ListItem, Text, Layout, Card, Button } from '@ui-kitten/components'
+import { Observer, useObserver, useAsObservableSource } from "mobx-react-lite"
+import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
+import React, { FunctionComponent as Component, useLayoutEffect, useRef, useEffect, useCallback } from "react"
 
-import { Event, useStores, Timeline } from "models"
-import { styles } from './timeline-screen.styles'
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
-import { autorun } from "mobx"
+import { Event, useStores } from "models"
+import { useEffectWithStore } from "utils/hooks"
+import { styles } from './timeline-screen.styles'
 
 // TODO: Move to utility
 const useTitle = (id: string) => {
@@ -29,6 +30,38 @@ const useTitle = (id: string) => {
   useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
 }
 
+// useEffect(() => {
+//   switch (params.action?.type) {
+//     case 'DELETE_EVENT':
+//       timeline.deleteEvent(params.action.meta.id)
+//       break
+
+//     case 'EDIT_TIMELINE':
+//       timeline.updateTimeline(params.action.payload)
+//       break
+
+//     default:
+//       break
+//   }
+// }, [params.action, timeline])
+
+// const useActions = (callback, dependencyCallback) => {
+//   const callbackRef = useRef<any>()
+//   const dependencyCallbackRef = useRef<any>()
+
+//   useEffect(() => {
+//     callbackRef.current = callback
+//   }, [callback])
+
+//   useEffect(() => {
+//     dependencyCallbackRef.current = dependencyCallback
+//   }, [dependencyCallback])
+
+//   useEffect(() => {
+//     return reaction(dependencyCallbackRef.current, callbackRef.current)
+//   }, [])
+// }
+
 export const TimelineScreen: Component = () => {
   // Pull in one of our MST stores
   const { timelineStore } = useStores()
@@ -36,10 +69,31 @@ export const TimelineScreen: Component = () => {
   // Pull in navigation via hook
   const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
   const { params } = useRoute<PrimaryRouteProp<"timeline">>()
-  const timeline = timelineStore.timelines.get(params.id) as Timeline
+
+  useEffectWithStore(
+
+    () => timelineStore.getTimeline(params.id),
+    timeline => {
+      if (!timeline) return
+
+      switch (params.action?.type) {
+        case 'DELETE_EVENT':
+          timeline.deleteEvent(params.action.meta.id)
+          break
+
+        case 'EDIT_TIMELINE':
+          timeline.updateTimeline(params.action.payload)
+          break
+
+        default:
+          break
+      }
+    },
+    [params],
+  )
 
   const deleteTimeline = () => {
-    navigation.navigate('home', { action: { type: 'DELETE_TIMELINE', meta: { id: timeline.id } } })
+    navigation.navigate('home', { action: { type: 'DELETE_TIMELINE', meta: { id: params.id } } })
   }
 
   const showDeleteAlert = () => {
@@ -59,8 +113,8 @@ export const TimelineScreen: Component = () => {
   }
 
   const goToEditTimelineScreen = useCallback(() => {
-    navigation.navigate('editTimeline', { id: timeline.id })
-  }, [navigation, timeline])
+    navigation.navigate('editTimeline', { id: params.id })
+  }, [navigation, params.id])
 
   useTitle(params.id)
 
@@ -81,23 +135,8 @@ export const TimelineScreen: Component = () => {
     }, [goToEditTimelineScreen, navigation])
   )
 
-  useEffect(() => {
-    switch (params.action?.type) {
-      case 'DELETE_EVENT':
-        timeline.deleteEvent(params.action.meta.id)
-        break
-
-      case 'EDIT_TIMELINE':
-        timeline.updateTimeline(params.action.payload)
-        break
-
-      default:
-        break
-    }
-  }, [params.action, timeline])
-
   const openEvent = (eventId: string) => {
-    navigation.navigate('event', { timelineId: timeline.id, eventId })
+    navigation.navigate('event', { timelineId: params.id, eventId })
   }
 
   const renderItem = ({ item, index }: { item: Event; index: number }) => (
@@ -105,20 +144,27 @@ export const TimelineScreen: Component = () => {
       {() => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />}
     </Observer>
   )
-  return useObserver(() => (
-    <SafeAreaView style={styles.container}>
-      <Layout style={styles.layout}>
-        <Card>
-          <Text>{timeline.description}</Text>
-        </Card>
 
-        <Button onPress={() => showDeleteAlert()}>Delete timeline</Button>
+  return useObserver(() => {
+    const timeline = timelineStore.getTimeline(params.id)
 
-        {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
-        <Text category="h4">Events - {timeline.events.length}</Text>
-        <List data={timelineStore.getTimeline(params.id)?.events} renderItem={renderItem} />
-      </Layout>
-    </SafeAreaView>
-  )
+    if (!timeline) return null
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <Layout style={styles.layout}>
+          <Card>
+            <Text>{timeline.description}</Text>
+          </Card>
+
+          <Button onPress={() => showDeleteAlert()}>Delete timeline</Button>
+
+          {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
+          <Text category="h4">Events - {timeline.events.length}</Text>
+          <List data={timelineStore.getTimeline(params.id)?.events} renderItem={renderItem} />
+        </Layout>
+      </SafeAreaView>
+    )
+  }
   )
 }
