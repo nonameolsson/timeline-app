@@ -1,5 +1,6 @@
 import { useEffect, useRef, EffectCallback } from 'react'
 import { reaction } from 'mobx'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 /**
  * useEffect combined with mobx stores. When the effect executes, the latest value from
@@ -39,3 +40,19 @@ export function useEffectWithStore<T>(
 }
 
 type EffectCallbackWithStore<T = unknown> = (injects: T) => ReturnType<EffectCallback>
+
+/**
+ * When a screen gets focused the title makes sure always the latest title is used
+ * @param title - Text to be used as the title
+ */
+export function useTitle(title?: string) {
+  const navigation = useNavigation()
+
+  useFocusEffect(() => {
+    if (!title) return
+
+    navigation.setOptions({
+      title
+    })
+  })
+}

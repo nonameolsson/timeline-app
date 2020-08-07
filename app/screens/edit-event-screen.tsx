@@ -20,17 +20,18 @@ const styles = StyleSheet.create({
 
 export const EditEventScreen: Component = observer(function EditEventScreen() {
   const navigation = useNavigation<PrimaryStackNavigationProp<"editEvent">>()
-  const { params: { eventId, timelineId } } = useRoute<PrimaryRouteProp<"editEvent">>()
-
   const { timelineStore } = useStores()
+  const { params } = useRoute<PrimaryRouteProp<"editEvent">>()
 
-  const timeline = timelineStore.getTimeline(timelineId)
-  const event = timeline.getEvent(eventId)
+  // Make sure all data exists
+  const event = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
+  if (!event) return null
 
   const onSubmit = async ({ title, description }: EditEventFormData) => {
     navigation.navigate('event', {
-      eventId: event.id, // FIXME: This should not be required when going back
-      timelineId: timelineId, // FIXME: This should not be required when going back
+      eventId: params.eventId,
+      timelineId: params.timelineId,
+      title,
       action: {
         type: 'EDIT_EVENT',
         payload: {
@@ -46,7 +47,6 @@ export const EditEventScreen: Component = observer(function EditEventScreen() {
     <SafeAreaView style={styles.container}>
       <Layout style={styles.layout}>
         <EditEventForm event={event} onSubmit={onSubmit} />
-
       </Layout>
     </SafeAreaView>
   )

@@ -31,11 +31,11 @@ export type PrimaryParamList = {
   // NOTE: Timeline interfaces should only be optional when goint BACK to TimelineScreen from EventScreen. Fix this.
   timeline: {
     id: string
-    title: string
+    title?: string
     action?: DeleteEventAction | EditTimelineAction
   }
   editTimeline: { id: string }
-  event: { timelineId: string; eventId: string, action?: EditEventAction }
+  event: { title?: string, timelineId: string; eventId: string, action?: EditEventAction }
   editEvent: { timelineId: string, eventId: string }
 }
 
@@ -79,7 +79,7 @@ export const PrimaryNavigator = () => {
         name="timeline"
         component={TimelineScreen}
         options={({ route }) => ({
-          title: route.params.title
+          title: route.params.title || 'Timeline'
         })}
       />
       <Stack.Screen
@@ -90,6 +90,9 @@ export const PrimaryNavigator = () => {
       <Stack.Screen
         name="event"
         component={EventScreen}
+        options={({ route }) => ({
+          title: route.params.title || 'Event'
+        })}
       />
       <Stack.Screen
         name="editEvent"
