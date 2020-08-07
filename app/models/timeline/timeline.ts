@@ -52,7 +52,7 @@ export const TimelineModel = types
    * Following actions will send requests to the API, and call actions defined in the first action definition
    */
   .actions(self => ({
-    updateTimeline: flow(function * (timeline: { id: string, title: string, description: string }) {
+    editTimeline: flow(function * (timeline: { id: string, title: string, description: string }) {
       const result: Types.PutTimelineResult = yield self.environment.api.updateTimeline(timeline)
 
       if (result.kind === "ok") {
