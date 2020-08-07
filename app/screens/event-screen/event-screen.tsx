@@ -6,35 +6,7 @@ import { useStores } from "models"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { styles } from './event-screen-styles'
 import { Button as HeaderButton, Alert } from "react-native"
-import { autorun } from "mobx"
 import { observer } from 'mobx-react-lite'
-
-// FIXME: Move to helper utility in navigation
-const useTitle = (timelineId: string, eventId: string) => {
-  const { timelineStore } = useStores()
-  const titleRef = useRef('')
-  const navigation = useNavigation()
-
-  useEffect(() => {
-    const dispose = autorun(() => {
-      const timeline = timelineStore.getTimeline(timelineId)
-
-      // If something happens in MST and the timeline has been removed, navigate back to avoid a crash.
-      // FIXME: This doesn't feel as the correct way to avoid a crash.
-      if (!timeline) {
-        navigation.goBack()
-        return
-      }
-
-      const event = timeline.getEvent(eventId)
-
-      if (event) titleRef.current = event.title
-    })
-
-    return dispose
-  }, [eventId, navigation, timelineId, timelineStore])
-  useFocusEffect(() => { navigation.setOptions({ title: titleRef.current }) })
-}
 
 const useHeaderRight = (timelineId: string, eventId: string) => {
   const { timelineStore } = useStores()
@@ -59,9 +31,6 @@ export const EventScreen: Component = observer(function EventScreen() {
   const event = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
 
   // TODO: Migrate to separate utility function
-  useTitle(params.timelineId, params.eventId)
-
-  // TODO: Migrate to separate utility function
   useHeaderRight(params.timelineId, params.eventId)
 
   useFocusEffect(
@@ -74,13 +43,15 @@ export const EventScreen: Component = observer(function EventScreen() {
     }, [event, params.action])
   )
 
+  // Make sure all data exists before using it
+  if (!event) return null
+
   const deleteEvent = () => {
     const currentEvent = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
     if (!currentEvent) return
 
     navigation.navigate('timeline', {
       id: params.timelineId,
-      title: currentEvent.title,
       action: {
         type: 'DELETE_EVENT',
         meta: {
@@ -105,9 +76,6 @@ export const EventScreen: Component = observer(function EventScreen() {
       { cancelable: false }
     )
   }
-
-  // Make sure all data exists before using it
-  if (!event) return null
 
   return (
     <Layout style={styles.container}>

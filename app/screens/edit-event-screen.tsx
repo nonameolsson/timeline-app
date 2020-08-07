@@ -20,9 +20,8 @@ const styles = StyleSheet.create({
 
 export const EditEventScreen: Component = observer(function EditEventScreen() {
   const navigation = useNavigation<PrimaryStackNavigationProp<"editEvent">>()
-  const { params } = useRoute<PrimaryRouteProp<"editEvent">>()
-
   const { timelineStore } = useStores()
+  const { params } = useRoute<PrimaryRouteProp<"editEvent">>()
 
   // Make sure all data exists
   const event = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
@@ -32,6 +31,7 @@ export const EditEventScreen: Component = observer(function EditEventScreen() {
     navigation.navigate('event', {
       eventId: params.eventId,
       timelineId: params.timelineId,
+      title,
       action: {
         type: 'EDIT_EVENT',
         payload: {
