@@ -1,19 +1,23 @@
-import { Button as HeaderButton, SafeAreaView, Alert } from "react-native"
-import { List, ListItem, Text, Layout, Card, Button } from '@ui-kitten/components'
-import { Observer, observer } from "mobx-react-lite"
+import { Button as HeaderButton, SafeAreaView, Alert, View } from "react-native"
+import { Card, Button, Text, List, Appbar, useTheme, Headline } from "react-native-paper"
+import { observer } from "mobx-react-lite"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
 
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
-import { Event, useStores } from "models"
-import { styles } from './timeline-screen.styles'
 import { Timeline } from 'navigation/types'
 import { useHeaderRight } from 'utils/hooks'
+import { useStores } from "models"
+import { styles } from './timeline-screen.styles'
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
   const { timelineStore } = useStores()
   const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
   const { params } = useRoute<PrimaryRouteProp<"timeline">>()
+
+  const {
+    colors: { background },
+  } = useTheme()
 
   const timeline = timelineStore.getTimeline(params.id)
 
@@ -75,25 +79,40 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     navigation.navigate('event', { title: event?.title, timelineId: params.id, eventId })
   }
 
-  const renderItem = ({ item, index }: { item: Event; index: number }) => (
-    <Observer>
-      {() => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />}
-    </Observer>
-  )
+  // const renderItem = ({ item, index }: { item: Event; index: number }) => (
+  //   <Observer>
+  //     {() => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />}
+  //   </Observer>
+  // )
+
+  const renderList = () => timeline.events.map(event => (
+    <List.Item
+      key={event.id}
+      onPress={() => openEvent(event.id)}
+      title={event.title}
+      description={event.description}
+    />
+  ))
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Layout style={styles.layout}>
-        <Card>
+    <SafeAreaView style={styles.screen}>
+      <Appbar>
+        <Appbar.Content title="Event" />
+      </Appbar>
+      <View style={[styles.container, { backgroundColor: background }]}>
+        <Card style={{ padding: 16 }}>
           <Text>{timeline.description}</Text>
         </Card>
 
         <Button onPress={() => showDeleteAlert()}>Delete timeline</Button>
 
         {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
-        <Text category="h4">Events - {timeline.events.length}</Text>
-        <List data={timeline.events} renderItem={renderItem} />
-      </Layout>
+        <Headline>Events - {timeline.events.length}</Headline>
+        {/* <List data={timeline.events} renderItem={renderItem} /> */}
+
+        {renderList()}
+
+      </View>
     </SafeAreaView>
   )
 })

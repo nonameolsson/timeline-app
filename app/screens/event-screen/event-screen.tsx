@@ -1,5 +1,5 @@
-import { Button as HeaderButton, Alert } from "react-native"
-import { Button, Layout, Text } from '@ui-kitten/components'
+import { Button as HeaderButton, Alert, View } from "react-native"
+import { Text, Button, Appbar, useTheme } from "react-native-paper"
 import { observer } from 'mobx-react-lite'
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
@@ -8,11 +8,16 @@ import { useStores } from "models"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { styles } from './event-screen-styles'
 import { useHeaderRight } from 'utils/hooks'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
   const navigation = useNavigation<PrimaryStackNavigationProp<"event">>()
   const { params } = useRoute<PrimaryRouteProp<"event">>()
+
+  const {
+    colors: { background },
+  } = useTheme()
 
   const event = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
 
@@ -69,10 +74,15 @@ export const EventScreen: Component = observer(function EventScreen() {
   }
 
   return (
-    <Layout style={styles.container}>
-      <Text>{event.title}</Text>
-      <Text>{event.description}</Text>
-      <Button onPress={showDeleteAlert}>Delete</Button>
-    </Layout>
+    <SafeAreaView style={styles.screen}>
+      <Appbar>
+        <Appbar.Content title="Event" />
+      </Appbar>
+      <View style={[styles.container, { backgroundColor: background }]}>
+        <Text>{event.title}</Text>
+        <Text>{event.description}</Text>
+        <Button mode="contained" onPress={showDeleteAlert}>Delete</Button>
+      </View>
+    </SafeAreaView>
   )
 })

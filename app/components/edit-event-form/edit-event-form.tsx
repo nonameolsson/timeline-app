@@ -1,6 +1,6 @@
 import { Button as HeaderButton } from "react-native"
 import { Controller, useForm } from "react-hook-form"
-import { Input } from "@ui-kitten/components"
+import { TextInput, HelperText } from "react-native-paper"
 import { yupResolver } from "@hookform/resolvers"
 import React, { FunctionComponent as Component } from "react"
 
@@ -54,15 +54,19 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
         name="title"
         label='Title'
         render={({ onChange, onBlur, value }) => (
-          <Input
-            autoCapitalize="none"
-            caption={errors.title && errors.title.message}
-            label="Title"
-            onBlur={onBlur}
-            onChangeText={text => onChange(text)}
-            status={errors.title ? 'danger' : 'basic'}
-            value={value}
-          />
+          <>
+            <TextInput
+              autoCapitalize="none"
+              error={!!errors.title}
+              label="Title"
+              onBlur={onBlur}
+              onChangeText={text => onChange(text)}
+              value={value}
+            />
+            <HelperText type="error" visible={!!errors.title}>
+              {errors.title?.message}
+            </HelperText>
+          </>
         )}
       />
       <Controller
@@ -70,15 +74,19 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
         name="description"
         label='Description'
         render={({ onChange, onBlur, value }) => (
-          <Input
-            autoCapitalize="none"
-            caption={errors.description && errors.description.message}
-            label="Description"
-            onBlur={onBlur}
-            onChangeText={text => onChange(text)}
-            status={errors.description ? 'danger' : 'basic'}
-            value={value}
-          />
+          <>
+            <TextInput
+              autoCapitalize="none"
+              error={!!errors.description}
+              label="Description"
+              onBlur={onBlur}
+              onChangeText={text => onChange(text)}
+              value={value}
+            />
+            <HelperText type="error" visible={!!errors.description}>
+              {errors.description?.message}
+            </HelperText>
+          </>
         )}
       />
     </>

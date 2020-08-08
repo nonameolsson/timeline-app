@@ -1,18 +1,37 @@
 import React, { FunctionComponent as Component } from "react"
-import { Layout, Text } from "@ui-kitten/components"
 import { observer } from "mobx-react-lite"
+import { Subheading, Headline, useTheme } from 'react-native-paper'
+import { View, StyleSheet } from 'react-native'
 
 import { LoginForm } from "../../components"
 import { useStores } from "../../models"
 import { translate } from "../../i18n"
 
 /** Styles */
-import { styles } from "./login-screen.styles"
+// import { styles } from "./login-screen.styles"
+
+const styles = StyleSheet.create({
+  alignCenter: {
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    padding: 16,
+    paddingTop: 64
+  },
+  screen: {
+    flex: 1,
+  },
+})
 
 export const LoginScreen: Component = observer(function LoginScreen() {
   const { userStore } = useStores()
   const [isLoading, setIsLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
+
+  const {
+    colors: { background },
+  } = useTheme()
 
   const onLogin = async (identifier: string, password: string) => {
     setIsLoading(true)
@@ -30,16 +49,13 @@ export const LoginScreen: Component = observer(function LoginScreen() {
   }
 
   return (
-    <>
-      <Layout style={styles.container}>
-        <Text category="h1" style={styles.titleText}>
-          Hello
-        </Text>
+    <View style={styles.screen}>
+      <View style={[styles.container, { backgroundColor: background }]}>
+        <Headline style={{ textAlign: 'center', fontSize: 32 }}>Hello</Headline>
+        <Subheading style={{ textAlign: 'center' }}>Sign in to your account</Subheading>
 
-        <Text style={styles.subtitleText}>Sign in to your account</Text>
-
-        <LoginForm handleLogin={onLogin} loading={isLoading} error={error} />
-      </Layout>
-    </>
+        <LoginForm handleLogin={onLogin} loading={isLoading} errorText={error} />
+      </View>
+    </View>
   )
 })
