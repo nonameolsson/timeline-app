@@ -1,32 +1,33 @@
-import { Layout } from '@ui-kitten/components'
 import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component } from "react"
-import { SafeAreaView, StyleSheet } from "react-native"
+import { SafeAreaView, StyleSheet, View } from "react-native"
 
 import { PrimaryRouteProp, PrimaryStackNavigationProp } from "navigation"
-import { useStores, Timeline } from "models"
+import { useStores } from "models"
 import { EditTimelineForm, EditTimelineFormData } from 'components/edit-timeline-form/edit-timeline-form'
+import { Appbar, useTheme } from 'react-native-paper'
 
 // TODO: Move to separate file
-const styles = StyleSheet.create({
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-  },
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 16,
+    paddingTop: 64
   },
-  layout: {
+  screen: {
     flex: 1,
-    padding: 16
-  }
+  },
 })
 
 export const EditTimelineScreen: Component = observer(function EditTimelineScreen () {
   const navigation = useNavigation<PrimaryStackNavigationProp<"editTimeline">>()
   const { timelineStore } = useStores()
   const { params } = useRoute<PrimaryRouteProp<"editTimeline">>()
+
+  const {
+    colors: { background },
+  } = useTheme()
 
   // Make sure all data exists
   const timeline = timelineStore.getTimeline(params.id)
@@ -48,10 +49,13 @@ export const EditTimelineScreen: Component = observer(function EditTimelineScree
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Layout style={styles.layout}>
+    <SafeAreaView style={styles.screen}>
+      <Appbar>
+        <Appbar.Content title="Edit" />
+      </Appbar>
+      <View style={[styles.container, { backgroundColor: background }]}>
         <EditTimelineForm timeline={timeline} onSubmit={onSubmit} />
-      </Layout>
+      </View>
     </SafeAreaView>
   )
 })
