@@ -2,12 +2,13 @@ import { Button as HeaderButton, SafeAreaView, Alert } from "react-native"
 import { List, ListItem, Text, Layout, Card, Button } from '@ui-kitten/components'
 import { Observer, observer } from "mobx-react-lite"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
-import React, { FunctionComponent as Component, useLayoutEffect, useCallback } from "react"
+import React, { FunctionComponent as Component, useCallback } from "react"
 
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { Event, useStores } from "models"
 import { styles } from './timeline-screen.styles'
 import { Timeline } from 'navigation/types'
+import { useHeaderRight } from 'utils/hooks'
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
   const { timelineStore } = useStores()
@@ -41,13 +42,9 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     navigation.navigate('editTimeline', { id: params.id })
   }, [navigation, params.id])
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <HeaderButton title="Edit" onPress={goToEditTimelineScreen} />
-      )
-    })
-  }, [goToEditTimelineScreen, navigation])
+  const headerRight = <HeaderButton title="Edit" onPress={goToEditTimelineScreen} />
+
+  useHeaderRight(headerRight)
 
   // Make sure all data exists before using it
   if (!timeline) return null
