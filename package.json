@@ -25,14 +25,11 @@
     "react-native-debugger": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'"
   },
   "dependencies": {
-    "@eva-design/eva": "^2.0.0",
     "@hookform/resolvers": "^0.0.6",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.1.5",
     "@react-navigation/stack": "^5.2.10",
-    "@ui-kitten/components": "^5.0.0",
-    "@ui-kitten/eva-icons": "^5.0.0",
     "apisauce": "1.1.1",
     "expo": "^38.0.0",
     "expo-localization": "~8.2.1",
