@@ -1,15 +1,12 @@
 import { Controller, useForm } from 'react-hook-form'
-import { Button, Card, TextInput, Text, DarkTheme, useTheme, HelperText } from 'react-native-paper'
+import { Button, TextInput, Text, useTheme, HelperText } from 'react-native-paper'
 import React, { FunctionComponent } from 'react'
 import { yupResolver } from '@hookform/resolvers'
 
 /** Import types here */
 import { FormData } from './login-form.types'
 
-import { themedStyles } from './login-form.styles'
 import { LoginSchema } from './login-form.validation'
-import { View } from 'react-native'
-import { color } from 'theme/'
 
 interface LoginFormProps {
   handleLogin: (email: string, password: string) => void
@@ -56,7 +53,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
             disabled={formState.isSubmitting}
             keyboardType="email-address"
             onBlur={onBlur}
-            onChangeText={value => onChange(value)}
+            onChangeText={text => onChange(text)}
             error={!!errors.email}
             textContentType="emailAddress"
             value={value}
@@ -83,7 +80,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
                 name="key"
               />
             }
-            onChangeText={value => onChange(value)}
+            onChangeText={text => onChange(text)}
             label="Password"
             secureTextEntry={true}
             spellCheck={false}
@@ -106,9 +103,9 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
 
       <Text style={{ textAlign: 'center', marginBottom: 16, color: error }}>{errorText || ''}</Text>
       <Button
-        disabled={!formState.isValid || formState.isSubmitting}
+        disabled={formState.isSubmitting}
         onPress={handleSubmit(onSubmit)}
-        mode="outlined"
+        mode="contained"
         loading={formState.isSubmitting}
       >
         SIGN IN

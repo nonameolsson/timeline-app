@@ -102,7 +102,7 @@ export const HomeScreen: Component = observer(function HomeScreen() {
           </>
         ) : (
           <Text>Logging in...</Text>
-        )}s
+        )}
         <Button onPress={(): void => logOut()}>Log out</Button>
       </View>
     </SafeAreaView>
