@@ -1,4 +1,4 @@
-import { useEffect, useRef, EffectCallback } from 'react'
+import { useEffect, useRef, EffectCallback, useLayoutEffect } from 'react'
 import { reaction } from 'mobx'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
@@ -55,4 +55,16 @@ export function useTitle(title?: string) {
       title
     })
   })
+}
+
+export const useHeaderRight = (component?: JSX.Element) => {
+  const navigation = useNavigation()
+
+  useLayoutEffect(() => {
+    if (!component) { return }
+
+    navigation.setOptions({
+      headerRight: () => component
+    })
+  }, [component, navigation])
 }

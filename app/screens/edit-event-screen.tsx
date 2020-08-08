@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { StyleSheet, SafeAreaView } from "react-native"
 import { Layout } from "@ui-kitten/components"
 
-import { EditEventForm, EditEventeFormData as EditEventFormData } from "components"
+import { EditEventForm, EditEventFormData } from "components"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { useStores } from "models"
 

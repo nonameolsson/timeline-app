@@ -1,27 +1,13 @@
-import React, { FunctionComponent as Component, useLayoutEffect, useRef, useEffect, useCallback } from "react"
-import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
+import { Button as HeaderButton, Alert } from "react-native"
 import { Button, Layout, Text } from '@ui-kitten/components'
+import { observer } from 'mobx-react-lite'
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
+import React, { FunctionComponent as Component, useCallback } from "react"
 
 import { useStores } from "models"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { styles } from './event-screen-styles'
-import { Button as HeaderButton, Alert } from "react-native"
-import { observer } from 'mobx-react-lite'
-
-const useHeaderRight = (timelineId: string, eventId: string) => {
-  const { timelineStore } = useStores()
-  const navigation = useNavigation()
-  const event = timelineStore.getEventFromTimeline(timelineId, eventId)
-
-  useLayoutEffect(() => {
-    if (!event) return
-    navigation.setOptions({
-      headerRight: () => (
-        <HeaderButton title="Edit" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId })} />
-      ),
-    })
-  }, [event, navigation, timelineId])
-}
+import { useHeaderRight } from 'utils/hooks'
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
@@ -30,8 +16,13 @@ export const EventScreen: Component = observer(function EventScreen() {
 
   const event = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
 
-  // TODO: Migrate to separate utility function
-  useHeaderRight(params.timelineId, params.eventId)
+  const headerRight = () => {
+    if (!event) return undefined
+
+    return <HeaderButton title="Edit" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId: params.timelineId })} />
+  }
+
+  useHeaderRight(headerRight())
 
   useFocusEffect(
     useCallback(() => {

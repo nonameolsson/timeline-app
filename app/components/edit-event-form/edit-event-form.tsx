@@ -1,22 +1,21 @@
 import { Button as HeaderButton } from "react-native"
 import { Controller, useForm } from "react-hook-form"
 import { Input } from "@ui-kitten/components"
-import { useNavigation } from "@react-navigation/native"
 import { yupResolver } from "@hookform/resolvers"
 import React, { FunctionComponent as Component } from "react"
 
 import { EditEventFormSchema } from "./edit-event-form.validation"
 import { Event } from "models"
-import { PrimaryStackNavigationProp } from "navigation"
+import { useHeaderRight } from 'utils/hooks'
 
-export type EditEventeFormData = {
+export type EditEventFormData = {
   title: string,
   description: string,
 }
 
 export interface EditEventFormProps {
   event: Event
-  onSubmit: (data: EditEventeFormData) => void
+  onSubmit: (data: EditEventFormData) => void
 }
 
 /**
@@ -25,8 +24,7 @@ export interface EditEventFormProps {
  * Component description here for TypeScript tips.
  */
 export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }) => {
-  const navigation = useNavigation<PrimaryStackNavigationProp<"editEvent">>()
-  const { control, errors, formState, handleSubmit } = useForm<EditEventeFormData>({
+  const { control, errors, formState, handleSubmit } = useForm<EditEventFormData>({
     resolver: yupResolver(EditEventFormSchema),
     mode: 'onChange',
     defaultValues: {
@@ -35,23 +33,19 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     }
   })
 
-  const localSubmit = async (data) => {
+  const localSubmit = (data: EditEventFormData) => {
     const updatedData = {
       id: event.id,
       title: data.title,
       description: data.description,
     }
 
-    await onSubmit(updatedData)
+    onSubmit(updatedData)
   }
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <HeaderButton disabled={!formState.isValid || formState.isSubmitting} title="Save" onPress={handleSubmit(localSubmit)} />
-      ),
-    })
-  }, [navigation, formState])
+  const headerRight = <HeaderButton disabled={!formState.isValid || formState.isSubmitting} title="Save" onPress={handleSubmit(localSubmit)} />
+
+  useHeaderRight(headerRight)
 
   return (
     <>
@@ -65,7 +59,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
             caption={errors.title && errors.title.message}
             label="Title"
             onBlur={onBlur}
-            onChangeText={value => onChange(value)}
+            onChangeText={text => onChange(text)}
             status={errors.title ? 'danger' : 'basic'}
             value={value}
           />
@@ -81,7 +75,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
             caption={errors.description && errors.description.message}
             label="Description"
             onBlur={onBlur}
-            onChangeText={value => onChange(value)}
+            onChangeText={text => onChange(text)}
             status={errors.description ? 'danger' : 'basic'}
             value={value}
           />

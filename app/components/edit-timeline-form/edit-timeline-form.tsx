@@ -5,9 +5,8 @@ import { yupResolver } from "@hookform/resolvers"
 
 import { Timeline } from "models"
 import { EditTimelineFormSchema } from "./edit-timeline-form.validation"
-import { useNavigation } from "@react-navigation/native"
 import { Button as HeaderButton } from "react-native"
-import { PrimaryStackNavigationProp } from "navigation"
+import { useHeaderRight } from 'utils/hooks'
 
 export interface EditTimelineFormProps {
   timeline: Timeline
@@ -23,7 +22,6 @@ export type EditTimelineFormData = {
  * Form used when editing a timeline.
  */
 export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, onSubmit }) => {
-  const navigation = useNavigation<PrimaryStackNavigationProp<"editTimeline">>()
   const { control, errors, formState, handleSubmit } = useForm<EditTimelineFormData>({
     resolver: yupResolver(EditTimelineFormSchema),
     mode: 'onChange',
@@ -33,23 +31,19 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
     }
   })
 
-  const localSubmit = async (data) => {
+  const localSubmit = (data: EditTimelineFormData) => {
     const updatedData = {
       id: timeline.id,
       title: data.title,
       description: data.description,
     }
 
-    await onSubmit(updatedData)
+    onSubmit(updatedData)
   }
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <HeaderButton disabled={!formState.isValid || formState.isSubmitting} title="Save" onPress={handleSubmit(localSubmit)} />
-      ),
-    })
-  }, [navigation, formState])
+  const headerRight = <HeaderButton disabled={!formState.isValid || formState.isSubmitting} title="Save" onPress={handleSubmit(localSubmit)} />
+
+  useHeaderRight(headerRight)
 
   return (
     <>
@@ -63,7 +57,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
             caption={errors.title && errors.title.message}
             label="Title"
             onBlur={onBlur}
-            onChangeText={value => onChange(value)}
+            onChangeText={text => onChange(text)}
             status={errors.title ? 'danger' : 'basic'}
             value={value}
           />
@@ -79,7 +73,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
             caption={errors.description && errors.description.message}
             label="Description"
             onBlur={onBlur}
-            onChangeText={value => onChange(value)}
+            onChangeText={text => onChange(text)}
             status={errors.description ? 'danger' : 'basic'}
             value={value}
           />
