@@ -6,7 +6,7 @@ import { StyleSheet, SafeAreaView, View } from "react-native"
 import { EditEventForm, EditEventFormData } from "components"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { useStores } from "models"
-import { Appbar, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 const styles = StyleSheet.create({
   container: {
@@ -50,9 +50,6 @@ export const EditEventScreen: Component = observer(function EditEventScreen() {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Appbar>
-        <Appbar.Content title="Edit" />
-      </Appbar>
       <View style={[styles.container, { backgroundColor: background }]}>
         <EditEventForm event={event} onSubmit={onSubmit} />
       </View>

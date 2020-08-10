@@ -1,5 +1,5 @@
-import { Button as HeaderButton, Alert, View } from "react-native"
-import { Text, Button, Appbar, useTheme } from "react-native-paper"
+import { Alert, SafeAreaView, View } from "react-native"
+import { Text, Button, useTheme, Appbar } from "react-native-paper"
 import { observer } from 'mobx-react-lite'
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
@@ -8,7 +8,6 @@ import { useStores } from "models"
 import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
 import { styles } from './event-screen-styles'
 import { useHeaderRight } from 'utils/hooks'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
@@ -24,7 +23,7 @@ export const EventScreen: Component = observer(function EventScreen() {
   const headerRight = () => {
     if (!event) return undefined
 
-    return <HeaderButton title="Edit" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId: params.timelineId })} />
+    return <Appbar.Action icon="pencil" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId: params.timelineId })} />
   }
 
   useHeaderRight(headerRight())
@@ -75,9 +74,6 @@ export const EventScreen: Component = observer(function EventScreen() {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Appbar>
-        <Appbar.Content title="Event" />
-      </Appbar>
       <View style={[styles.container, { backgroundColor: background }]}>
         <Text>{event.title}</Text>
         <Text>{event.description}</Text>

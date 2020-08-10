@@ -6,8 +6,10 @@
  */
 import React from "react"
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack"
-import { EventScreen, EditEventScreen, HomeScreen, TimelineScreen, WelcomeScreen, DemoScreen, EditTimelineScreen } from "screens"
 import { RouteProp } from "@react-navigation/native"
+import { EventScreen, EditEventScreen, HomeScreen, TimelineScreen, WelcomeScreen, DemoScreen, EditTimelineScreen } from "screens"
+
+import { TopBar } from 'components'
 import { DeleteTimelineAction, DeleteEventAction, EditTimelineAction, EditEventAction } from './types'
 
 /**
@@ -59,55 +61,59 @@ export type PrimaryStackNavigationProp<T extends keyof PrimaryParamList> = Stack
 export type PrimaryRouteProp<T extends keyof PrimaryParamList> = RouteProp<PrimaryParamList, T>
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createStackNavigator<PrimaryParamList>()
+const PrimaryStack = createStackNavigator<PrimaryParamList>()
 
 export const PrimaryNavigator = () => {
   return (
-    <Stack.Navigator
+    <PrimaryStack.Navigator
       initialRouteName="home"
+      headerMode="screen"
       screenOptions={{
         headerShown: true,
-        gestureEnabled: true
+        gestureEnabled: true,
+        header: ({ scene, previous, navigation, ...props }) => (
+          <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+        ),
       }}
     >
-      <Stack.Screen
+      <PrimaryStack.Screen
         name="home"
         component={HomeScreen}
-        options={() => ({ headerShown: false, title: 'Timelines' })}
+        options={() => ({ headerShown: true, headerTitle: 'Timeline' })}
       />
-      <Stack.Screen
+      <PrimaryStack.Screen
         name="timeline"
         component={TimelineScreen}
         options={({ route }) => ({
-          title: route.params.title || 'Timeline'
+          headerTitle: route.params.title || 'Timeline'
         })}
       />
-      <Stack.Screen
+      <PrimaryStack.Screen
         name="editTimeline"
         component={EditTimelineScreen}
-        options={({ title: 'Edit' })}
+        options={({ headerTitle: 'Edit' })}
       />
-      <Stack.Screen
+      <PrimaryStack.Screen
         name="event"
         component={EventScreen}
         options={({ route }) => ({
-          title: route.params.title || 'Event'
+          headerTitle: route.params.title || 'Event'
         })}
       />
-      <Stack.Screen
+      <PrimaryStack.Screen
         name="editEvent"
         component={EditEventScreen}
-        options={({ title: 'Edit' })}
+        options={({ headerTitle: 'Edit' })}
       />
-      <Stack.Screen
+      <PrimaryStack.Screen
         name="welcome"
         component={WelcomeScreen}
       />
-      <Stack.Screen
+      <PrimaryStack.Screen
         name="demo"
         component={DemoScreen}
       />
-    </Stack.Navigator>
+    </PrimaryStack.Navigator>
   )
 }
 
