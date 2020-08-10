@@ -1,6 +1,5 @@
-import { Button as HeaderButton } from "react-native"
 import { Controller, useForm } from "react-hook-form"
-import { TextInput, HelperText } from "react-native-paper"
+import { TextInput, HelperText, Appbar } from "react-native-paper"
 import { yupResolver } from "@hookform/resolvers"
 import React, { FunctionComponent as Component } from "react"
 
@@ -43,9 +42,9 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     onSubmit(updatedData)
   }
 
-  const headerRight = <HeaderButton disabled={!formState.isValid || formState.isSubmitting} title="Save" onPress={handleSubmit(localSubmit)} />
+  const headerRight = () => <Appbar.Action disabled={!formState.isValid || formState.isSubmitting} icon="check" onPress={handleSubmit(localSubmit)} />
 
-  useHeaderRight(headerRight)
+  useHeaderRight(headerRight())
 
   return (
     <>

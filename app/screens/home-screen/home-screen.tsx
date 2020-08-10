@@ -1,5 +1,5 @@
 import { ActivityIndicator, SafeAreaView, View } from "react-native"
-import { Appbar, Button, FAB, Text, List, useTheme } from "react-native-paper"
+import { Button, FAB, Text, List, useTheme } from "react-native-paper"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 import React, { useState, FunctionComponent as Component, useCallback } from "react"
@@ -81,9 +81,6 @@ export const HomeScreen: Component = observer(function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Appbar>
-        <Appbar.Content title="Timeline" />
-      </Appbar>
       <View style={[styles.container, { backgroundColor: background }]}>
         {userStore.isLoggedIn() ? (
           <>

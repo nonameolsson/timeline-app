@@ -6,7 +6,7 @@ import { SafeAreaView, StyleSheet, View } from "react-native"
 import { PrimaryRouteProp, PrimaryStackNavigationProp } from "navigation"
 import { useStores } from "models"
 import { EditTimelineForm, EditTimelineFormData } from 'components/edit-timeline-form/edit-timeline-form'
-import { Appbar, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 
 // TODO: Move to separate file
 export const styles = StyleSheet.create({
@@ -50,9 +50,6 @@ export const EditTimelineScreen: Component = observer(function EditTimelineScree
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Appbar>
-        <Appbar.Content title="Edit" />
-      </Appbar>
       <View style={[styles.container, { backgroundColor: background }]}>
         <EditTimelineForm timeline={timeline} onSubmit={onSubmit} />
       </View>

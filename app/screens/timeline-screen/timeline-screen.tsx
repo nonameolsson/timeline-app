@@ -1,5 +1,5 @@
-import { Button as HeaderButton, SafeAreaView, Alert, View } from "react-native"
-import { Card, Button, Text, List, Appbar, useTheme, Headline } from "react-native-paper"
+import { SafeAreaView, Alert, View } from "react-native"
+import { Card, Button, Text, List, useTheme, Headline, Appbar } from "react-native-paper"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
@@ -46,9 +46,9 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     navigation.navigate('editTimeline', { id: params.id })
   }, [navigation, params.id])
 
-  const headerRight = <HeaderButton title="Edit" onPress={goToEditTimelineScreen} />
+  const headerRight = () => <Appbar.Action icon="pencil" onPress={goToEditTimelineScreen} />
 
-  useHeaderRight(headerRight)
+  useHeaderRight(headerRight())
 
   // Make sure all data exists before using it
   if (!timeline) return null
@@ -79,12 +79,6 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     navigation.navigate('event', { title: event?.title, timelineId: params.id, eventId })
   }
 
-  // const renderItem = ({ item, index }: { item: Event; index: number }) => (
-  //   <Observer>
-  //     {() => <ListItem onPress={() => openEvent(item.id)} key={index} title={item.title} description={item.description} />}
-  //   </Observer>
-  // )
-
   const renderList = () => timeline.events.map(event => (
     <List.Item
       key={event.id}
@@ -96,9 +90,6 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <Appbar>
-        <Appbar.Content title="Event" />
-      </Appbar>
       <View style={[styles.container, { backgroundColor: background }]}>
         <Card style={{ padding: 16 }}>
           <Text>{timeline.description}</Text>

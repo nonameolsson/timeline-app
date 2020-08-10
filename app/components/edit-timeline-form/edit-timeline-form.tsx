@@ -1,11 +1,11 @@
 import React, { FunctionComponent as Component } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { TextInput, HelperText } from "react-native-paper"
+import { TextInput, HelperText, Appbar } from "react-native-paper"
 import { yupResolver } from "@hookform/resolvers"
 
 import { Timeline } from "models"
 import { EditTimelineFormSchema } from "./edit-timeline-form.validation"
-import { Button as HeaderButton } from "react-native"
+
 import { useHeaderRight } from 'utils/hooks'
 
 export interface EditTimelineFormProps {
@@ -41,9 +41,9 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
     onSubmit(updatedData)
   }
 
-  const headerRight = <HeaderButton disabled={!formState.isValid || formState.isSubmitting} title="Save" onPress={handleSubmit(localSubmit)} />
+  const headerRight = () => <Appbar.Action disabled={!formState.isValid || formState.isSubmitting} icon="check" onPress={handleSubmit(localSubmit)} />
 
-  useHeaderRight(headerRight)
+  useHeaderRight(headerRight())
 
   return (
     <>
