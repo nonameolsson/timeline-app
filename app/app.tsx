@@ -57,7 +57,8 @@ const CombinedDefaultTheme = {
   colors: {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors
-  }
+  },
+  mode: 'adaptive'
 }
 
 /**
