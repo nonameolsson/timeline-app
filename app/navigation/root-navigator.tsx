@@ -45,18 +45,11 @@ const RootStack = observer(function RootStack() {
         <Stack.Screen
           name="drawerNav"
           component={DrawerNavigator}
-          options={{
-            headerShown: false,
-          }}
         />
       ) : (
         <Stack.Screen
           name="authStack"
           component={AuthNavigator}
-          options={{
-            headerShown: false,
-            animationTypeForReplace: 'pop'
-          }}
         />
       )}
     </Stack.Navigator>

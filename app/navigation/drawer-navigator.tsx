@@ -21,7 +21,7 @@ const DrawerNav = createDrawerNavigator()
 
 export const DrawerNavigator = () => {
   return (
-    <DrawerNav.Navigator hideStatusBar={true} drawerContent={() => <DrawerContent />}>
+    <DrawerNav.Navigator hideStatusBar={true} drawerContent={props => <DrawerContent {...props} />}>
       <DrawerNav.Screen name="app" component={PrimaryTabNavigator} />
     </DrawerNav.Navigator>
   )

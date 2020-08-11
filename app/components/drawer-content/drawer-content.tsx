@@ -5,7 +5,7 @@ import { Drawer, TouchableRipple, Switch, Avatar, Title, Caption, Text } from 'r
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import { drawerContentStyles as styles } from "./drawer-content.styles"
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
+import { DrawerContentScrollView, DrawerItem, DrawerContentComponentProps } from '@react-navigation/drawer'
 
 import { useStores } from 'models'
 

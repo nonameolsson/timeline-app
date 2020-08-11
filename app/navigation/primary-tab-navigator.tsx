@@ -5,30 +5,62 @@
  * You'll likely spend most of your time in this file.
  */
 import React from "react"
+import color from 'color'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { Portal, FAB } from 'react-native-paper'
+import { Portal, FAB, useTheme } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused, RouteProp } from '@react-navigation/native'
 
 import { TimelineStackNavigator } from './timeline-stack-navigator'
 import { PeopleStackNavigator } from './people-stack-navigator'
 import { PlacesStackNavigator } from './places-stack-navigator'
+import { RootParamList } from './root-navigator'
+import { useSafeArea } from 'react-native-safe-area-context'
+import { overlay } from 'theme/overlay'
+
+type Props = {
+  route: RouteProp<RootParamList, 'drawerNav'>
+}
 
 const Tab = createMaterialBottomTabNavigator()
 
-export const PrimaryTabNavigator = () => {
+export const PrimaryTabNavigator = (props: Props) => {
   const isFocused = useIsFocused()
+  const theme = useTheme()
+  const safeArea = useSafeArea()
+
+  const routeName = props.route.state
+    ? props.route.state.routes[props.route.state.index].name as string
+    : 'timelines'
+
+  const icon = routeName === 'timelines'
+    ? 'timeline-plus-outline'
+    : routeName === 'people' ? 'account-plus-outline'
+      : routeName === 'places' ? 'map-plus'
+        : 'plus'
+
+  const tabBarColor = theme.dark
+    ? (overlay(6, theme.colors.surface) as string)
+    : theme.colors.surface
 
   return (
     <React.Fragment>
       <Tab.Navigator
         initialRouteName="timelines"
+        backBehavior="initialRoute"
         shifting={true}
+        activeColor={theme.colors.primary}
+        inactiveColor={color(theme.colors.text)
+          .alpha(0.6)
+          .rgb()
+          .string()}
+        sceneAnimationEnabled={false}
       >
         <Tab.Screen
           name="timelines"
           component={TimelineStackNavigator}
           options={{
+            tabBarColor,
             tabBarLabel: 'Timelines',
             tabBarIcon: ({ focused, color }) => {
               const iconName = focused
@@ -44,6 +76,7 @@ export const PrimaryTabNavigator = () => {
           component={PeopleStackNavigator}
           options={{
             tabBarLabel: 'People',
+            tabBarColor,
             tabBarIcon: ({ focused, color }) => {
               const iconName = focused
                 ? 'account-group-outline'
@@ -58,6 +91,7 @@ export const PrimaryTabNavigator = () => {
           component={PlacesStackNavigator}
           options={{
             tabBarLabel: 'Places',
+            tabBarColor,
             tabBarIcon: ({ focused, color }) => {
               const iconName = focused
                 ? 'map-outline'
@@ -71,12 +105,19 @@ export const PrimaryTabNavigator = () => {
       <Portal>
         <FAB
           visible={isFocused} // show FAB only when this screen is focused
-          icon="plus"
+          icon={icon}
           style={{
             position: 'absolute',
-            bottom: 100,
+            bottom: safeArea.bottom + 65,
             right: 16,
           }}
+          color="white"
+          theme={{
+            colors: {
+              accent: theme.colors.primary,
+            },
+          }}
+          onPress={() => {}}
         />
       </Portal>
     </React.Fragment>
