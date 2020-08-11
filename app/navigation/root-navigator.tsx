@@ -5,15 +5,14 @@
  * will use once logged in.
  */
 import React from "react"
-import { createDrawerNavigator } from '@react-navigation/drawer'
 import { createStackNavigator } from "@react-navigation/stack"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 
-import { PrimaryTabNavigator } from "./primary-tab-navigator"
+import { useStores } from "models"
+
 import { AuthNavigator } from "./auth-navigator"
-import { useStores } from "../models"
-import { DrawerContent } from 'components'
+import { DrawerNavigator } from './drawer-navigator'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -26,7 +25,7 @@ import { DrawerContent } from 'components'
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type RootParamList = {
-  primaryStack: undefined
+  drawerNav: undefined
   authStack: undefined
 }
 
@@ -44,8 +43,8 @@ const RootStack = observer(function RootStack() {
     >
       {userStore.isLoggedIn() ? (
         <Stack.Screen
-          name="primaryStack"
-          component={PrimaryTabNavigator}
+          name="drawerNav"
+          component={DrawerNavigator}
           options={{
             headerShown: false,
           }}
@@ -64,23 +63,13 @@ const RootStack = observer(function RootStack() {
   )
 })
 
-const DrawerNav = createDrawerNavigator()
-
-const DrawerNavigator = () => {
-  return (
-    <DrawerNav.Navigator drawerContent={() => <DrawerContent />}>
-      <DrawerNav.Screen name="Home" component={RootStack} />
-    </DrawerNav.Navigator>
-  )
-}
-
 export const RootNavigator = React.forwardRef<
   NavigationContainerRef,
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {
   return (
     <NavigationContainer {...props} ref={ref}>
-      <DrawerNavigator />
+      <RootStack />
     </NavigationContainer>
   )
 })

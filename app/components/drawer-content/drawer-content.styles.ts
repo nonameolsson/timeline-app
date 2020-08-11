@@ -1,8 +1,10 @@
 import { StyleSheet } from "react-native"
+import { useTheme } from '@react-navigation/native'
 
 export const drawerContentStyles = StyleSheet.create({
   avatar: {
-    flexDirection: 'row', marginTop: 15
+    flexDirection: 'row',
+    marginTop: 15
   },
   bottomDrawerSection: {
     borderTopWidth: 1,
@@ -44,7 +46,8 @@ export const drawerContentStyles = StyleSheet.create({
     marginTop: 3,
   },
   userInfo: {
-    flexDirection: 'column', marginLeft: 15
+    flexDirection: 'column',
+    marginLeft: 15
   },
   userInfoSection: {
     paddingLeft: 20,
