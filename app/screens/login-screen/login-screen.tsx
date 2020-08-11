@@ -38,9 +38,9 @@ export const LoginScreen: Component = observer(function LoginScreen() {
     setError(null)
 
     try {
-      const error = await userStore.login(identifier, password)
+      const response = await userStore.login(identifier, password)
 
-      setError(translate(`login.errors.${error?.kind}`))
+      setError(translate(`login.errors.${response?.kind}`))
       setIsLoading(false)
     } catch (err) {
       console.tron.error('login error', err)

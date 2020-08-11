@@ -10,7 +10,7 @@ import { LoginSchema } from './login-form.validation'
 
 interface LoginFormProps {
   handleLogin: (email: string, password: string) => void
-  errorText?: string
+  errorText: string | null
   loading: boolean
 }
 

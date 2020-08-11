@@ -1,26 +1,26 @@
 import { ActivityIndicator, SafeAreaView, View } from "react-native"
-import { Button, FAB, Text, List, useTheme } from "react-native-paper"
+import { Button, Text, List, useTheme } from "react-native-paper"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 import React, { useState, FunctionComponent as Component, useCallback } from "react"
 
 import { useStores } from "models"
-import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
-import { styles } from "./home-screen.styles"
+import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
+import { styles } from "./timelines-screen.styles"
 
-export const HomeScreen: Component = observer(function HomeScreen() {
+export const TimelinesScreen: Component = observer(function TimelinesScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const {
-    colors: { background, primary },
+    colors: { background },
   } = useTheme()
 
   // Fix to get correct type
   const { userStore, timelineStore } = useStores()
 
   // Pull in navigation via hook
-  const navigation = useNavigation<PrimaryStackNavigationProp<"home">>()
-  const { params } = useRoute<PrimaryRouteProp<"home">>()
+  const navigation = useNavigation<TimelineStackNavigationProp<"home">>()
+  const { params } = useRoute<TimelineRouteProp<"home">>()
 
   // TODO: Adjust so new timelines are retrieved when navigating to this screen.
   useFocusEffect(
@@ -91,11 +91,6 @@ export const HomeScreen: Component = observer(function HomeScreen() {
                 ? renderList()
                 : renderEmptyState()
             }
-            <FAB
-              icon="plus"
-              style={[styles.fab, { backgroundColor: primary }]}
-              onPress={() => setIsLoading(!isLoading)}
-            />
           </>
         ) : (
           <Text>Logging in...</Text>

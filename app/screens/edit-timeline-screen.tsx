@@ -3,7 +3,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component } from "react"
 import { SafeAreaView, StyleSheet, View } from "react-native"
 
-import { PrimaryRouteProp, PrimaryStackNavigationProp } from "navigation"
+import { TimelineRouteProp, TimelineStackNavigationProp } from "navigation"
 import { useStores } from "models"
 import { EditTimelineForm, EditTimelineFormData } from 'components/edit-timeline-form/edit-timeline-form'
 import { useTheme } from 'react-native-paper'
@@ -21,9 +21,9 @@ export const styles = StyleSheet.create({
 })
 
 export const EditTimelineScreen: Component = observer(function EditTimelineScreen () {
-  const navigation = useNavigation<PrimaryStackNavigationProp<"editTimeline">>()
+  const navigation = useNavigation<TimelineStackNavigationProp<"editTimeline">>()
   const { timelineStore } = useStores()
-  const { params } = useRoute<PrimaryRouteProp<"editTimeline">>()
+  const { params } = useRoute<TimelineRouteProp<"editTimeline">>()
 
   const {
     colors: { background },
