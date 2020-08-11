@@ -5,14 +5,14 @@ import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/nativ
 import React, { FunctionComponent as Component, useCallback } from "react"
 
 import { useStores } from "models"
-import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
-import { styles } from './event-screen-styles'
+import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
+import { styles } from './event-screen.styles'
 import { useHeaderRight } from 'utils/hooks'
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
-  const navigation = useNavigation<PrimaryStackNavigationProp<"event">>()
-  const { params } = useRoute<PrimaryRouteProp<"event">>()
+  const navigation = useNavigation<TimelineStackNavigationProp<"event">>()
+  const { params } = useRoute<TimelineRouteProp<"event">>()
 
   const {
     colors: { background },

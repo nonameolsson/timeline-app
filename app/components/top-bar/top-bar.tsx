@@ -1,10 +1,10 @@
-import { Appbar, useTheme } from "react-native-paper"
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { Appbar, useTheme, Avatar } from "react-native-paper"
 import { observer } from 'mobx-react-lite'
+import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { StackHeaderProps } from '@react-navigation/stack'
-import { Platform } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { Platform, TouchableOpacity } from 'react-native'
 import React, { FunctionComponent as Component } from "react"
+import { DrawerNavigationProp } from '@react-navigation/drawer'
 
 const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical' // FIXME: When adding overflow icons
 
@@ -15,8 +15,8 @@ export interface TopBarProps extends StackHeaderProps { }
  *
  * Component description here for TypeScript tips.
  */
-export const TopBar: Component<TopBarProps> = observer(function TopBar({ scene }) {
-  const navigation = useNavigation()
+export const TopBar: Component<TopBarProps> = observer(function TopBar({ scene, previous, navigation }) {
+  // const navigation = useNavigation()
 
   const { options } = scene.descriptor
   const title =
@@ -32,30 +32,52 @@ export const TopBar: Component<TopBarProps> = observer(function TopBar({ scene }
 
   return (
     <Appbar.Header theme={{ colors: { primary: colors.surface } }}>
-
-      {scene.route.name === 'home' ? (
-        <Appbar.Action
-          onPress={() => undefined}
-          icon={({ color, size }) => (
-            <MaterialCommunityIcons
-              name="menu"
-              color={color}
-              size={size}
-            />
-          )}
-        />
-      ) : (
+      {previous ? (
         <Appbar.BackAction
-          onPress={() => navigation.goBack()}
+          onPress={navigation.goBack}
           color={colors.primary}
         />
+      ) : (
+        <TouchableOpacity
+          style={{ marginLeft: 10 }}
+          onPress={() => {
+            ((navigation as any) as DrawerNavigationProp<{}>).openDrawer()
+          }}
+        >
+          <Avatar.Image
+            size={40}
+            source={{
+              uri:
+                'https://api.adorable.io/avatars/50/hey@adorable.io.png',
+            }}
+          />
+        </TouchableOpacity>
       )}
       <Appbar.Content
+        title={
+          title === 'Timelines' ? (
+            <MaterialCommunityIcons
+              style={{ marginRight: 10 }}
+              name="twitter"
+              size={40}
+              color={colors.primary}
+            />
+          ) : (
+            title
+          )
+        }
+        titleStyle={{
+          fontSize: 18,
+          fontWeight: 'bold',
+          color: colors.primary,
+        }}
+      />
+      {/* <Appbar.Content
         title={
           title
           // previous ? title : <MaterialCommunityIcons name="save" size={40} /> // Shows custom icon on start screen, and text on others
         }
-      />
+      /> */}
       {options.headerRight && options.headerRight({})}
     </Appbar.Header>
   )

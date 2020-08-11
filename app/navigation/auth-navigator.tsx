@@ -21,8 +21,6 @@ import { LoginScreen } from "../screens"
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type AuthParamList = {
-  welcome: undefined
-  demo: undefined
   login: undefined
 }
 

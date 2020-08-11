@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
 
-import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
+import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { Timeline } from 'navigation/types'
 import { useHeaderRight } from 'utils/hooks'
 import { useStores } from "models"
@@ -12,8 +12,8 @@ import { styles } from './timeline-screen.styles'
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
   const { timelineStore } = useStores()
-  const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
-  const { params } = useRoute<PrimaryRouteProp<"timeline">>()
+  const navigation = useNavigation<TimelineStackNavigationProp<"timeline">>()
+  const { params } = useRoute<TimelineRouteProp<"timeline">>()
 
   const {
     colors: { background },

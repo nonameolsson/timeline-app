@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { StyleSheet, SafeAreaView, View } from "react-native"
 
 import { EditEventForm, EditEventFormData } from "components"
-import { PrimaryStackNavigationProp, PrimaryRouteProp } from "navigation"
+import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { useStores } from "models"
 import { useTheme } from 'react-native-paper'
 
@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
 })
 
 export const EditEventScreen: Component = observer(function EditEventScreen() {
-  const navigation = useNavigation<PrimaryStackNavigationProp<"editEvent">>()
+  const navigation = useNavigation<TimelineStackNavigationProp<"editEvent">>()
   const { timelineStore } = useStores()
-  const { params } = useRoute<PrimaryRouteProp<"editEvent">>()
+  const { params } = useRoute<TimelineRouteProp<"editEvent">>()
 
   const {
     colors: { background },
