@@ -22,7 +22,17 @@ const DrawerNav = createDrawerNavigator()
 export const DrawerNavigator = () => {
   return (
     <DrawerNav.Navigator hideStatusBar={true} drawerContent={props => <DrawerContent {...props} />}>
-      <DrawerNav.Screen name="app" component={PrimaryTabNavigator} />
+      <DrawerNav.Screen
+        name="app"
+        component={PrimaryTabNavigator}
+        options={({ route }) => {
+          console.tron.log('!@# options', { route })
+          const routeName = route.state
+            ? route.state.routes[route.state.index].name
+            : 'Feed'
+          return { headerTitle: routeName }
+        }}
+      />
     </DrawerNav.Navigator>
   )
 }

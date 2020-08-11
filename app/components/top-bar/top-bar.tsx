@@ -1,5 +1,6 @@
 import { Appbar, useTheme, Avatar } from "react-native-paper"
 import { observer } from 'mobx-react-lite'
+import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { StackHeaderProps } from '@react-navigation/stack'
 import { Platform, TouchableOpacity } from 'react-native'
 import React, { FunctionComponent as Component } from "react"
@@ -54,10 +55,29 @@ export const TopBar: Component<TopBarProps> = observer(function TopBar({ scene, 
       )}
       <Appbar.Content
         title={
+          title === 'Timelines' ? (
+            <MaterialCommunityIcons
+              style={{ marginRight: 10 }}
+              name="twitter"
+              size={40}
+              color={colors.primary}
+            />
+          ) : (
+            title
+          )
+        }
+        titleStyle={{
+          fontSize: 18,
+          fontWeight: 'bold',
+          color: colors.primary,
+        }}
+      />
+      {/* <Appbar.Content
+        title={
           title
           // previous ? title : <MaterialCommunityIcons name="save" size={40} /> // Shows custom icon on start screen, and text on others
         }
-      />
+      /> */}
       {options.headerRight && options.headerRight({})}
     </Appbar.Header>
   )
