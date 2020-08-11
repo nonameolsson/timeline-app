@@ -7,8 +7,8 @@
 import React from "react"
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack"
 import { RouteProp } from "@react-navigation/native"
-import { EventScreen, EditEventScreen, HomeScreen, TimelineScreen, WelcomeScreen, DemoScreen, EditTimelineScreen } from "screens"
 
+import { EventScreen, EditEventScreen, TimelinesScreen, TimelineScreen, EditTimelineScreen } from "screens"
 import { TopBar } from 'components'
 import { DeleteTimelineAction, DeleteEventAction, EditTimelineAction, EditEventAction } from './types'
 
@@ -24,9 +24,7 @@ import { DeleteTimelineAction, DeleteEventAction, EditTimelineAction, EditEventA
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
-export type PrimaryParamList = {
-  welcome: undefined
-  demo: undefined
+export type TimelineParamList = {
   home: {
     action?: DeleteTimelineAction
   }
@@ -49,7 +47,7 @@ export type PrimaryParamList = {
  * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
  * ```
  */
-export type PrimaryStackNavigationProp<T extends keyof PrimaryParamList> = StackNavigationProp<PrimaryParamList, T>
+export type TimelineStackNavigationProp<T extends keyof TimelineParamList> = StackNavigationProp<TimelineParamList, T>
 /**
  * Utility type to make it easier to use with `useRoute()`
  *
@@ -58,14 +56,13 @@ export type PrimaryStackNavigationProp<T extends keyof PrimaryParamList> = Stack
  * const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
  * ```
  */
-export type PrimaryRouteProp<T extends keyof PrimaryParamList> = RouteProp<PrimaryParamList, T>
+export type TimelineRouteProp<T extends keyof TimelineParamList> = RouteProp<TimelineParamList, T>
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
-const PrimaryStack = createStackNavigator<PrimaryParamList>()
+const TimelineStack = createStackNavigator<TimelineParamList>()
 
-export const PrimaryNavigator = () => {
+export const TimelineStackNavigator = () => {
   return (
-    <PrimaryStack.Navigator
+    <TimelineStack.Navigator
       initialRouteName="home"
       headerMode="screen"
       screenOptions={{
@@ -76,44 +73,36 @@ export const PrimaryNavigator = () => {
         ),
       }}
     >
-      <PrimaryStack.Screen
+      <TimelineStack.Screen
         name="home"
-        component={HomeScreen}
+        component={TimelinesScreen}
         options={() => ({ headerShown: true, headerTitle: 'Timeline' })}
       />
-      <PrimaryStack.Screen
+      <TimelineStack.Screen
         name="timeline"
         component={TimelineScreen}
         options={({ route }) => ({
           headerTitle: route.params.title || 'Timeline'
         })}
       />
-      <PrimaryStack.Screen
+      <TimelineStack.Screen
         name="editTimeline"
         component={EditTimelineScreen}
         options={({ headerTitle: 'Edit' })}
       />
-      <PrimaryStack.Screen
+      <TimelineStack.Screen
         name="event"
         component={EventScreen}
         options={({ route }) => ({
           headerTitle: route.params.title || 'Event'
         })}
       />
-      <PrimaryStack.Screen
+      <TimelineStack.Screen
         name="editEvent"
         component={EditEventScreen}
         options={({ headerTitle: 'Edit' })}
       />
-      <PrimaryStack.Screen
-        name="welcome"
-        component={WelcomeScreen}
-      />
-      <PrimaryStack.Screen
-        name="demo"
-        component={DemoScreen}
-      />
-    </PrimaryStack.Navigator>
+    </TimelineStack.Navigator>
   )
 }
 

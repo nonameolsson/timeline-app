@@ -11,15 +11,18 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import { NavigationContainerRef } from "@react-navigation/native"
+import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
+import {
+  NavigationContainerRef,
+  DefaultTheme as NavigationDefaultTheme,
+  DarkTheme as NavigationDarkTheme,
+} from '@react-navigation/native'
 import { observer } from "mobx-react-lite"
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
-import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
-
 import {
+  DefaultTheme as PaperDefaultTheme,
   DarkTheme as PaperDarkTheme,
-  Provider as PaperProvider,
-  DefaultTheme,
+  Provider as PaperProvider
 } from 'react-native-paper'
 
 import { initFonts } from "./theme/fonts"
@@ -41,6 +44,21 @@ import { enableScreens } from "react-native-screens"
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
+
+const CombinedDarkTheme = {
+  ...PaperDarkTheme,
+  ...NavigationDarkTheme,
+  colors: { ...PaperDarkTheme.colors, ...NavigationDarkTheme.colors },
+}
+
+const CombinedDefaultTheme = {
+  ...PaperDefaultTheme,
+  ...NavigationDefaultTheme,
+  colors: {
+    ...PaperDefaultTheme.colors,
+    ...NavigationDefaultTheme.colors
+  }
+}
 
 /**
  * This is the root component of our app.
@@ -70,15 +88,18 @@ const App: Component<{}> = observer(() => {
   // with your own loading component if you wish.
   if (!rootStore) return null
 
+  const theme = rootStore.uiStore.theme === 'light' ? CombinedDefaultTheme : CombinedDarkTheme
+
   // otherwise, we're ready to render the app
   return (
-    <PaperProvider theme={DefaultTheme}>
+    <PaperProvider theme={theme}>
       <RootStoreProvider value={rootStore}>
         <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
           <RootNavigator
             ref={navigationRef}
             initialState={initialNavigationState}
             onStateChange={onNavigationStateChange}
+            theme={theme}
           />
         </SafeAreaProvider>
       </RootStoreProvider>
