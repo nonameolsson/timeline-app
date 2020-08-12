@@ -11708,10 +11708,10 @@ react-native-flipper@^0.34.0:
   resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.34.0.tgz#7df1f38ba5d97a9321125fe0fccbe47d99e6fa1d"
   integrity sha512-48wgm29HJTOlZ0DibBsvXueEOY0EPIVL0wWKbwRfgrk86+luSEuLW3aZC50oJa95zSFb9qYShTV/6dWqh4Jamg==
 
-react-native-gesture-handler@~1.6.0:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"
-  integrity sha512-gQgIKhDiYf754yzhhliagLuLupvGb6ZyBdzYzr7aus3Fyi87TLOw63ers+r4kGw0h26oAWTAdHd34JnF4NeL6Q==
+react-native-gesture-handler@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.7.0.tgz#0ef74a5ba836832e497dc49eb1ce58baa6c617e5"
+  integrity sha512-1CrjJf8Z6Iz2XWzfZknYtsm2sud5Lu/pLhhokkgBIKttxqGDtetDEVFDJOTJWJyKCrUPk0X5tnWi/diSF4q++w==
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
     hoist-non-react-statics "^2.3.1"
@@ -11728,6 +11728,11 @@ react-native-keychain@^6.1.1:
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-6.1.1.tgz#3c14e4df9e5599f8d5a708da75d27f9d2424d7c1"
   integrity sha512-WYvAg7FbYPyX8jJ1rY/IQGS+6zK5LtNMRa3E8x1n0M5Lmsm/9CHtakzbmqT+rLvFE7DpPBg7qFawMuUoDjjtYA==
 
+react-native-modalize@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-modalize/-/react-native-modalize-2.0.5.tgz#1a9df6864850e93a5c7b0c9fb1a0ded30057f8a0"
+  integrity sha512-7xcgMSbJH1VVi+EmcnkWfzvul5pr2RGCPK1oyK818wBHCA4WGRanEVegFyEuGOHk6nz2BL0rQb+cu5oMvh66mQ==
+
 react-native-paper@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-4.0.1.tgz#13d2272757fb738113582e900787f365cfa77c74"
@@ -11736,6 +11741,11 @@ react-native-paper@^4.0.1:
     "@callstack/react-theme-provider" "^3.0.5"
     color "^3.1.2"
     react-native-safe-area-view "^0.14.9"
+
+react-native-portalize@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-portalize/-/react-native-portalize-1.0.5.tgz#755167f1990b809c11b690c0169a9d072e0327c8"
+  integrity sha512-3LAF/JfoJ340po2XqGLdmpXF2nRkhx07gxgfHQ5ATsU5I3twREWjR8vSltmcvl0Noe3Mmtwn9sbVK7AaHnHzxQ==
 
 react-native-reanimated@~1.9.0:
   version "1.9.0"

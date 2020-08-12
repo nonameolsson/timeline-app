@@ -1,3 +1,4 @@
+require("../app/components/addTimelineForm/addTimelineForm.story")
 require("../app/components/drawer-content/drawer-content.story")
 require("../app/components/top-bar/top-bar.story")
 require("../app/components/edit-event-form/edit-event-form.story")

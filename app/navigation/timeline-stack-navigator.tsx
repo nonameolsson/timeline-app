@@ -65,7 +65,7 @@ export const TimelineStackNavigator = () => {
   return (
     <TimelineStack.Navigator
       initialRouteName="home"
-      headerMode="screen"
+      headerMode="float"
       screenOptions={{
         headerShown: true,
         gestureEnabled: true,

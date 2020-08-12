@@ -1,8 +1,11 @@
-import { ActivityIndicator, SafeAreaView, View } from "react-native"
+import React, { useRef, useState, FunctionComponent as Component, useCallback } from "react"
+import { ActivityIndicator, Animated, SafeAreaView, View, Modal } from "react-native"
 import { Button, Text, List, useTheme } from "react-native-paper"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import React, { useState, FunctionComponent as Component, useCallback } from "react"
+import { Modalize } from 'react-native-modalize'
+import { Host } from 'react-native-portalize'
+import { AddTimelineForm } from 'components'
 
 import { useStores } from "models"
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
@@ -10,7 +13,9 @@ import { styles } from "./timelines-screen.styles"
 
 export const TimelinesScreen: Component = observer(function TimelinesScreen(props) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-
+  const modalizeRef = useRef<Modalize>(null)
+  const [showModal, setShowModal] = useState<boolean>(false)
+  const animated = useRef(new Animated.Value(0)).current
   const {
     colors: { background },
   } = useTheme()
@@ -59,12 +64,14 @@ export const TimelinesScreen: Component = observer(function TimelinesScreen(prop
 
   const renderEmptyState = () => <Text>Please create a timeline first.</Text>
 
-  const logOut = () => {
-    try {
-      userStore.logOut()
-    } catch (error) {
-      console.error(error)
-    }
+  const onOpen = () => {
+    setShowModal(true)
+    modalizeRef.current?.open()
+  }
+
+  const closeModalize = () => {
+    setShowModal(false)
+    modalizeRef.current?.close()
   }
 
   const renderList = () => {
@@ -80,23 +87,32 @@ export const TimelinesScreen: Component = observer(function TimelinesScreen(prop
   }
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <View style={[styles.container, { backgroundColor: background }]}>
-        {userStore.isLoggedIn() ? (
-          <>
-            <Text>Your timelines</Text>
-            {isLoading
-              ? <ActivityIndicator />
-              : timelineStore.hasTimelines()
-                ? renderList()
-                : renderEmptyState()
-            }
-          </>
-        ) : (
-          <Text>Logging in...</Text>
-        )}
-        <Button onPress={(): void => logOut()}>Log out</Button>
-      </View>
-    </SafeAreaView>
+    <Host style={{ backgroundColor: '#000' }}>
+      <SafeAreaView style={styles.screen}>
+        <View style={[styles.container, { backgroundColor: background }]}>
+          {userStore.isLoggedIn() ? (
+            <>
+              <Text>Your timelines</Text>
+              {isLoading
+                ? <ActivityIndicator />
+                : timelineStore.hasTimelines()
+                  ? renderList()
+                  : renderEmptyState()
+              }
+            </>
+          ) : (
+            <Text>Logging in...</Text>
+          )}
+          <Button onPress={(): void => onOpen()}>Add</Button>
+        </View>
+        <Modal
+          animationType="slide"
+          presentationStyle="pageSheet"
+          visible={showModal}
+        >
+          <AddTimelineForm onClose={closeModalize} />
+        </Modal>
+      </SafeAreaView>
+    </Host>
   )
 })
