@@ -10,12 +10,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Portal, FAB, useTheme } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { useIsFocused, RouteProp } from '@react-navigation/native'
+import { useSafeArea } from 'react-native-safe-area-context'
 
 import { TimelineStackNavigator } from './timeline-stack-navigator'
 import { PeopleStackNavigator } from './people-stack-navigator'
 import { PlacesStackNavigator } from './places-stack-navigator'
 import { RootParamList } from './root-navigator'
-import { useSafeArea } from 'react-native-safe-area-context'
 import { overlay } from 'theme/overlay'
 
 type Props = {
@@ -24,14 +24,14 @@ type Props = {
 
 const Tab = createMaterialBottomTabNavigator()
 
-export const PrimaryTabNavigator = (props: Props) => {
-  const isFocused = useIsFocused()
+export const PrimaryTabNavigator: React.FC = ({ route, navigation }) => {
+  const routeName = route.name
+    ? route.state.routes[route.state.index].name as string
+    : 'timelines'
+
   const theme = useTheme()
   const safeArea = useSafeArea()
-
-  const routeName = props.route.state
-    ? props.route.state.routes[props.route.state.index].name as string
-    : 'timelines'
+  const isFocused = useIsFocused()
 
   const icon = routeName === 'timelines'
     ? 'timeline-plus-outline'
@@ -117,7 +117,7 @@ export const PrimaryTabNavigator = (props: Props) => {
               accent: theme.colors.primary,
             },
           }}
-          onPress={() => {}}
+          onPress={() => navigation.navigate('addEvent')}
         />
       </Portal>
     </React.Fragment>

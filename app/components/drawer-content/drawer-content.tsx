@@ -5,7 +5,7 @@ import { Drawer, TouchableRipple, Switch, Avatar, Title, Caption, Text } from 'r
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import { drawerContentStyles as styles } from "./drawer-content.styles"
-import { DrawerContentScrollView, DrawerItem, DrawerContentComponentProps } from '@react-navigation/drawer'
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
 
 import { useStores } from 'models'
 
@@ -50,7 +50,7 @@ export const DrawerContent: Component<DrawerContentProps> = props => {
                 />
               )}
               label="Home"
-              onPress={() => {}}
+              onPress={() => props.navigation.navigate('app')}
             />
             <DrawerItem
               icon={({ color, size }) => (
@@ -61,7 +61,7 @@ export const DrawerContent: Component<DrawerContentProps> = props => {
                 />
               )}
               label="Profile"
-              onPress={() => {}}
+              onPress={() => props.navigation.navigate('profile')}
             />
             {/* <DrawerItem
               icon={({ color, size }) => (

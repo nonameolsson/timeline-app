@@ -1,7 +1,9 @@
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { DrawerContent } from 'components'
+
 import { PrimaryTabNavigator } from './primary-tab-navigator'
+import { ProfileScreen } from 'screens'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -26,11 +28,18 @@ export const DrawerNavigator = () => {
         name="app"
         component={PrimaryTabNavigator}
         options={({ route }) => {
-          console.tron.log('!@# options', { route })
-          const routeName = route.state
-            ? route.state.routes[route.state.index].name
-            : 'Feed'
-          return { headerTitle: routeName }
+          return {
+            title: route.name
+          }
+        }}
+      />
+      <DrawerNav.Screen
+        name="profile"
+        component={ProfileScreen}
+        options={({ route }) => {
+          return {
+            title: route.name
+          }
         }}
       />
     </DrawerNav.Navigator>

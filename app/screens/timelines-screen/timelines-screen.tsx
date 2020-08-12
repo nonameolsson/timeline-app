@@ -8,7 +8,7 @@ import { useStores } from "models"
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { styles } from "./timelines-screen.styles"
 
-export const TimelinesScreen: Component = observer(function TimelinesScreen() {
+export const TimelinesScreen: Component = observer(function TimelinesScreen(props) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const {
