@@ -9,25 +9,25 @@ import color from 'color'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Portal, FAB, useTheme } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { useIsFocused, RouteProp } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
 
-import { TimelineStackNavigator } from './timeline-stack-navigator'
+import { TimelineStackScreen } from './timeline-stack-navigator'
 import { PeopleStackNavigator } from './people-stack-navigator'
 import { PlacesStackNavigator } from './places-stack-navigator'
-import { RootParamList } from './root-navigator'
 import { overlay } from 'theme/overlay'
+import { getActiveRouteName } from './navigation-utilities'
 
-type Props = {
-  route: RouteProp<RootParamList, 'drawerNav'>
+export type BottomTabParamList = {
+  timelines: undefined
+  people: undefined
+  places: undefined
 }
 
-const Tab = createMaterialBottomTabNavigator()
+const Tab = createMaterialBottomTabNavigator<BottomTabParamList>()
 
-export const PrimaryTabNavigator: React.FC = ({ route, navigation }) => {
-  const routeName = route.name
-    ? route.state.routes[route.state.index].name as string
-    : 'timelines'
+export const PrimaryTabNavigator = ({ navigation, route }) => {
+  const routeName = route.state ? getActiveRouteName(route.state) : 'timeline'
 
   const theme = useTheme()
   const safeArea = useSafeArea()
@@ -42,6 +42,29 @@ export const PrimaryTabNavigator: React.FC = ({ route, navigation }) => {
   const tabBarColor = theme.dark
     ? (overlay(6, theme.colors.surface) as string)
     : theme.colors.surface
+
+  const onFabPress = () => {
+    let screenToNavigateTo
+
+    switch (routeName) {
+      case 'timelines':
+        screenToNavigateTo = 'addTimeline'
+        break
+
+      case 'people':
+        screenToNavigateTo = 'addPeople'
+        break
+
+      case 'places':
+        screenToNavigateTo = 'addPlace'
+        break
+
+      default:
+        break
+    }
+
+    navigation.navigate(screenToNavigateTo)
+  }
 
   return (
     <React.Fragment>
@@ -58,7 +81,7 @@ export const PrimaryTabNavigator: React.FC = ({ route, navigation }) => {
       >
         <Tab.Screen
           name="timelines"
-          component={TimelineStackNavigator}
+          component={TimelineStackScreen}
           options={{
             tabBarColor,
             tabBarLabel: 'Timelines',
@@ -117,7 +140,7 @@ export const PrimaryTabNavigator: React.FC = ({ route, navigation }) => {
               accent: theme.colors.primary,
             },
           }}
-          onPress={() => navigation.navigate('addEvent')}
+          onPress={() => onFabPress()}
         />
       </Portal>
     </React.Fragment>

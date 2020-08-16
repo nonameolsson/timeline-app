@@ -25,7 +25,7 @@ import { DeleteTimelineAction, DeleteEventAction, EditTimelineAction, EditEventA
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type TimelineParamList = {
-  home: {
+  timelines: {
     action?: DeleteTimelineAction
   }
   // NOTE: Timeline interfaces should only be optional when goint BACK to TimelineScreen from EventScreen. Fix this.
@@ -36,8 +36,8 @@ export type TimelineParamList = {
   }
   editTimeline: { id: string }
   event: { title?: string, timelineId: string; eventId: string, action?: EditEventAction }
-  editEvent: { timelineId: string, eventId: string }
   addEvent: undefined
+  editEvent: { timelineId: string, eventId: string }
 }
 
 /**
@@ -61,11 +61,11 @@ export type TimelineRouteProp<T extends keyof TimelineParamList> = RouteProp<Tim
 
 const TimelineStack = createStackNavigator<TimelineParamList>()
 
-export const TimelineStackNavigator = () => {
+export const TimelineStackScreen = () => {
   return (
     <TimelineStack.Navigator
-      initialRouteName="home"
-      headerMode="float"
+      initialRouteName="timelines"
+      headerMode="screen"
       screenOptions={{
         headerShown: true,
         gestureEnabled: true,
@@ -75,7 +75,7 @@ export const TimelineStackNavigator = () => {
       }}
     >
       <TimelineStack.Screen
-        name="home"
+        name="timelines"
         component={TimelinesScreen}
         options={() => ({ headerShown: true, headerTitle: 'Timeline' })}
       />
@@ -83,6 +83,8 @@ export const TimelineStackNavigator = () => {
         name="timeline"
         component={TimelineScreen}
         options={({ route }) => ({
+
+          headerShown: true,
           headerTitle: route.params.title || 'Timeline'
         })}
       />

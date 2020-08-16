@@ -1,21 +1,33 @@
-import React, { useRef, useState, FunctionComponent as Component, useCallback } from "react"
-import { ActivityIndicator, Animated, SafeAreaView, View, Modal } from "react-native"
+import React, { useState, useCallback } from "react"
+import { ActivityIndicator, SafeAreaView, View } from "react-native"
 import { Button, Text, List, useTheme } from "react-native-paper"
 import { observer } from "mobx-react-lite"
-import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import { Modalize } from 'react-native-modalize'
-import { Host } from 'react-native-portalize'
+import { useNavigation, useRoute, useFocusEffect, CompositeNavigationProp } from "@react-navigation/native"
+import { StackScreenProps, StackNavigationProp } from "@react-navigation/stack"
+import { MaterialBottomTabNavigationProp } from "@react-navigation/material-bottom-tabs"
+
 import { AddTimelineForm } from 'components'
-
 import { useStores } from "models"
-import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
+import { TimelineStackNavigationProp, TimelineRouteProp, TimelineParamList } from "navigation"
 import { styles } from "./timelines-screen.styles"
+import { pathOr } from 'ramda'
+import { BottomTabParamList } from 'navigation/primary-tab-navigator'
 
-export const TimelinesScreen: Component = observer(function TimelinesScreen(props) {
+// type TimelinesScreenProp = {
+//   navigation: CompositeNavigationProp<
+//     MaterialBottomTabNavigationProp<BottomTabParamList, "timelines">,
+//     StackNavigationProp<RootTimelineParamList>>
+//   route: TimelineRouteProp<"timelines">
+// }
+
+// type Props = {
+//   navigation: TimelineStackNavigationProp<"timelines">
+//   route: TimelineRouteProp<"timelines">
+// };
+
+export const TimelinesScreen = observer(function TimelinesScreen({ navigation, route: { params } }: any) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const modalizeRef = useRef<Modalize>(null)
-  const [showModal, setShowModal] = useState<boolean>(false)
-  const animated = useRef(new Animated.Value(0)).current
+
   const {
     colors: { background },
   } = useTheme()
@@ -23,9 +35,8 @@ export const TimelinesScreen: Component = observer(function TimelinesScreen(prop
   // Fix to get correct type
   const { userStore, timelineStore } = useStores()
 
-  // Pull in navigation via hook
-  const navigation = useNavigation<TimelineStackNavigationProp<"home">>()
-  const { params } = useRoute<TimelineRouteProp<"home">>()
+  const onOpen = () => navigation.navigate('addTimeline')
+  // const onOpen = () => navigation.navigate('main')
 
   // TODO: Adjust so new timelines are retrieved when navigating to this screen.
   useFocusEffect(
@@ -64,16 +75,6 @@ export const TimelinesScreen: Component = observer(function TimelinesScreen(prop
 
   const renderEmptyState = () => <Text>Please create a timeline first.</Text>
 
-  const onOpen = () => {
-    setShowModal(true)
-    modalizeRef.current?.open()
-  }
-
-  const closeModalize = () => {
-    setShowModal(false)
-    modalizeRef.current?.close()
-  }
-
   const renderList = () => {
     return timelineStore.getTimelinesArray().map(timeline => (
       <List.Item
@@ -87,32 +88,29 @@ export const TimelinesScreen: Component = observer(function TimelinesScreen(prop
   }
 
   return (
-    <Host style={{ backgroundColor: '#000' }}>
-      <SafeAreaView style={styles.screen}>
-        <View style={[styles.container, { backgroundColor: background }]}>
-          {userStore.isLoggedIn() ? (
-            <>
-              <Text>Your timelines</Text>
-              {isLoading
-                ? <ActivityIndicator />
-                : timelineStore.hasTimelines()
-                  ? renderList()
-                  : renderEmptyState()
-              }
-            </>
-          ) : (
-            <Text>Logging in...</Text>
-          )}
-          <Button onPress={(): void => onOpen()}>Add</Button>
-        </View>
-        <Modal
+    <SafeAreaView style={styles.screen}>
+      <View style={[styles.container, { backgroundColor: background }]}>
+        {userStore.isLoggedIn() ? (
+          <>
+            <Text>Your timelines</Text>
+            {isLoading
+              ? <ActivityIndicator />
+              : timelineStore.hasTimelines()
+                ? renderList()
+                : renderEmptyState()
+            }
+          </>
+        ) : (
+          <Text>Logging in...</Text>
+        )}
+        <Button onPress={() => onOpen()}>Add</Button>
+      </View>
+      {/* <Modal
           animationType="slide"
           presentationStyle="pageSheet"
-          visible={showModal}
         >
-          <AddTimelineForm onClose={closeModalize} />
-        </Modal>
-      </SafeAreaView>
-    </Host>
+          <AddTimelineForm />
+        </Modal> */}
+    </SafeAreaView>
   )
 })
