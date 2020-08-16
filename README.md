@@ -4,6 +4,7 @@
 [![CircleCI](https://circleci.com/gh/infinitered/ignite-bowser.svg?style=svg)](https://circleci.com/gh/infinitered/ignite-bowser)
 [![CodeFactor](https://www.codefactor.io/repository/github/nonameolsson/timeline/badge)](https://www.codefactor.io/repository/github/nonameolsson/timeline)
 [![DeepScan grade](https://deepscan.io/api/teams/7648/projects/13404/branches/224591/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=7648&pid=13404&bid=224591)
+<a href="https://codeclimate.com/github/nonameolsson/timeline/maintainability"><img src="https://api.codeclimate.com/v1/badges/834537e7006956722c0f/maintainability" /></a>
 
 ## The latest and greatest boilerplate for Infinite Red opinions
 
