@@ -1,5 +1,6 @@
 # timeline
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6ca7fcd6618140748532f2a9c3c4906c)](https://app.codacy.com/manual/noname.olsson/timeline?utm_source=github.com&utm_medium=referral&utm_content=nonameolsson/timeline&utm_campaign=Badge_Grade_Dashboard)
 [![CircleCI](https://circleci.com/gh/infinitered/ignite-bowser.svg?style=svg)](https://circleci.com/gh/infinitered/ignite-bowser)
 [![CodeFactor](https://www.codefactor.io/repository/github/nonameolsson/timeline/badge)](https://www.codefactor.io/repository/github/nonameolsson/timeline)
 [![DeepScan grade](https://deepscan.io/api/teams/7648/projects/13404/branches/224591/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=7648&pid=13404&bid=224591)
