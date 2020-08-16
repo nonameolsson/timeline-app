@@ -1,5 +1,6 @@
 # timeline
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6ca7fcd6618140748532f2a9c3c4906c)](https://app.codacy.com/manual/noname.olsson/timeline?utm_source=github.com&utm_medium=referral&utm_content=nonameolsson/timeline&utm_campaign=Badge_Grade_Dashboard)
 [![CircleCI](https://circleci.com/gh/infinitered/ignite-bowser.svg?style=svg)](https://circleci.com/gh/infinitered/ignite-bowser)
 
 ## The latest and greatest boilerplate for Infinite Red opinions
