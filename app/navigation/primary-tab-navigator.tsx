@@ -133,7 +133,9 @@ export const PrimaryTabNavigator = ({ navigation, route }) => {
             position: 'absolute',
             bottom: safeArea.bottom + 65,
             right: 16,
+
           }}
+
           color="white"
           theme={{
             colors: {

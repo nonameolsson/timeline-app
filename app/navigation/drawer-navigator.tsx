@@ -1,11 +1,13 @@
 import React from 'react'
 import { Platform } from 'react-native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { DrawerContent, AddTimelineForm } from 'components'
+import { DrawerContent } from 'components'
 
 import { PrimaryTabNavigator } from './primary-tab-navigator'
 import { ProfileScreen } from 'screens'
-import { createStackNavigator, CardStyleInterpolators, TransitionPresets } from '@react-navigation/stack'
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
+import { AddTimelineScreen } from 'screens/add-timeline-screen'
+import { Text, Button } from 'react-native-paper'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -57,28 +59,46 @@ export type RootTimelineParamList = {
 const RootTimelineStack = createStackNavigator<RootTimelineParamList>()
 const transition = () => Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : undefined
 
-export const RootTimelineStackScreen = () => {
-  return (
-    <RootTimelineStack.Navigator
-      initialRouteName="main"
-      headerMode="none"
-      mode="modal"
-      screenOptions={() => {
-        return {
-          gestureEnabled: true,
-          cardOverlayEnabled: true,
-          ...transition()
-        }
+const AddTimelineStack = createStackNavigator()
+
+const AddTimelineStackScreen = () => (
+  <AddTimelineStack.Navigator>
+    <AddTimelineStack.Screen
+      name="addTimeline"
+      component={AddTimelineScreen}
+    />
+  </AddTimelineStack.Navigator>
+)
+
+export const RootTimelineStackScreen = () => (
+  <RootTimelineStack.Navigator
+    initialRouteName="main"
+    // mode="modal"
+    // screenOptions={() => {
+    // return {
+    // headerShown: false,
+    // gestureEnabled: true,
+    // cardOverlayEnabled: true,
+    // ...transition()
+    //   }
+    // }}
+  >
+    <RootTimelineStack.Screen
+      name="main"
+      component={DrawerNavigator}
+    />
+    <RootTimelineStack.Screen
+      name="addTimeline"
+      // options={() => ({ headerBackImage: () => null, headerBackTitle: 'Cancel', headerRight: () => <Text>asdhf</Text>, headerShown: true, headerTitle: 'Add Timeline' })}
+      component={AddTimelineStackScreen}
+      options={{
+        title: 'hsej',
+        headerRight: () => (
+          <Text
+            onPress={() => undefined}
+            color="#fff"
+          >Info</Text>
+        ),
       }}
-    >
-      <RootTimelineStack.Screen
-        name="main"
-        component={DrawerNavigator}
-      />
-      <RootTimelineStack.Screen
-        options={{ headerShown: true }}
-        name="addTimeline"
-        component={AddTimelineForm}
-      />
-    </RootTimelineStack.Navigator>)
-}
+    />
+  </RootTimelineStack.Navigator>)
