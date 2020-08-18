@@ -1,14 +1,15 @@
 import { SafeAreaView, Alert, View } from "react-native"
-import { Card, Button, Text, List, useTheme, Headline, Appbar } from "react-native-paper"
+import { Card, Button, Text, List, useTheme, Headline } from "react-native-paper"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
+import { Item } from 'react-navigation-header-buttons'
 
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { Timeline } from 'navigation/types'
-import { useHeaderRight } from 'utils/hooks'
 import { useStores } from "models"
 import { styles } from './timeline-screen.styles'
+import { MaterialHeaderButtons } from 'components'
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
   const { timelineStore } = useStores()
@@ -20,6 +21,22 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   } = useTheme()
 
   const timeline = timelineStore.getTimeline(params.id)
+
+  const goToEditTimelineScreen = useCallback(() => {
+    navigation.navigate('editTimeline', { id: params.id })
+  }, [navigation, params.id])
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      // in your app, extract the arrow function into a separate component
+      // to avoid creating a new one every time
+      headerRight: () => (
+        <MaterialHeaderButtons>
+          <Item title="Edit" iconName="edit" onPress={() => goToEditTimelineScreen()} />
+        </MaterialHeaderButtons>
+      ),
+    })
+  }, [goToEditTimelineScreen, navigation])
 
   useFocusEffect(
     useCallback(() => {
@@ -41,14 +58,6 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
       }
     }, [params, timeline])
   )
-
-  const goToEditTimelineScreen = useCallback(() => {
-    navigation.navigate('editTimeline', { id: params.id })
-  }, [navigation, params.id])
-
-  const headerRight = () => <Appbar.Action icon="pencil" onPress={goToEditTimelineScreen} />
-
-  useHeaderRight(headerRight())
 
   // Make sure all data exists before using it
   if (!timeline) return null

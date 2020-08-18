@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers"
 import { Timeline } from "models"
 import { EditTimelineFormSchema } from "./edit-timeline-form.validation"
 
-import { useHeaderRight } from 'utils/hooks'
+import { useHeaderButtons } from 'utils/hooks'
 
 export interface EditTimelineFormProps {
   timeline: Timeline
@@ -43,7 +43,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
 
   const headerRight = () => <Appbar.Action disabled={!formState.isValid || formState.isSubmitting} icon="check" onPress={handleSubmit(localSubmit)} />
 
-  useHeaderRight(headerRight())
+  useHeaderButtons({ right: headerRight })
 
   return (
     <>

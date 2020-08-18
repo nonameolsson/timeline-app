@@ -57,14 +57,20 @@ export function useTitle(title?: string) {
   })
 }
 
-export const useHeaderRight = (component?: JSX.Element) => {
+type HeaderButtons = {
+  left?: () => JSX.Element
+  right?: () => JSX.Element
+}
+
+export const useHeaderButtons = ({ left, right }: HeaderButtons) => {
   const navigation = useNavigation()
 
   useLayoutEffect(() => {
-    if (!component) { return }
+    if (!left && !right) { return }
 
     navigation.setOptions({
-      headerRight: () => component
+      headerLeft: left,
+      headerRight: right
     })
-  }, [component, navigation])
+  }, [left, right, navigation])
 }

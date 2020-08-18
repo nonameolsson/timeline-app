@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from "react"
 import { ActivityIndicator, SafeAreaView, View } from "react-native"
-import { Text, List, useTheme } from "react-native-paper"
+import { Text, List, useTheme, Appbar } from "react-native-paper"
 import { observer } from "mobx-react-lite"
 import { useFocusEffect } from "@react-navigation/native"
 
 import { useStores } from "models"
 import { styles } from "./timelines-screen.styles"
+import { useHeaderButtons } from 'utils/hooks'
 
 // type TimelinesScreenProp = {
 //   navigation: CompositeNavigationProp<

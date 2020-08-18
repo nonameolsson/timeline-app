@@ -24,6 +24,7 @@ import {
   DarkTheme as PaperDarkTheme,
   Provider as PaperProvider
 } from 'react-native-paper'
+import { OverflowMenuProvider } from 'react-navigation-header-buttons'
 
 import { initFonts } from "./theme/fonts"
 import * as storage from "./utils/storage"
@@ -96,12 +97,14 @@ const App: Component<{}> = observer(() => {
     <PaperProvider theme={theme}>
       <RootStoreProvider value={rootStore}>
         <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-          <RootNavigator
-            ref={navigationRef}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-            theme={theme}
-          />
+          <OverflowMenuProvider>
+            <RootNavigator
+              ref={navigationRef}
+              initialState={initialNavigationState}
+              onStateChange={onNavigationStateChange}
+              theme={theme}
+            />
+          </OverflowMenuProvider>
         </SafeAreaProvider>
       </RootStoreProvider>
     </PaperProvider>

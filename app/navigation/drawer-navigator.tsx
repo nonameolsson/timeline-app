@@ -1,7 +1,7 @@
 import React from 'react'
 import { Platform } from 'react-native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { DrawerContent } from 'components'
+import { DrawerContent, TopBar } from 'components'
 
 import { PrimaryTabNavigator } from './primary-tab-navigator'
 import { ProfileScreen } from 'screens'
@@ -65,6 +65,11 @@ const AddTimelineStackScreen = () => (
   <AddTimelineStack.Navigator>
     <AddTimelineStack.Screen
       name="addTimeline"
+      options={() => {
+        return {
+          title: 'New Timeline'
+        }
+      }}
       component={AddTimelineScreen}
     />
   </AddTimelineStack.Navigator>
@@ -73,15 +78,15 @@ const AddTimelineStackScreen = () => (
 export const RootTimelineStackScreen = () => (
   <RootTimelineStack.Navigator
     initialRouteName="main"
-    // mode="modal"
-    // screenOptions={() => {
-    // return {
-    // headerShown: false,
-    // gestureEnabled: true,
-    // cardOverlayEnabled: true,
-    // ...transition()
-    //   }
-    // }}
+    mode="modal"
+    screenOptions={() => {
+      return {
+        headerShown: false,
+        gestureEnabled: Platform.OS === 'ios',
+        cardOverlayEnabled: true,
+        ...transition()
+      }
+    }}
   >
     <RootTimelineStack.Screen
       name="main"
@@ -89,16 +94,6 @@ export const RootTimelineStackScreen = () => (
     />
     <RootTimelineStack.Screen
       name="addTimeline"
-      // options={() => ({ headerBackImage: () => null, headerBackTitle: 'Cancel', headerRight: () => <Text>asdhf</Text>, headerShown: true, headerTitle: 'Add Timeline' })}
       component={AddTimelineStackScreen}
-      options={{
-        title: 'hsej',
-        headerRight: () => (
-          <Text
-            onPress={() => undefined}
-            color="#fff"
-          >Info</Text>
-        ),
-      }}
     />
   </RootTimelineStack.Navigator>)

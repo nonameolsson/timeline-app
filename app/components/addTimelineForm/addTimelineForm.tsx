@@ -7,11 +7,11 @@ import { yupResolver } from '@hookform/resolvers'
 
 import { FormData } from './addTimelineForm.types'
 import { AddTimelineFormSchema } from './addTimelineFormSchema.validation'
-
-import { addTimelineFormStyles as styles } from "./addTimelineForm.styles"
+import { MaterialHeaderButtons, Item } from 'components'
+import { useNavigation } from '@react-navigation/native'
 
 interface AddTimelineFormProps {
-  onCreate: (email: string, password: string) => void
+  onSubmit: (data: { title: string, description: string }) => void
   errorText: string | null
 }
 
@@ -20,90 +20,100 @@ interface AddTimelineFormProps {
  *
  * Component description here for TypeScript tips.
  */
-export const AddTimelineForm = ({ errorText, onCreate }: AddTimelineFormProps) => {
-  // Note: if you want your componeobservernt to refresh when data is updated in the store,
-  // wrap this component in `` like so:
-  // `export const AddTimelineForm = observer(function AddTimelineForm { ... })`
-
-  // Enable this line to retrieve data from the rootStore (or other store)
-  // const rootStore = useStores()
-  // or
-  // const { otherStore, userStore } = useStores()
+export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) => {
+  const navigation = useNavigation()
+  const {
+    colors: { error },
+  } = useTheme()
 
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
     resolver: yupResolver(AddTimelineFormSchema),
     mode: 'onBlur'
   })
 
-  const onSubmit = ({ email, password }): void => {
-    onCreate(email, password)
-  }
+  React.useLayoutEffect(() => {
+    const localSubmit = (data: any /* FIXME: this type */) => {
+      const updatedData = {
+        title: data.title,
+        description: data.description,
+      }
 
-  const {
-    colors: { error },
-  } = useTheme()
+      onSubmit(updatedData)
+    }
+
+    navigation.setOptions({
+      // in your app, extract the arrow function into a separate component
+      // to avoid creating a new one every time
+      headerLeft: () => (
+        <MaterialHeaderButtons left={true}>
+          <Item title="Cancel" onPress={() => navigation.goBack()} />
+        </MaterialHeaderButtons>
+      ),
+      headerRight: () => (
+        <MaterialHeaderButtons left={true}>
+          <Item title="Save" disabled={!formState.isValid || formState.isSubmitting} onPress={handleSubmit(localSubmit)} />
+        </MaterialHeaderButtons>
+      ),
+    })
+  }, [formState.isSubmitting, formState.isValid, handleSubmit, navigation, onSubmit])
 
   return useObserver(() => (
     <View>
       <Controller
         control={control}
         name="title"
-        render={({ onChange, onBlur, value }) => (<>
-          <TextInput
-            autoCapitalize="words" // TODO: Only on English, not Swedish
-            autoCorrect={false}
-            label="Title"
-            left={
+        render={({ onChange, onBlur, value }) => (
+          <>
+            <TextInput
+              autoCapitalize="words" // TODO: Only on English, not Swedish
+              autoCorrect={false}
+              label="Title"
+              left={
+                <TextInput.Icon
+                  name="format-title"
+                />
+              }
+              right={errors.title &&
               <TextInput.Icon
-                name="email"
+                name="alert-circle"
+                color={error}
               />
-            }
-            disabled={formState.isSubmitting}
-            onBlur={onBlur}
-            onChangeText={text => onChange(text)}
-            error={!!errors.title}
-            value={value}
-          />
-          <HelperText type="error" visible={!!errors.title}>
-            {errors.title?.message}
-          </HelperText></>
+              }
+              disabled={formState.isSubmitting}
+              onBlur={onBlur}
+              onChangeText={text => onChange(text)}
+              error={!!errors.title}
+              value={value}
+            />
+            <HelperText type="error" visible={!!errors.title}>
+              {errors.title?.message}
+            </HelperText>
+          </>
         )}
       />
       <Controller
         control={control}
         name="description"
-        render={({ onChange, onBlur, value }) => (<>
+        render={({ onChange, onBlur, value }) => (
           <TextInput
             disabled={formState.isSubmitting}
             onBlur={onBlur}
             left={
               <TextInput.Icon
-                name="key"
+                name="script-text-outline"
               />
             }
             onChangeText={text => onChange(text)}
-            label="Password"
-            secureTextEntry={true}
-            spellCheck={false}
+            label="Description"
+            spellCheck={true}
             error={!!errors.description}
             value={value}
             style={{ marginTop: 16 }}
           />
-          <HelperText type="error" visible={!!errors.description}>
-            {errors.description?.message}
-          </HelperText></>
         )}
       />
 
       <Text style={{ textAlign: 'center', marginBottom: 16, color: error }}>{errorText || ''}</Text>
-      <Button
-        disabled={formState.isSubmitting}
-        onPress={handleSubmit(onSubmit)}
-        mode="contained"
-        loading={formState.isSubmitting}
-      >
-          Create Timeline
-      </Button>
     </View>
   ))
 }

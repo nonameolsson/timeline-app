@@ -1,26 +1,26 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { SafeAreaView } from "react-native"
-import { Appbar, Text } from 'react-native-paper'
+import { SafeAreaView, Alert, View, StyleSheet } from "react-native"
+
 import { AddTimelineForm } from 'components'
-import { useHeaderRight } from 'utils/hooks'
 
-export const AddTimelineScreen = observer(function AddTimelineScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  // OR
-  // const rootStore = useStores()
+// TODO: Move to separate file
+const styles = StyleSheet.create({
+  container: {
+    padding: 16
+  },
+})
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
-
-  // const headerRight = () => <Appbar.Action icon="check" onPress={() => undefined} />
-
-  // useHeaderRight(headerRight())
+export const AddTimelineScreen = observer(function AddTimelineScreen({ navigation }) {
+  const handleSubmit = ({ title, description }) => {
+    Alert.alert(title, description)
+  }
 
   return (
     <SafeAreaView>
-      <AddTimelineForm errorText="" onCreate={() => undefined} />
+      <View style={styles.container}>
+        <AddTimelineForm errorText="" onSubmit={data => handleSubmit(data)} />
+      </View>
     </SafeAreaView>
   )
 })

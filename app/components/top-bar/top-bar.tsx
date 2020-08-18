@@ -2,11 +2,9 @@ import { Appbar, useTheme, Avatar } from "react-native-paper"
 import { observer } from 'mobx-react-lite'
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { StackHeaderProps } from '@react-navigation/stack'
-import { Platform, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import React, { FunctionComponent as Component } from "react"
 import { DrawerNavigationProp } from '@react-navigation/drawer'
-
-const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical' // FIXME: When adding overflow icons
 
 export interface TopBarProps extends StackHeaderProps { }
 
@@ -32,6 +30,7 @@ export const TopBar: Component<TopBarProps> = observer(function TopBar({ scene, 
 
   return (
     <Appbar.Header theme={{ colors: { primary: colors.surface } }}>
+      {options.headerLeft && options.headerLeft({})}
       {previous ? (
         <Appbar.BackAction
           onPress={navigation.goBack}
@@ -72,12 +71,6 @@ export const TopBar: Component<TopBarProps> = observer(function TopBar({ scene, 
           color: colors.primary,
         }}
       />
-      {/* <Appbar.Content
-        title={
-          title
-          // previous ? title : <MaterialCommunityIcons name="save" size={40} /> // Shows custom icon on start screen, and text on others
-        }
-      /> */}
       {options.headerRight && options.headerRight({})}
     </Appbar.Header>
   )
