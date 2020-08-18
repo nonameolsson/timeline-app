@@ -1,5 +1,4 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk1MjI4MDczLCJleHAiOjE1OTc4MjAwNzN9.NYyCjJ5HxOI_X731mOoq-wDAnqxiZ8H2rW1V3RwdQTk
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk3NzkxMzczLCJleHAiOjE2MDAzODMzNzN9.CsfKYDG1rHsBLbh8KxX3SBL9Zj2w0AcCDRzNRtC9pts
 
 ###
 
@@ -10,6 +9,19 @@ Authorization: Bearer {{token}}
 
 GET http://localhost:1337/timelines/2
 Authorization: Bearer {{token}}
+
+###
+
+POST http://localhost:1337/timelines
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Hej new",
+  "description": "En riktigt spännande historia!",
+  "events": [],
+  "user": 2
+}
 
 ###
 

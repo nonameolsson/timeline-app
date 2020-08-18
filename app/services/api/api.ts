@@ -220,9 +220,35 @@ export class Api {
   }
 
   /**
+   * Create a new timeline
+   *
+   * @returns {Promise<Types.PostTimelineResult>}
+   * @memberof Api
+   */
+  async createTimeline(timeline: { title: string, description?: string }): Promise<Types.PostTimelineResult> { // TODO: Add correct type for timeline
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.post(`/timelines`, timeline)
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const resultTimeline: Types.Timeline = response.data
+
+      return { kind: "ok", timeline: resultTimeline }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
    * Update a specific timeline
    *
-   * @returns {Promise<Types.GetTimelinesResult>}
+   * @returns {Promise<Types.PutTimelineResult>}
    * @memberof Api
    */
   async updateTimeline(timeline: { id: string, title: string, description: string }): Promise<Types.PutTimelineResult> { // TODO: Add correct type for timeline

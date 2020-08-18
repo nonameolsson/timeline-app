@@ -1,8 +1,9 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { SafeAreaView, Alert, View, StyleSheet } from "react-native"
+import { SafeAreaView, View, StyleSheet } from "react-native"
 
 import { AddTimelineForm } from 'components'
+import { useStores } from 'models'
 
 // TODO: Move to separate file
 const styles = StyleSheet.create({
@@ -11,9 +12,12 @@ const styles = StyleSheet.create({
   },
 })
 
-export const AddTimelineScreen = observer(function AddTimelineScreen({ navigation }) {
-  const handleSubmit = ({ title, description }) => {
-    Alert.alert(title, description)
+export const AddTimelineScreen = observer(function AddTimelineScreen({ navigation }) {
+  const { timelineStore } = useStores()
+
+  const handleSubmit = async ({ title, description }) => {
+    await timelineStore.createTimeline({ title, description })
+    navigation.goBack()
   }
 
   return (

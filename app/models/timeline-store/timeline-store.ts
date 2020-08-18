@@ -73,6 +73,15 @@ export const TimelineStoreModel = types
    * Following actions will send requests to the API, and call actions defined in the first action definition
    */
   .actions(self => ({
+    createTimeline: flow(function * ({ title, description }: { title: string, description?: string}) {
+      const result: Types.GetTimelinesResult = yield self.environment.api.createTimeline({ title, description })
+
+      if (result.kind === "ok") {
+        self.addTimelinesToStore(result.timelines)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
     getTimelines: flow(function * (userId: number) {
       const result: Types.GetTimelinesResult = yield self.environment.api.getTimelinesByUser(userId)
 
