@@ -225,9 +225,9 @@ export class Api {
    * @returns {Promise<Types.PostTimelineResult>}
    * @memberof Api
    */
-  async createTimeline(timeline: { title: string, description?: string }): Promise<Types.PostTimelineResult> { // TODO: Add correct type for timeline
+  async createTimeline(data: { user: string, title: string, description?: string }): Promise<Types.PostTimelineResult> { // TODO: Add correct type for timeline
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.post(`/timelines`, timeline)
+    const response: ApiResponse<any> = await this.apisauce.post(`/timelines`, data)
 
     // the typical ways to die when calling an api
     if (!response.ok) {

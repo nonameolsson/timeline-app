@@ -4,10 +4,10 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react"
+import React, { useState, useEffect } from "react"
 import color from 'color'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { Portal, FAB, useTheme } from 'react-native-paper'
+import { FAB, useTheme } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { useIsFocused } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
@@ -17,6 +17,7 @@ import { PeopleStackNavigator } from './people-stack-navigator'
 import { PlacesStackNavigator } from './places-stack-navigator'
 import { overlay } from 'theme/overlay'
 import { getActiveRouteName } from './navigation-utilities'
+import { useStores } from 'models'
 
 export type BottomTabParamList = {
   timelines: undefined
@@ -26,12 +27,73 @@ export type BottomTabParamList = {
 
 const Tab = createMaterialBottomTabNavigator<BottomTabParamList>()
 
+// FIXME: This should be used instead of putting code inside the component
+/**
+ * Calculate when the global FAB should be displayed
+ */
+const useFab = (routeName: string, isFocused: boolean) => {
+  const { timelineStore } = useStores()
+  const [showFab, setShowFab] = useState(true)
+
+  useEffect(() => {
+    if (!isFocused) setShowFab(false)
+
+    switch (routeName) {
+      case 'timeline':
+        timelineStore.hasTimelines() ? setShowFab(true) : setShowFab(false)
+        break
+
+      case 'people':
+        setShowFab(true)
+        break
+
+      case 'places':
+        setShowFab(false)
+        break
+
+      default:
+        setShowFab(true)
+        break
+    }
+  }, [isFocused, routeName, timelineStore])
+
+  return ([showFab])
+}
+
 export const PrimaryTabNavigator = ({ navigation, route }) => {
   const routeName = route.state ? getActiveRouteName(route.state) : 'timeline'
 
+  const { timelineStore } = useStores()
   const theme = useTheme()
   const safeArea = useSafeArea()
   const isFocused = useIsFocused()
+  const [showFab, setShowFab] = useState(false)
+
+  useEffect(() => {
+    if (!isFocused) setShowFab(false)
+
+    switch (routeName) {
+      case 'timelines':
+        if (timelineStore.hasTimelines()) {
+          setShowFab(true)
+        } else {
+          setShowFab(false)
+        }
+        break
+
+      case 'people':
+        setShowFab(true)
+        break
+
+      case 'places':
+        setShowFab(false)
+        break
+
+      default:
+        setShowFab(false)
+        break
+    }
+  }, [isFocused, routeName, timelineStore])
 
   const icon = routeName === 'timelines'
     ? 'timeline-plus-outline'
@@ -125,26 +187,22 @@ export const PrimaryTabNavigator = ({ navigation, route }) => {
           }}
         />
       </Tab.Navigator>
-      <Portal>
-        <FAB
-          visible={isFocused} // show FAB only when this screen is focused
-          icon={icon}
-          style={{
-            position: 'absolute',
-            bottom: safeArea.bottom + 65,
-            right: 16,
 
-          }}
-
-          color="white"
-          theme={{
-            colors: {
-              accent: theme.colors.primary,
-            },
-          }}
-          onPress={() => onFabPress()}
-        />
-      </Portal>
+      <FAB
+        visible={showFab} // show FAB only when this screen is focused
+        icon={icon}
+        style={{
+          position: 'absolute',
+          bottom: safeArea.bottom + 65,
+          right: 16,
+        }}
+        theme={{
+          colors: {
+            accent: theme.colors.primary,
+          },
+        }}
+        onPress={onFabPress}
+      />
     </React.Fragment>
   )
 }

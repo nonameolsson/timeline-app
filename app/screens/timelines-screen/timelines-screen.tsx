@@ -1,12 +1,13 @@
 import React, { useState, useCallback } from "react"
-import { ActivityIndicator, SafeAreaView, View } from "react-native"
-import { Text, List, useTheme, Appbar } from "react-native-paper"
+import { ActivityIndicator, SafeAreaView, View, FlatList } from "react-native"
+import { Text, List, Button } from "react-native-paper"
 import { observer } from "mobx-react-lite"
 import { useFocusEffect } from "@react-navigation/native"
 
 import { useStores } from "models"
 import { styles } from "./timelines-screen.styles"
-import { useHeaderButtons } from 'utils/hooks'
+
+import { EmptyState } from 'components'
 
 // type TimelinesScreenProp = {
 //   navigation: CompositeNavigationProp<
@@ -22,10 +23,6 @@ import { useHeaderButtons } from 'utils/hooks'
 
 export const TimelinesScreen = observer(function TimelinesScreen({ navigation, route: { params } }: any) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-
-  const {
-    colors: { background },
-  } = useTheme()
 
   // Fix to get correct type
   const { userStore, timelineStore } = useStores()
@@ -65,31 +62,48 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
     navigation.navigate("timeline", { id, title })
   }
 
-  const renderEmptyState = () => <Text>Please create a timeline first.</Text>
+  const renderItem = ({ item: { title, id, description } }) => (
+    <List.Item
+      title={title}
+      key={id}
+      onPress={() => openTimeline(id, title)}
+      description={description}
+      left={props => <List.Icon {...props} icon="folder" />}
+    />
+  )
 
   const renderList = () => {
-    return timelineStore.getTimelinesArray().map(timeline => (
-      <List.Item
-        title={timeline.title}
-        key={timeline.id}
-        onPress={() => openTimeline(timeline.id, timeline.title)}
-        description={timeline.description}
-        left={props => <List.Icon {...props} icon="folder" />}
-      />
-    ))
+    return <FlatList
+      data={timelineStore.getTimelinesArray()}
+      renderItem={renderItem}
+      keyExtractor={item => item.id}
+    />
+  }
+
+  const emptyState = () => {
+    return (
+      <View style={styles.emptyStateWrapper}>
+        <EmptyState
+          title="Empty in timelines"
+          description="Start by creating a timeline and it will show up here"
+          icon="timeline-plus-outline" />
+        <View style={styles.emptyStateButtonWrapper}>
+          <Button onPress={() => navigation.navigate('addTimeline')} mode="contained">Create timeline</Button>
+        </View>
+      </View>
+    )
   }
 
   return (
     <SafeAreaView style={styles.screen}>
-      <View style={[styles.container, { backgroundColor: background }]}>
+      <View style={styles.container}>
         {userStore.isLoggedIn() ? (
           <>
-            <Text>Your timelines</Text>
             {isLoading
               ? <ActivityIndicator />
               : timelineStore.hasTimelines()
                 ? renderList()
-                : renderEmptyState()
+                : emptyState()
             }
           </>
         ) : (

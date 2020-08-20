@@ -1,13 +1,12 @@
 import React from 'react'
 import { Platform } from 'react-native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { DrawerContent, TopBar } from 'components'
+import { DrawerContent } from 'components'
 
 import { PrimaryTabNavigator } from './primary-tab-navigator'
 import { ProfileScreen } from 'screens'
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
-import { AddTimelineScreen } from 'screens/add-timeline-screen'
-import { Text, Button } from 'react-native-paper'
+import { AddTimelineScreen } from 'screens/add-timeline-screen/add-timeline-screen'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator

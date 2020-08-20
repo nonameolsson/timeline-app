@@ -34,6 +34,7 @@ export type TimelineParamList = {
     title?: string
     action?: DeleteEventAction | EditTimelineAction
   }
+  addTimeline: undefined
   editTimeline: { id: string }
   event: { title?: string, timelineId: string; eventId: string, action?: EditEventAction }
   addEvent: undefined

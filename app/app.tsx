@@ -11,7 +11,7 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import {
   NavigationContainerRef,
   DefaultTheme as NavigationDefaultTheme,
@@ -65,7 +65,7 @@ const CombinedDefaultTheme = {
 /**
  * This is the root component of our app.
  */
-const App: Component<{}> = observer(() => {
+const App = observer(() => {
   const navigationRef = useRef<NavigationContainerRef>()
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
 

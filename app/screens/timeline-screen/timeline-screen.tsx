@@ -1,5 +1,5 @@
-import { SafeAreaView, Alert, View } from "react-native"
-import { Card, Button, Text, List, useTheme, Headline } from "react-native-paper"
+import { SafeAreaView, Alert, ScrollView, View } from "react-native"
+import { Card, Text, List, useTheme, Headline } from "react-native-paper"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
@@ -26,17 +26,38 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     navigation.navigate('editTimeline', { id: params.id })
   }, [navigation, params.id])
 
+  const deleteTimeline = useCallback(() => {
+    navigation.navigate('timelines', { action: { type: 'DELETE_TIMELINE', meta: { id: params.id } } })
+  }, [navigation, params.id])
+
+  const showDeleteAlert = useCallback(() => {
+    Alert.alert(
+      "Delete timeline",
+      "Do you really want to delete the timeline and all of the events?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => deleteTimeline() }
+      ],
+      { cancelable: false }
+    )
+  }, [deleteTimeline])
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       // in your app, extract the arrow function into a separate component
       // to avoid creating a new one every time
       headerRight: () => (
         <MaterialHeaderButtons>
+          <Item title="Delete" iconName="delete" onPress={() => showDeleteAlert()} />
           <Item title="Edit" iconName="edit" onPress={() => goToEditTimelineScreen()} />
         </MaterialHeaderButtons>
       ),
     })
-  }, [goToEditTimelineScreen, navigation])
+  }, [goToEditTimelineScreen, navigation, showDeleteAlert])
 
   useFocusEffect(
     useCallback(() => {
@@ -62,40 +83,24 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   // Make sure all data exists before using it
   if (!timeline) return null
 
-  const deleteTimeline = () => {
-    navigation.navigate('home', { action: { type: 'DELETE_TIMELINE', meta: { id: params.id } } })
-  }
-
-  const showDeleteAlert = () => {
-    Alert.alert(
-      "Delete event",
-      "Do you really want to delete the timeline and all of the events?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => deleteTimeline() }
-      ],
-      { cancelable: false }
-    )
-  }
-
   const openEvent = (eventId: string) => {
     const event = timeline.getEvent(eventId)
 
     navigation.navigate('event', { title: event?.title, timelineId: params.id, eventId })
   }
 
-  const renderList = () => timeline.events.map(event => (
-    <List.Item
-      key={event.id}
-      onPress={() => openEvent(event.id)}
-      title={event.title}
-      description={event.description}
-    />
-  ))
+  const renderList = () => {
+    const items = () => timeline.events.map(event => (
+      <List.Item
+        key={event.id}
+        onPress={() => openEvent(event.id)}
+        title={event.title}
+        description={event.description}
+      />
+    ))
+
+    return <ScrollView>{items}</ScrollView>
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -104,14 +109,11 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
           <Text>{timeline.description}</Text>
         </Card>
 
-        <Button onPress={() => showDeleteAlert()}>Delete timeline</Button>
-
         {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
         <Headline>Events - {timeline.events.length}</Headline>
         {/* <List data={timeline.events} renderItem={renderItem} /> */}
 
         {renderList()}
-
       </View>
     </SafeAreaView>
   )

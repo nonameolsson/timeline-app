@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native"
-import { useTheme } from '@react-navigation/native'
 
 export const drawerContentStyles = StyleSheet.create({
   avatar: {

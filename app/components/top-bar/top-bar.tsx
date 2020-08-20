@@ -1,10 +1,8 @@
-import { Appbar, useTheme, Avatar } from "react-native-paper"
-import { observer } from 'mobx-react-lite'
-import { MaterialCommunityIcons } from "@expo/vector-icons"
-import { StackHeaderProps } from '@react-navigation/stack'
-import { TouchableOpacity } from 'react-native'
-import React, { FunctionComponent as Component } from "react"
+import React from "react"
+import { Appbar, useTheme } from "react-native-paper"
 import { DrawerNavigationProp } from '@react-navigation/drawer'
+import { observer } from 'mobx-react-lite'
+import { StackHeaderProps } from '@react-navigation/stack'
 
 export interface TopBarProps extends StackHeaderProps { }
 
@@ -13,9 +11,7 @@ export interface TopBarProps extends StackHeaderProps { }
  *
  * Component description here for TypeScript tips.
  */
-export const TopBar: Component<TopBarProps> = observer(function TopBar({ scene, previous, navigation }) {
-  // const navigation = useNavigation()
-
+export const TopBar = observer(function TopBar({ scene, previous, navigation }: TopBarProps) {
   const { options } = scene.descriptor
   const title =
     options.headerTitle !== undefined
@@ -34,43 +30,13 @@ export const TopBar: Component<TopBarProps> = observer(function TopBar({ scene, 
       {previous ? (
         <Appbar.BackAction
           onPress={navigation.goBack}
-          color={colors.primary}
         />
       ) : (
-        <TouchableOpacity
-          style={{ marginLeft: 10 }}
-          onPress={() => {
-            ((navigation as any) as DrawerNavigationProp<{}>).openDrawer()
-          }}
-        >
-          <Avatar.Image
-            size={40}
-            source={{
-              uri:
-                'https://api.adorable.io/avatars/50/hey@adorable.io.png',
-            }}
-          />
-        </TouchableOpacity>
+        <Appbar.Action icon="menu" onPress={() => {
+          ((navigation as any) as DrawerNavigationProp<{}>).openDrawer()
+        }} />
       )}
-      <Appbar.Content
-        title={
-          title === 'Timelines' ? (
-            <MaterialCommunityIcons
-              style={{ marginRight: 10 }}
-              name="twitter"
-              size={40}
-              color={colors.primary}
-            />
-          ) : (
-            title
-          )
-        }
-        titleStyle={{
-          fontSize: 18,
-          fontWeight: 'bold',
-          color: colors.primary,
-        }}
-      />
+      <Appbar.Content title={title} />
       {options.headerRight && options.headerRight({})}
     </Appbar.Header>
   )

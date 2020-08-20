@@ -1,7 +1,7 @@
-import React, { FunctionComponent as Component } from "react"
-import { View } from "react-native"
+import React from "react"
+import { SafeAreaView, View } from "react-native"
 import { useObserver } from 'mobx-react-lite'
-import { Drawer, TouchableRipple, Switch, Avatar, Title, Caption, Text } from 'react-native-paper'
+import { Drawer, TouchableRipple, Switch, Avatar, Title, Caption, Text, Divider } from 'react-native-paper'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 import { drawerContentStyles as styles } from "./drawer-content.styles"
@@ -16,13 +16,13 @@ export interface DrawerContentProps {}
  *
  * Component description here for TypeScript tips.
  */
-export const DrawerContent: Component<DrawerContentProps> = props => {
+export const DrawerContent = (props: DrawerContentProps) => {
   const { userStore, uiStore } = useStores()
 
   const logOut = () => userStore.logOut()
 
   return useObserver(() => (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
@@ -87,7 +87,19 @@ export const DrawerContent: Component<DrawerContentProps> = props => {
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
-      <Drawer.Section style={styles.bottomDrawerSection}>
+      <Divider />
+      <Drawer.Section>
+        <DrawerItem
+          icon={({ color, size }) => (
+            <MaterialCommunityIcons
+              name="help-circle"
+              color={color}
+              size={size}
+            />
+          )}
+          label="Help"
+          onPress={() => undefined }
+        />
         <DrawerItem
           icon={({ color, size }) => (
             <MaterialCommunityIcons
@@ -100,6 +112,6 @@ export const DrawerContent: Component<DrawerContentProps> = props => {
           onPress={() => logOut() }
         />
       </Drawer.Section>
-    </View>
+    </SafeAreaView>
   ))
 }

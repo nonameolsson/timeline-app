@@ -1,24 +1,13 @@
 import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component } from "react"
-import { SafeAreaView, StyleSheet, View } from "react-native"
+import { SafeAreaView, View } from "react-native"
 
 import { TimelineRouteProp, TimelineStackNavigationProp } from "navigation"
 import { useStores } from "models"
 import { EditTimelineForm, EditTimelineFormData } from 'components/edit-timeline-form/edit-timeline-form'
 import { useTheme } from 'react-native-paper'
-
-// TODO: Move to separate file
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    paddingTop: 64
-  },
-  screen: {
-    flex: 1,
-  },
-})
+import { editTimelineScreenStyles as styles } from './edit-timeline-screen.styles'
 
 export const EditTimelineScreen: Component = observer(function EditTimelineScreen () {
   const navigation = useNavigation<TimelineStackNavigationProp<"editTimeline">>()
