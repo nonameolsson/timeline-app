@@ -31,6 +31,7 @@ const Tab = createMaterialBottomTabNavigator<BottomTabParamList>()
 /**
  * Calculate when the global FAB should be displayed
  */
+// deepscan-disable-next-line
 const useFab = (routeName: string, isFocused: boolean) => {
   const { timelineStore } = useStores()
   const [showFab, setShowFab] = useState(true)

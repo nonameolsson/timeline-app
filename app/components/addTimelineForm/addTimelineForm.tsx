@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, TextInput, Text, HelperText, useTheme } from "react-native-paper"
+import { TextInput, Text, HelperText, useTheme } from "react-native-paper"
 import { Controller, useForm } from 'react-hook-form'
 import { useObserver } from 'mobx-react-lite'
 import { View } from "react-native"
