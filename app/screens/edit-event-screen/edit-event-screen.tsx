@@ -1,26 +1,16 @@
 import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute } from "@react-navigation/native"
-import { StyleSheet, SafeAreaView, View } from "react-native"
+import { SafeAreaView, View } from "react-native"
+import { useTheme } from 'react-native-paper'
 
 import { EditEventForm, EditEventFormData } from "components"
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { useStores } from "models"
-import { useTheme } from 'react-native-paper'
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    paddingTop: 64
-  },
-  screen: {
-    flex: 1,
-  },
-})
+import { editEventScreenStyles as styles } from './add-event-screen.styles'
 
 export const EditEventScreen: Component = observer(function EditEventScreen() {
-  const navigation = useNavigation<TimelineStackNavigationProp<"editEvent">>()
+  const navigation = useNavigation<TimelineStackNavigationProp<"editEvent">>() // NOTE: Should this be a props instead?
   const { timelineStore } = useStores()
   const { params } = useRoute<TimelineRouteProp<"editEvent">>()
 

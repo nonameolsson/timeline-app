@@ -1,26 +1,31 @@
-import { ActivityIndicator, SafeAreaView, View } from "react-native"
-import { Button, Text, List, useTheme } from "react-native-paper"
+import React, { useState, useCallback } from "react"
+import { ActivityIndicator, SafeAreaView, View, FlatList } from "react-native"
+import { Text, List, Button } from "react-native-paper"
 import { observer } from "mobx-react-lite"
-import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import React, { useState, FunctionComponent as Component, useCallback } from "react"
+import { useFocusEffect } from "@react-navigation/native"
 
 import { useStores } from "models"
-import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { styles } from "./timelines-screen.styles"
 
-export const TimelinesScreen: Component = observer(function TimelinesScreen() {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+import { EmptyState } from 'components'
 
-  const {
-    colors: { background },
-  } = useTheme()
+// type TimelinesScreenProp = {
+//   navigation: CompositeNavigationProp<
+//     MaterialBottomTabNavigationProp<BottomTabParamList, "timelines">,
+//     StackNavigationProp<RootTimelineParamList>>
+//   route: TimelineRouteProp<"timelines">
+// }
+
+// type Props = {
+//   navigation: TimelineStackNavigationProp<"timelines">
+//   route: TimelineRouteProp<"timelines">
+// };
+
+export const TimelinesScreen = observer(function TimelinesScreen({ navigation, route: { params } }: any) {
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   // Fix to get correct type
   const { userStore, timelineStore } = useStores()
-
-  // Pull in navigation via hook
-  const navigation = useNavigation<TimelineStackNavigationProp<"home">>()
-  const { params } = useRoute<TimelineRouteProp<"home">>()
 
   // TODO: Adjust so new timelines are retrieved when navigating to this screen.
   useFocusEffect(
@@ -57,45 +62,53 @@ export const TimelinesScreen: Component = observer(function TimelinesScreen() {
     navigation.navigate("timeline", { id, title })
   }
 
-  const renderEmptyState = () => <Text>Please create a timeline first.</Text>
-
-  const logOut = () => {
-    try {
-      userStore.logOut()
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  const renderItem = ({ item: { title, id, description } }) => (
+    <List.Item
+      title={title}
+      key={id}
+      onPress={() => openTimeline(id, title)}
+      description={description}
+      left={props => <List.Icon {...props} icon="folder" />}
+    />
+  )
 
   const renderList = () => {
-    return timelineStore.getTimelinesArray().map(timeline => (
-      <List.Item
-        title={timeline.title}
-        key={timeline.id}
-        onPress={() => openTimeline(timeline.id, timeline.title)}
-        description={timeline.description}
-        left={props => <List.Icon {...props} icon="folder" />}
-      />
-    ))
+    return <FlatList
+      data={timelineStore.getTimelinesArray()}
+      renderItem={renderItem}
+      keyExtractor={item => item.id}
+    />
+  }
+
+  const emptyState = () => {
+    return (
+      <View style={styles.emptyStateWrapper}>
+        <EmptyState
+          title="Empty in timelines"
+          description="Start by creating a timeline and it will show up here"
+          icon="timeline-plus-outline" />
+        <View style={styles.emptyStateButtonWrapper}>
+          <Button onPress={() => navigation.navigate('addTimeline')} mode="contained">Create timeline</Button>
+        </View>
+      </View>
+    )
   }
 
   return (
     <SafeAreaView style={styles.screen}>
-      <View style={[styles.container, { backgroundColor: background }]}>
+      <View style={styles.container}>
         {userStore.isLoggedIn() ? (
           <>
-            <Text>Your timelines</Text>
             {isLoading
               ? <ActivityIndicator />
               : timelineStore.hasTimelines()
                 ? renderList()
-                : renderEmptyState()
+                : emptyState()
             }
           </>
         ) : (
           <Text>Logging in...</Text>
         )}
-        <Button onPress={(): void => logOut()}>Log out</Button>
       </View>
     </SafeAreaView>
   )

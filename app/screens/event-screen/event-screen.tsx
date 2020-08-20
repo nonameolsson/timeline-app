@@ -7,7 +7,7 @@ import React, { FunctionComponent as Component, useCallback } from "react"
 import { useStores } from "models"
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { styles } from './event-screen.styles'
-import { useHeaderRight } from 'utils/hooks'
+import { useHeaderButtons } from 'utils/hooks'
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
@@ -26,7 +26,7 @@ export const EventScreen: Component = observer(function EventScreen() {
     return <Appbar.Action icon="pencil" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId: params.timelineId })} />
   }
 
-  useHeaderRight(headerRight())
+  useHeaderButtons({ right: headerRight })
 
   useFocusEffect(
     useCallback(() => {

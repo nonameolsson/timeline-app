@@ -8,7 +8,7 @@ import React from "react"
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack"
 import { RouteProp } from "@react-navigation/native"
 
-import { EventScreen, EditEventScreen, TimelinesScreen, TimelineScreen, EditTimelineScreen } from "screens"
+import { EventScreen, EditEventScreen, TimelinesScreen, TimelineScreen, EditTimelineScreen, AddEventScreen } from "screens"
 import { TopBar } from 'components'
 import { DeleteTimelineAction, DeleteEventAction, EditTimelineAction, EditEventAction } from './types'
 
@@ -25,7 +25,7 @@ import { DeleteTimelineAction, DeleteEventAction, EditTimelineAction, EditEventA
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type TimelineParamList = {
-  home: {
+  timelines: {
     action?: DeleteTimelineAction
   }
   // NOTE: Timeline interfaces should only be optional when goint BACK to TimelineScreen from EventScreen. Fix this.
@@ -34,8 +34,10 @@ export type TimelineParamList = {
     title?: string
     action?: DeleteEventAction | EditTimelineAction
   }
+  addTimeline: undefined
   editTimeline: { id: string }
   event: { title?: string, timelineId: string; eventId: string, action?: EditEventAction }
+  addEvent: undefined
   editEvent: { timelineId: string, eventId: string }
 }
 
@@ -60,10 +62,10 @@ export type TimelineRouteProp<T extends keyof TimelineParamList> = RouteProp<Tim
 
 const TimelineStack = createStackNavigator<TimelineParamList>()
 
-export const TimelineStackNavigator = () => {
+export const TimelineStackScreen = () => {
   return (
     <TimelineStack.Navigator
-      initialRouteName="home"
+      initialRouteName="timelines"
       headerMode="screen"
       screenOptions={{
         headerShown: true,
@@ -74,7 +76,7 @@ export const TimelineStackNavigator = () => {
       }}
     >
       <TimelineStack.Screen
-        name="home"
+        name="timelines"
         component={TimelinesScreen}
         options={() => ({ headerShown: true, headerTitle: 'Timeline' })}
       />
@@ -82,6 +84,8 @@ export const TimelineStackNavigator = () => {
         name="timeline"
         component={TimelineScreen}
         options={({ route }) => ({
+
+          headerShown: true,
           headerTitle: route.params.title || 'Timeline'
         })}
       />
@@ -101,6 +105,11 @@ export const TimelineStackNavigator = () => {
         name="editEvent"
         component={EditEventScreen}
         options={({ headerTitle: 'Edit' })}
+      />
+      <TimelineStack.Screen
+        name="addEvent"
+        component={AddEventScreen}
+        options={({ headerTitle: 'add' })}
       />
     </TimelineStack.Navigator>
   )

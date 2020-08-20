@@ -12,7 +12,7 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "models"
 
 import { AuthNavigator } from "./auth-navigator"
-import { DrawerNavigator } from './drawer-navigator'
+import { RootTimelineStackScreen } from './drawer-navigator'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -44,7 +44,7 @@ const RootStack = observer(function RootStack() {
       {userStore.isLoggedIn() ? (
         <Stack.Screen
           name="drawerNav"
-          component={DrawerNavigator}
+          component={RootTimelineStackScreen}
         />
       ) : (
         <Stack.Screen

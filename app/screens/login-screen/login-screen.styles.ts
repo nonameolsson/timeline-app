@@ -1,25 +1,22 @@
 import { StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
-  captionTextStyle: {
-    textTransform: 'capitalize'
+export const loginScreenStyles = StyleSheet.create({
+  alignCenter: {
+    alignItems: 'center',
   },
   container: {
     flex: 1,
-    paddingHorizontal: 16
+    padding: 16,
+    paddingTop: 64
   },
-  socialMediaIcons: { flexDirection: 'row', justifyContent: 'space-between' },
-  socialMediaText: { marginBottom: 16, marginTop: 16, textAlign: 'center' },
-  subtitleText: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginBottom: 80,
-    marginTop: 18,
+  headline: {
+    fontSize: 32,
     textAlign: 'center'
   },
-  titleText: {
-    fontSize: 36,
-    marginTop: 80,
+  screen: {
+    flex: 1,
+  },
+  subheading: {
     textAlign: 'center'
   }
 })

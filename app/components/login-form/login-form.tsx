@@ -11,10 +11,9 @@ import { LoginSchema } from './login-form.validation'
 interface LoginFormProps {
   handleLogin: (email: string, password: string) => void
   errorText: string | null
-  loading: boolean
 }
 
-export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, errorText, loading }) => {
+export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, errorText }) => {
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
     resolver: yupResolver(LoginSchema),
     mode: 'onBlur'

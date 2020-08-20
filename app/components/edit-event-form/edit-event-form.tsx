@@ -5,7 +5,7 @@ import React, { FunctionComponent as Component } from "react"
 
 import { EditEventFormSchema } from "./edit-event-form.validation"
 import { Event } from "models"
-import { useHeaderRight } from 'utils/hooks'
+import { useHeaderButtons } from 'utils/hooks'
 
 export type EditEventFormData = {
   title: string,
@@ -44,7 +44,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
 
   const headerRight = () => <Appbar.Action disabled={!formState.isValid || formState.isSubmitting} icon="check" onPress={handleSubmit(localSubmit)} />
 
-  useHeaderRight(headerRight())
+  useHeaderButtons({ right: headerRight })
 
   return (
     <>

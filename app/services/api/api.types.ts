@@ -62,6 +62,7 @@ export type GetTimelinesResult = { kind: "ok"; timelines: Timeline[] } | General
 export type GetTimelineResult = { kind: "ok"; timelines: Timeline } | GeneralApiProblem
 
 export type PutTimelineResult = { kind: "ok"; timeline: Timeline } | GeneralApiProblem
+export type PostTimelineResult = { kind: "ok"; timeline: Timeline } | GeneralApiProblem
 export type DeleteTimelineResult = { kind: "ok"; timeline: Timeline } | GeneralApiProblem
 
 /**

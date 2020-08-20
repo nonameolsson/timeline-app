@@ -11,7 +11,7 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import React, { useState, useEffect, useRef, FunctionComponent as Component } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import {
   NavigationContainerRef,
   DefaultTheme as NavigationDefaultTheme,
@@ -24,6 +24,7 @@ import {
   DarkTheme as PaperDarkTheme,
   Provider as PaperProvider
 } from 'react-native-paper'
+import { OverflowMenuProvider } from 'react-navigation-header-buttons'
 
 import { initFonts } from "./theme/fonts"
 import * as storage from "./utils/storage"
@@ -64,7 +65,7 @@ const CombinedDefaultTheme = {
 /**
  * This is the root component of our app.
  */
-const App: Component<{}> = observer(() => {
+const App = observer(() => {
   const navigationRef = useRef<NavigationContainerRef>()
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
 
@@ -96,12 +97,14 @@ const App: Component<{}> = observer(() => {
     <PaperProvider theme={theme}>
       <RootStoreProvider value={rootStore}>
         <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-          <RootNavigator
-            ref={navigationRef}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-            theme={theme}
-          />
+          <OverflowMenuProvider>
+            <RootNavigator
+              ref={navigationRef}
+              initialState={initialNavigationState}
+              onStateChange={onNavigationStateChange}
+              theme={theme}
+            />
+          </OverflowMenuProvider>
         </SafeAreaProvider>
       </RootStoreProvider>
     </PaperProvider>
