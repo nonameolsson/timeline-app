@@ -2,7 +2,11 @@
   "expo": {
     "name": "timeline",
     "slug": "timeline",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,12 +18,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "experiments": {
       "redesignedLogBox": true
-    }
-  }
+    },
+    "sdkVersion": "38.0.0"
+  },
+  "name": "timeline"
 }

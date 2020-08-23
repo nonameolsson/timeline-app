@@ -1,5 +1,5 @@
 import { Alert, SafeAreaView, View } from "react-native"
-import { Text, Button, useTheme, Appbar } from "react-native-paper"
+import { Text, useTheme } from "react-native-paper"
 import { observer } from 'mobx-react-lite'
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
@@ -7,7 +7,7 @@ import React, { FunctionComponent as Component, useCallback } from "react"
 import { useStores } from "models"
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { styles } from './event-screen.styles'
-import { useHeaderButtons } from 'utils/hooks'
+import { MaterialHeaderButtons, Item } from 'components'
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
@@ -20,14 +20,6 @@ export const EventScreen: Component = observer(function EventScreen() {
 
   const event = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
 
-  const headerRight = () => {
-    if (!event) return undefined
-
-    return <Appbar.Action icon="pencil" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId: params.timelineId })} />
-  }
-
-  useHeaderButtons({ right: headerRight })
-
   useFocusEffect(
     useCallback(() => {
       if (!params.action || !event) return
@@ -38,10 +30,7 @@ export const EventScreen: Component = observer(function EventScreen() {
     }, [event, params.action])
   )
 
-  // Make sure all data exists before using it
-  if (!event) return null
-
-  const deleteEvent = () => {
+  const deleteEvent = useCallback(() => {
     const currentEvent = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
     if (!currentEvent) return
 
@@ -54,9 +43,9 @@ export const EventScreen: Component = observer(function EventScreen() {
         }
       }
     })
-  }
+  }, [navigation, params.eventId, params.timelineId, timelineStore])
 
-  const showDeleteAlert = () => {
+  const showDeleteAlert = useCallback(function showDeleteAlert() {
     Alert.alert(
       "Delete event",
       "Do you really want to delete it?",
@@ -70,14 +59,30 @@ export const EventScreen: Component = observer(function EventScreen() {
       ],
       { cancelable: false }
     )
-  }
+  }, [deleteEvent])
+
+  React.useLayoutEffect(function HeaderButtons () {
+    if (event) {
+      navigation.setOptions({
+      // in your app, extract the arrow function into a separate component
+      // to avoid creating a new one every time
+        headerRight: () => (
+          <MaterialHeaderButtons>
+            <Item title="Delete" iconName="delete" onPress={showDeleteAlert} />
+            <Item title="Edit" iconName="edit" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId: params.timelineId })} />
+          </MaterialHeaderButtons>
+        ),
+      })
+    }
+  }, [event, event?.id, navigation, params.timelineId, showDeleteAlert])
+
+  if (!event) return null
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={[styles.container, { backgroundColor: background }]}>
         <Text>{event.title}</Text>
         <Text>{event.description}</Text>
-        <Button mode="contained" onPress={showDeleteAlert}>Delete</Button>
       </View>
     </SafeAreaView>
   )

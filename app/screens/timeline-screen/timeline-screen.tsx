@@ -3,13 +3,12 @@ import { Card, Text, List, useTheme, Headline } from "react-native-paper"
 import { observer } from "mobx-react-lite"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
-import { Item } from 'react-navigation-header-buttons'
 
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { Timeline } from 'navigation/types'
 import { useStores } from "models"
 import { styles } from './timeline-screen.styles'
-import { MaterialHeaderButtons } from 'components'
+import { MaterialHeaderButtons, Item } from 'components'
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
   const { timelineStore } = useStores()
@@ -89,8 +88,8 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     navigation.navigate('event', { title: event?.title, timelineId: params.id, eventId })
   }
 
-  const renderList = () => {
-    const items = () => timeline.events.map(event => (
+  const renderEventList = () => {
+    const events = timeline.events.map(event => (
       <List.Item
         key={event.id}
         onPress={() => openEvent(event.id)}
@@ -99,7 +98,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
       />
     ))
 
-    return <ScrollView>{items}</ScrollView>
+    return <ScrollView>{events}</ScrollView>
   }
 
   return (
@@ -111,9 +110,8 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
 
         {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
         <Headline>Events - {timeline.events.length}</Headline>
-        {/* <List data={timeline.events} renderItem={renderItem} /> */}
 
-        {renderList()}
+        {renderEventList()}
       </View>
     </SafeAreaView>
   )
