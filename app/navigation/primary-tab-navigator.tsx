@@ -9,7 +9,7 @@ import color from 'color'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { FAB, useTheme } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
 
 import { TimelineStackScreen } from './timeline-stack-navigator'
@@ -18,6 +18,8 @@ import { PlacesStackNavigator } from './places-stack-navigator'
 import { overlay } from 'theme/overlay'
 import { getActiveRouteName } from './navigation-utilities'
 import { useStores } from 'models'
+import { observer } from 'mobx-react-lite'
+import { autorun, reaction } from 'mobx'
 
 export type BottomTabParamList = {
   timelines: undefined
@@ -56,45 +58,37 @@ const useFab = (routeName: string, isFocused: boolean) => {
         setShowFab(true)
         break
     }
-  }, [isFocused, routeName, timelineStore])
+  }, [isFocused, routeName, timelineStore.timelines])
 
   return ([showFab])
 }
 
-export const PrimaryTabNavigator = ({ navigation, route }) => {
-  const routeName = route.state ? getActiveRouteName(route.state) : 'timeline'
-
+export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route }: any) {
+  const routeName = route.state ? getActiveRouteName(route.state) : 'timelines'
   const { timelineStore } = useStores()
+  const navigation = useNavigation()
   const theme = useTheme()
-  const safeArea = useSafeArea()
   const isFocused = useIsFocused()
+  const safeArea = useSafeArea()
   const [showFab, setShowFab] = useState(false)
 
   useEffect(() => {
-    if (!isFocused) setShowFab(false)
+    if (!isFocused) return
 
-    switch (routeName) {
-      case 'timelines':
-        if (timelineStore.hasTimelines()) {
-          setShowFab(true)
-        } else {
-          setShowFab(false)
-        }
-        break
-
-      case 'people':
+    if (routeName === 'timelines') {
+      if (timelineStore.hasTimelines() === true) {
         setShowFab(true)
-        break
-
-      case 'places':
+      } else {
         setShowFab(false)
-        break
-
-      default:
-        setShowFab(false)
-        break
+      }
+    } else if (routeName === 'timeline') {
+      setShowFab(true)
+    } else if (routeName === 'people') {
+      setShowFab(true)
+    } else {
+      setShowFab(false)
     }
-  }, [isFocused, routeName, timelineStore])
+  }, [routeName, setShowFab, showFab, timelineStore])
 
   const icon = routeName === 'timelines'
     ? 'timeline-plus-outline'
@@ -107,26 +101,13 @@ export const PrimaryTabNavigator = ({ navigation, route }) => {
     : theme.colors.surface
 
   const onFabPress = () => {
-    let screenToNavigateTo
-
-    switch (routeName) {
-      case 'timelines':
-        screenToNavigateTo = 'addTimeline'
-        break
-
-      case 'people':
-        screenToNavigateTo = 'addPeople'
-        break
-
-      case 'places':
-        screenToNavigateTo = 'addPlace'
-        break
-
-      default:
-        break
+    if (routeName === 'timelines') {
+      navigation.navigate('addTimeline')
+    } else if (routeName === 'people') {
+      navigation.navigate('addPeople')
+    } else if (routeName === 'places') {
+      navigation.navigate('addPlace')
     }
-
-    navigation.navigate(screenToNavigateTo)
   }
 
   return (
@@ -188,7 +169,6 @@ export const PrimaryTabNavigator = ({ navigation, route }) => {
           }}
         />
       </Tab.Navigator>
-
       <FAB
         visible={showFab} // show FAB only when this screen is focused
         icon={icon}
@@ -202,11 +182,11 @@ export const PrimaryTabNavigator = ({ navigation, route }) => {
             accent: theme.colors.primary,
           },
         }}
-        onPress={onFabPress}
+        onPress={() => onFabPress()}
       />
     </React.Fragment>
   )
-}
+})
 
 /**
  * A list of routes from which we're allowed to leave the app when
