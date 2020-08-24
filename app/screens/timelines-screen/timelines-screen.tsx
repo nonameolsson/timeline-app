@@ -73,6 +73,9 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
   )
 
   const renderList = () => {
+    const timelines = timelineStore.getTimelinesArray()
+    if (!timelines) return null
+
     return <FlatList
       data={timelineStore.getTimelinesArray()}
       renderItem={renderItem}

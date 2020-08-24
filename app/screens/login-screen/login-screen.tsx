@@ -8,7 +8,7 @@ import { useStores } from "models"
 import { translate } from "i18n"
 import { loginScreenStyles as styles } from "./login-screen.styles"
 
-export const LoginScreen: Component = observer(function LoginScreen() {
+export const LoginScreen: Component = observer(function LoginScreen(props) {
   const { userStore } = useStores()
   const [isLoading, setIsLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)

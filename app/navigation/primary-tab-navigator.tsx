@@ -9,7 +9,7 @@ import color from 'color'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { FAB, useTheme } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useIsFocused, CommonActions } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
 
 import { TimelineStackScreen } from './timeline-stack-navigator'
@@ -28,13 +28,13 @@ export type BottomTabParamList = {
 
 const Tab = createMaterialBottomTabNavigator<BottomTabParamList>()
 
-export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route }: any) {
-  const routeName = route.state ? getActiveRouteName(route.state) : 'timelines'
+export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route, navigation }: any) {
   const { timelineStore } = useStores()
-  const navigation = useNavigation()
   const theme = useTheme()
   const isFocused = useIsFocused()
   const safeArea = useSafeArea()
+
+  const routeName = route.state ? getActiveRouteName(route.state) : 'timelines'
 
   /**
    * Calculate when to show a global FAB.
@@ -57,25 +57,36 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route
     }
   }
 
-  const icon = routeName === 'timelines'
+  /**
+   * Display different icons on each screen
+   */
+  const fabIcon = routeName === 'timelines'
     ? 'timeline-plus-outline'
     : routeName === 'people' ? 'account-plus-outline'
       : routeName === 'places' ? 'map-plus'
         : 'plus'
 
-  const tabBarColor = theme.dark
-    ? (overlay(6, theme.colors.surface) as string)
-    : theme.colors.surface
-
   const onFabPress = () => {
     if (routeName === 'timelines') {
       navigation.navigate('addTimeline')
+    } else if (routeName === 'timeline') {
+      const timelineId = route.state.routes[0].state.routes[1].params.id
+
+      navigation.navigate('addEvent', {
+        timelineId: timelineId,
+      })
     } else if (routeName === 'people') {
       navigation.navigate('addPeople')
     } else if (routeName === 'places') {
       navigation.navigate('addPlace')
+    } else {
+      throw new Error('No action defined for onPress FAB ')
     }
   }
+
+  const tabBarColor = theme.dark
+    ? (overlay(6, theme.colors.surface) as string)
+    : theme.colors.surface
 
   return (
     <React.Fragment>
@@ -138,7 +149,7 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route
       </Tab.Navigator>
       <FAB
         visible={showFab()} // show FAB only when this screen is focused
-        icon={icon}
+        icon={fabIcon}
         style={{
           position: 'absolute',
           bottom: safeArea.bottom + 65,

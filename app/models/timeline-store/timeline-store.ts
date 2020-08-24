@@ -62,7 +62,12 @@ export const TimelineStoreModel = types
       }
 
       const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => timelineModelFromSnapshot(timeline))
-      timelinesModel.forEach(timeline => self.timelines.set(timeline.id, timeline))
+      timelinesModel.forEach(timeline => {
+        // Do not add/update timeline if it already exits
+        if (!self.timelines.has(timeline.id)) {
+          self.timelines.set(timeline.id, timeline)
+        }
+      })
     },
 
     deleteTimelineFromStore: (timelineId: string) => {

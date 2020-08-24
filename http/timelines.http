@@ -1,4 +1,4 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk3NzkxMzczLCJleHAiOjE2MDAzODMzNzN9.CsfKYDG1rHsBLbh8KxX3SBL9Zj2w0AcCDRzNRtC9pts
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk4MzQ1MDU1LCJleHAiOjE2MDA5MzcwNTV9.4MC1v-lGQzUGOjpwcfeoNcmayx2UB5g3KovikSHpzDk
 
 ###
 
@@ -17,10 +17,10 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "title": "Hej new",
+  "title": "Hej3",
   "description": "En riktigt spännande historia!",
   "events": [],
-  "user": 2
+  "user": 1
 }
 
 ###

@@ -1,3 +1,4 @@
+require("../app/components/add-event-form/add-event-form.story")
 require("../app/components/empty-state/empty-state.story")
 require("../app/components/material-header-button/material-header-button.story")
 require("../app/components/addTimelineForm/addTimelineForm.story")
