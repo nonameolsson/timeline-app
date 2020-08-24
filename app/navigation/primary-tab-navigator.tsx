@@ -4,7 +4,7 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React, { useState, useEffect } from "react"
+import React from "react"
 import color from 'color'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { FAB, useTheme } from 'react-native-paper'
@@ -19,7 +19,6 @@ import { overlay } from 'theme/overlay'
 import { getActiveRouteName } from './navigation-utilities'
 import { useStores } from 'models'
 import { observer } from 'mobx-react-lite'
-import { autorun, reaction } from 'mobx'
 
 export type BottomTabParamList = {
   timelines: undefined
@@ -29,40 +28,6 @@ export type BottomTabParamList = {
 
 const Tab = createMaterialBottomTabNavigator<BottomTabParamList>()
 
-// FIXME: This should be used instead of putting code inside the component
-/**
- * Calculate when the global FAB should be displayed
- */
-// deepscan-disable-next-line
-const useFab = (routeName: string, isFocused: boolean) => {
-  const { timelineStore } = useStores()
-  const [showFab, setShowFab] = useState(true)
-
-  useEffect(() => {
-    if (!isFocused) setShowFab(false)
-
-    switch (routeName) {
-      case 'timeline':
-        timelineStore.hasTimelines() ? setShowFab(true) : setShowFab(false)
-        break
-
-      case 'people':
-        setShowFab(true)
-        break
-
-      case 'places':
-        setShowFab(false)
-        break
-
-      default:
-        setShowFab(true)
-        break
-    }
-  }, [isFocused, routeName, timelineStore.timelines])
-
-  return ([showFab])
-}
-
 export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route }: any) {
   const routeName = route.state ? getActiveRouteName(route.state) : 'timelines'
   const { timelineStore } = useStores()
@@ -70,25 +35,27 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route
   const theme = useTheme()
   const isFocused = useIsFocused()
   const safeArea = useSafeArea()
-  const [showFab, setShowFab] = useState(false)
 
-  useEffect(() => {
-    if (!isFocused) return
+  /**
+   * Calculate when to show a global FAB.
+   */
+  const showFab = () => {
+    if (!isFocused) return false
 
     if (routeName === 'timelines') {
       if (timelineStore.hasTimelines() === true) {
-        setShowFab(true)
+        return true
       } else {
-        setShowFab(false)
+        return false
       }
     } else if (routeName === 'timeline') {
-      setShowFab(true)
+      return true
     } else if (routeName === 'people') {
-      setShowFab(true)
+      return true
     } else {
-      setShowFab(false)
+      return false
     }
-  }, [routeName, setShowFab, showFab, timelineStore])
+  }
 
   const icon = routeName === 'timelines'
     ? 'timeline-plus-outline'
@@ -170,7 +137,7 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route
         />
       </Tab.Navigator>
       <FAB
-        visible={showFab} // show FAB only when this screen is focused
+        visible={showFab()} // show FAB only when this screen is focused
         icon={icon}
         style={{
           position: 'absolute',
