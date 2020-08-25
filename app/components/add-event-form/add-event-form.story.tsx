@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react-native"
 import { StoryScreen, Story, UseCase } from "../../../storybook/views"
 import { AddEventForm } from "./add-event-form"
 
-declare var module
+declare const module
 
 storiesOf("AddEventForm", module)
   .addDecorator(fn => <StoryScreen>{fn()}</StoryScreen>)

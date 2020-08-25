@@ -1,9 +1,9 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://bv-98e.andreasolsson.timeline.exp.direct",
-  "packagerNgrokUrl": "https://packager.bv-98e.andreasolsson.timeline.exp.direct",
-  "ngrokPid": 19748,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "devToolsPort": 19002,
-  "packagerPort": 8081,
-  "packagerPid": 96395
+  "packagerPort": 19016,
+  "packagerPid": 31032
 }

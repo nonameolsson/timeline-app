@@ -19,7 +19,7 @@ import { DrawerNavigator } from './drawer-navigator'
  */
 export type ModalStackParamList = {
   main: undefined
-  addEvent: { timelineId: string }
+  addEvent: { timelineId: string }
   addTimeline: undefined
 }
 /**

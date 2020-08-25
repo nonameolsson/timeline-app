@@ -112,6 +112,3 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
     </>
   )
 }
-
-// TODO: Change to hooks instead
-// export const LoginForm = withNavigation(InnerLoginForm)

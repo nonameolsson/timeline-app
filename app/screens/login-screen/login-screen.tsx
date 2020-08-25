@@ -8,9 +8,9 @@ import { useStores } from "models"
 import { translate } from "i18n"
 import { loginScreenStyles as styles } from "./login-screen.styles"
 
-export const LoginScreen: Component = observer(function LoginScreen(props) {
+export const LoginScreen: Component = observer(function LoginScreen() {
   const { userStore } = useStores()
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false) // TODO: Add loading to render
   const [error, setError] = React.useState<string | null>(null)
 
   const {
@@ -38,7 +38,7 @@ export const LoginScreen: Component = observer(function LoginScreen(props) {
         <Headline style={styles.headline}>Hello</Headline>
         <Subheading style={styles.subheading}>Sign in to your account</Subheading>
 
-        <LoginForm handleLogin={onLogin} loading={isLoading} errorText={error} />
+        <LoginForm handleLogin={onLogin} errorText={error} />
       </View>
     </View>
   )

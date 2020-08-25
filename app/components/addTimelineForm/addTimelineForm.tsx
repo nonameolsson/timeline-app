@@ -107,12 +107,11 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
             spellCheck={true}
             error={!!errors.description}
             value={value}
-            style={{ marginTop: 16 }}
           />
         )}
       />
 
-      <Text style={{ textAlign: 'center', marginBottom: 16, color: error }}>{errorText || ''}</Text>
+      <Text>{errorText || ''}</Text>
     </View>
   )
 }

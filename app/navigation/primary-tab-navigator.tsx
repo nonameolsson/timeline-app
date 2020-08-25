@@ -9,7 +9,7 @@ import color from 'color'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { FAB, useTheme } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { useIsFocused, CommonActions } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
 import { useSafeArea } from 'react-native-safe-area-context'
 
 import { TimelineStackScreen } from './timeline-stack-navigator'
