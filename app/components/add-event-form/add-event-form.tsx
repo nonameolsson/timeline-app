@@ -1,15 +1,15 @@
 import React from "react"
-import { TextInput, Text, HelperText, useTheme } from "react-native-paper"
-import { Controller, useForm } from 'react-hook-form'
 import { View } from "react-native"
+import { Text, useTheme, HelperText, TextInput } from "react-native-paper"
+import { useNavigation } from '@react-navigation/native'
+import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers'
 
-import { FormData } from './addTimelineForm.types'
-import { AddTimelineFormSchema } from './addTimelineForm.validation'
 import { MaterialHeaderButtons, Item } from 'components'
-import { useNavigation } from '@react-navigation/native'
+import { AddEventFormSchema } from './add-event-form.validation'
+import { FormData } from './add-event-form.types'
 
-interface AddTimelineFormProps {
+export interface AddEventFormProps {
   onSubmit: (data: { title: string, description: string }) => void
   errorText: string | null
 }
@@ -19,14 +19,14 @@ interface AddTimelineFormProps {
  *
  * Component description here for TypeScript tips.
  */
-export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) => {
+export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
   const navigation = useNavigation()
   const {
     colors: { error },
   } = useTheme()
 
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
-    resolver: yupResolver(AddTimelineFormSchema),
+    resolver: yupResolver(AddEventFormSchema),
     mode: 'onBlur'
   })
 

@@ -58,12 +58,15 @@ export interface Event extends EventType {}
 type EventSnapshotType = SnapshotOut<typeof EventModel>
 export interface EventSnapshot extends EventSnapshotType {}
 
-export const EventModelFromData = (event: Types.TimelineEvent) => {
+export const EventModelFromData = (event: Types.TimelineEvent | Types.Event): EventType => {
+  // Extract the ID if neccessary. On some endpoints the API returns a timeline instead of just the id
+  const timelineId = typeof (event.timeline) === 'number' ? event.timeline : event.timeline.id
+
   return EventModel.create({
     id: event.id.toString(),
     title: event.title,
     description: event.description,
-    timeline: event.timeline,
+    timeline: timelineId,
     createdAt: event.created_at,
     updatedAt: event.updated_at
   })

@@ -1,12 +1,11 @@
 import React from 'react'
-import { Platform } from 'react-native'
-import { createDrawerNavigator } from '@react-navigation/drawer'
+
+import { createDrawerNavigator, DrawerNavigationProp } from '@react-navigation/drawer'
 import { DrawerContent } from 'components'
 
 import { PrimaryTabNavigator } from './primary-tab-navigator'
 import { ProfileScreen } from 'screens'
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
-import { AddTimelineScreen } from 'screens/add-timeline-screen/add-timeline-screen'
+import { RouteProp } from '@react-navigation/native'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -18,11 +17,30 @@ import { AddTimelineScreen } from 'screens/add-timeline-screen/add-timeline-scre
  *   https://reactnavigation.org/docs/params/
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
-export type DrawerParamList = {
+export type AppDrawerParamList = {
   app: undefined
+  profile: undefined
 }
+/**
+ * Utility type to make it easier to use with `useNavigation()`
+ *
+ * **Example usage**:
+ * ```typescript
+ * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
+ * ```
+ */
+export type AppDrawerNavigationProp<T extends keyof AppDrawerParamList> = DrawerNavigationProp<AppDrawerParamList, T>
+/**
+ * Utility type to make it easier to use with `useRoute()`
+ *
+ * **Example usage**:
+ * ```typescript
+ * const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
+ * ```
+ */
+export type AppDrawerRouteProp<T extends keyof AppDrawerParamList> = RouteProp<AppDrawerParamList, T>
 
-const DrawerNav = createDrawerNavigator()
+const DrawerNav = createDrawerNavigator<AppDrawerParamList>()
 
 export const DrawerNavigator = () => {
   return (
@@ -50,49 +68,3 @@ export const DrawerNavigator = () => {
     </DrawerNav.Navigator>
   )
 }
-
-export type RootTimelineParamList = {
-  main: DrawerParamList
-  addTimeline: undefined
-}
-const RootTimelineStack = createStackNavigator<RootTimelineParamList>()
-const transition = () => Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : undefined
-
-const AddTimelineStack = createStackNavigator()
-
-const AddTimelineStackScreen = () => (
-  <AddTimelineStack.Navigator>
-    <AddTimelineStack.Screen
-      name="addTimeline"
-      options={() => {
-        return {
-          title: 'New Timeline'
-        }
-      }}
-      component={AddTimelineScreen}
-    />
-  </AddTimelineStack.Navigator>
-)
-
-export const RootTimelineStackScreen = () => (
-  <RootTimelineStack.Navigator
-    initialRouteName="main"
-    mode="modal"
-    screenOptions={() => {
-      return {
-        headerShown: false,
-        gestureEnabled: Platform.OS === 'ios',
-        cardOverlayEnabled: true,
-        ...transition()
-      }
-    }}
-  >
-    <RootTimelineStack.Screen
-      name="main"
-      component={DrawerNavigator}
-    />
-    <RootTimelineStack.Screen
-      name="addTimeline"
-      component={AddTimelineStackScreen}
-    />
-  </RootTimelineStack.Navigator>)

@@ -325,6 +325,32 @@ export class Api {
   }
 
   /**
+   * Create an event
+   *
+   * @returns {Promise<Types.PutEventResult>}
+   * @memberof Api
+   */
+  async createEvent(event: { timeline: string, title: string, description?: string }): Promise<Types.PostEventResult> { // TODO: Add correct type for event
+    // make the api call
+    const response: ApiResponse<any> = await this.apisauce.post(`/events`, { ...event })
+
+    // the typical ways to die when calling an api
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
+    // transform the data into the format we are expecting
+    try {
+      const resultEvent: Types.Event = response.data
+
+      return { kind: "ok", event: resultEvent }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
    * Update a specific event
    *
    * @returns {Promise<Types.PutEventResult>}
@@ -351,7 +377,7 @@ export class Api {
   }
 
   /**
-   * Update a specific event
+   * Delete a event
    *
    * @returns {Promise<Types.DeleteEventResult>}
    * @memberof Api

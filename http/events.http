@@ -1,4 +1,4 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk1MjI4MDczLCJleHAiOjE1OTc4MjAwNzN9.NYyCjJ5HxOI_X731mOoq-wDAnqxiZ8H2rW1V3RwdQTk
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk4MzQ1MDU1LCJleHAiOjE2MDA5MzcwNTV9.4MC1v-lGQzUGOjpwcfeoNcmayx2UB5g3KovikSHpzDk
 
 GET http://localhost:1337/events
 Authorization: Bearer {{token}}
@@ -22,7 +22,7 @@ Content-Type: application/json
 {
   "title": "Semester",
   "description": "Nu åker vi!!",
-  "timeline": "2"
+  "timeline": "245"
 }
 
 ###

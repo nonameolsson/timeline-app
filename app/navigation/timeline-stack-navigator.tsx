@@ -8,7 +8,7 @@ import React from "react"
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack"
 import { RouteProp } from "@react-navigation/native"
 
-import { EventScreen, EditEventScreen, TimelinesScreen, TimelineScreen, EditTimelineScreen, AddEventScreen } from "screens"
+import { EventScreen, EditEventScreen, TimelinesScreen, TimelineScreen, EditTimelineScreen } from "screens"
 import { TopBar } from 'components'
 import { DeleteTimelineAction, DeleteEventAction, EditTimelineAction, EditEventAction } from './types'
 
@@ -34,10 +34,8 @@ export type TimelineParamList = {
     title?: string
     action?: DeleteEventAction | EditTimelineAction
   }
-  addTimeline: undefined
   editTimeline: { id: string }
   event: { title?: string, timelineId: string; eventId: string, action?: EditEventAction }
-  addEvent: undefined
   editEvent: { timelineId: string, eventId: string }
 }
 
@@ -105,11 +103,6 @@ export const TimelineStackScreen = () => {
         name="editEvent"
         component={EditEventScreen}
         options={({ headerTitle: 'Edit' })}
-      />
-      <TimelineStack.Screen
-        name="addEvent"
-        component={AddEventScreen}
-        options={({ headerTitle: 'add' })}
       />
     </TimelineStack.Navigator>
   )

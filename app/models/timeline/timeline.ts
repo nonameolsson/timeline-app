@@ -1,5 +1,5 @@
 import { destroy, Instance, SnapshotOut, types, flow } from "mobx-state-tree"
-import { Event, EventModel } from "models/event/event"
+import { Event, EventModel, EventModelFromData } from "models/event/event"
 import { withEnvironment } from "models/extensions/with-environment"
 import * as Types from "services/api/api.types"
 
@@ -33,6 +33,9 @@ export const TimelineModel = types
       return self.events
     }
   }))
+  /**
+   * Following actions will be called with data received from the API and modify the store.
+   */
   .actions(self => ({
     updateTimelineInStore: (timelineSnapshot: Types.Timeline) => {
       const { created_at, description, title, updated_at } = timelineSnapshot
@@ -43,15 +46,31 @@ export const TimelineModel = types
       self.description = description
     },
 
+    addEventToStore: (event: Types.Event) => {
+      const eventToCreate = EventModelFromData(event)
+
+      self.events.push(eventToCreate)
+    },
+
     deleteEventFromStore: (eventId: string) => {
       const eventToDelete = self.getEvent(eventId) as Event // TODO: Should we use type casting or make sure higher in the tree it will be an Event?
       destroy(eventToDelete)
     }
   }))
-/**
+  /**
    * Following actions will send requests to the API, and call actions defined in the first action definition
    */
   .actions(self => ({
+    createEvent: flow(function * ({ timelineId, title, description }: { timelineId: string, title: string, description?: string}) {
+      const result: Types.PostEventResult = yield self.environment.api.createEvent({ timeline: timelineId, title, description })
+
+      if (result.kind === 'ok') {
+        self.addEventToStore(result.event)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+
     editTimeline: flow(function * (timeline: { id: string, title: string, description: string }) {
       const result: Types.PutTimelineResult = yield self.environment.api.updateTimeline(timeline)
 
@@ -73,15 +92,21 @@ export const TimelineModel = types
     }),
 
     deleteAllEvents: flow(function * () {
-      self.events.forEach(flow(function * (event) {
-        const result: Types.DeleteEventResult = yield self.environment.api.deleteEvent(event.id)
+      const eventsToDelete: string[] = []
+
+      yield Promise.all(self.events.map(async (event) => {
+        const result: Types.DeleteEventResult = await self.environment.api.deleteEvent(event.id)
 
         if (result.kind === "ok") {
-          self.deleteEventFromStore(result.event)
+          eventsToDelete.push(event.id)
         } else {
           __DEV__ && console.tron.log(result.kind)
         }
       }))
+
+      eventsToDelete.forEach(id => {
+        self.deleteEventFromStore(id)
+      })
     }),
   }))
 
