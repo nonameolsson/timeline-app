@@ -26,6 +26,7 @@ export const UserStoreModel = types
     },
     saveJwt: (jwt: string) => {
       self.jwt = jwt
+      self.environment.api.apisauce.setHeader('Authorization', `Bearer ${jwt}`)
     },
     saveUser: (userSnapshot: UserSnapshot) => {
       const userModel: User = UserModel.create(userSnapshot) // create model instances from the plain objects

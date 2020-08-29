@@ -1,8 +1,9 @@
+import React, { FunctionComponent as Component, useCallback } from "react"
 import { Alert, SafeAreaView, View } from "react-native"
-import { Text, useTheme } from "react-native-paper"
+import * as WebBroser from 'expo-web-browser'
+import { Text, useTheme, Subheading, Headline, List } from "react-native-paper"
 import { observer } from 'mobx-react-lite'
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
-import React, { FunctionComponent as Component, useCallback } from "react"
 
 import { useStores } from "models"
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
@@ -43,7 +44,7 @@ export const EventScreen: Component = observer(function EventScreen() {
         }
       }
     })
-  }, [navigation, params.eventId, params.timelineId, timelineStore])
+  }, [navigation, params.eventId, params.timelineId, timelineStore])
 
   const showDeleteAlert = useCallback(function showDeleteAlert() {
     Alert.alert(
@@ -78,11 +79,33 @@ export const EventScreen: Component = observer(function EventScreen() {
 
   if (!event) return null
 
+  const openBrowser = async () => {
+    if (event.url) {
+      await WebBroser.openBrowserAsync(event.url, { enableBarCollapsing: true, enableDefaultShareMenuItem: true })
+    }
+  }
+
+  const renderUrlList = () => {
+    if (event.url) {
+      return (
+        <List.Item title={event.url} onPress={openBrowser} />
+      )
+    } else {
+      return (
+        <List.Item title="No refefence added" />
+      )
+    }
+  }
+
   return (
     <SafeAreaView style={styles.screen}>
       <View style={[styles.container, { backgroundColor: background }]}>
+        <Subheading>Title</Subheading>
         <Text>{event.title}</Text>
+        <Subheading>Description</Subheading>
         <Text>{event.description}</Text>
+        <Headline>References</Headline>
+        {event.url && renderUrlList()}
       </View>
     </SafeAreaView>
   )

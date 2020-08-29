@@ -7,10 +7,10 @@ import { yupResolver } from '@hookform/resolvers'
 
 import { MaterialHeaderButtons, Item } from 'components'
 import { AddEventFormSchema } from './add-event-form.validation'
-import { FormData } from './add-event-form.types'
+import { AddEventFormData } from './add-event-form.types'
 
 export interface AddEventFormProps {
-  onSubmit: (data: { title: string, description: string }) => void
+  onSubmit: (data: AddEventFormData) => void
   errorText: string | null
 }
 
@@ -25,16 +25,17 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
     colors: { error },
   } = useTheme()
 
-  const { control, formState, handleSubmit, errors } = useForm<FormData>({
+  const { control, formState, handleSubmit, errors } = useForm<AddEventFormData>({
     resolver: yupResolver(AddEventFormSchema),
     mode: 'onBlur'
   })
 
   React.useLayoutEffect(() => {
-    const localSubmit = (data: any /* FIXME: this type */) => {
-      const updatedData = {
+    const localSubmit = (data: AddEventFormData) => {
+      const updatedData: AddEventFormData = {
         title: data.title,
         description: data.description,
+        url: data.url,
       }
 
       onSubmit(updatedData)
@@ -106,6 +107,27 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
             label="Description"
             spellCheck={true}
             error={!!errors.description}
+            value={value}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="url"
+        render={({ onChange, onBlur, value }) => (
+          <TextInput
+            disabled={formState.isSubmitting}
+            onBlur={onBlur}
+            left={
+              <TextInput.Icon
+                name="script-text-outline"
+              />
+            }
+            onChangeText={text => onChange(text)}
+            label="URL"
+            autoCapitalize="none"
+            autoCorrect={false}
+            error={!!errors.url}
             value={value}
           />
         )}

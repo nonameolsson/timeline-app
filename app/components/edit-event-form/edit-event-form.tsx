@@ -10,6 +10,7 @@ import { useHeaderButtons } from 'utils/hooks'
 export type EditEventFormData = {
   title: string,
   description: string,
+  url?: string
 }
 
 export interface EditEventFormProps {
@@ -28,7 +29,8 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     mode: 'onChange',
     defaultValues: {
       title: event.title,
-      description: event.description
+      description: event.description,
+      url: event.url
     }
   })
 
@@ -36,6 +38,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     const updatedData = {
       id: event.id,
       title: data.title,
+      url: data.url,
       description: data.description,
     }
 
@@ -85,6 +88,26 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
             <HelperText type="error" visible={!!errors.description}>
               {errors.description?.message}
             </HelperText>
+          </>
+        )}
+      />
+      <Controller
+        control={control}
+        name="url"
+        label='URL'
+        render={({ onChange, onBlur, value }) => (
+          <>
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              error={!!errors.url}
+              label="Url"
+              onBlur={onBlur}
+              onChangeText={text => onChange(text)}
+              value={value}
+              textContentType="URL"
+              keyboardType="url"
+            />
           </>
         )}
       />

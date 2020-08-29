@@ -61,8 +61,8 @@ export const TimelineModel = types
    * Following actions will send requests to the API, and call actions defined in the first action definition
    */
   .actions(self => ({
-    createEvent: flow(function * ({ timelineId, title, description }: { timelineId: string, title: string, description?: string}) {
-      const result: Types.PostEventResult = yield self.environment.api.createEvent({ timeline: timelineId, title, description })
+    createEvent: flow(function * ({ timelineId, title, description, url }: { timelineId: string, title: string, description?: string, url: string | null}) {
+      const result: Types.PostEventResult = yield self.environment.api.createEvent({ timeline: timelineId, title, description, url })
 
       if (result.kind === 'ok') {
         self.addEventToStore(result.event)

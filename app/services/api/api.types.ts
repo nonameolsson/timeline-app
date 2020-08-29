@@ -73,6 +73,7 @@ export interface Event {
   title: string
   description: string
   timeline: EventTimeline
+  url: string | null
   created_at: string
   updated_at: string
 }
@@ -82,6 +83,7 @@ export interface TimelineEvent {
   title: string
   description: string
   timeline: number
+  url: string | null
   created_at: string
   updated_at: string
 }

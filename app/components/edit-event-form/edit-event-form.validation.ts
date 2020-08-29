@@ -6,5 +6,6 @@ export const EditEventFormSchema = yup.object().shape({
     .required(),
   description: yup
     .string()
-    .required()
+    .required(),
+  url: yup.string()
 })

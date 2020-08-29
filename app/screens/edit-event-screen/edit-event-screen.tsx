@@ -22,7 +22,7 @@ export const EditEventScreen: Component = observer(function EditEventScreen() {
   const event = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
   if (!event) return null
 
-  const onSubmit = async ({ title, description }: EditEventFormData) => {
+  const onSubmit = async ({ title, url, description }: EditEventFormData) => {
     navigation.navigate('event', {
       eventId: params.eventId,
       timelineId: params.timelineId,
@@ -32,6 +32,7 @@ export const EditEventScreen: Component = observer(function EditEventScreen() {
         payload: {
           id: event.id,
           title,
+          url,
           description
         }
       }

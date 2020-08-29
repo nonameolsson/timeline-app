@@ -13,6 +13,7 @@ export const EventModel = types
     title: types.string,
     description: types.string,
     timeline: types.number,
+    url: types.maybeNull(types.string),
     createdAt: types.string,
     updatedAt: types.string
   })
@@ -21,16 +22,16 @@ export const EventModel = types
   // Following actions will send requests to the API, and call actions defined in the first action definition
   .actions(self => {
     const updateEventInStore = (eventSnapshot: Types.Event) => {
-      const { title, description, created_at, timeline, updated_at } = eventSnapshot
-
+      const { title, description, created_at, url, timeline, updated_at } = eventSnapshot
       self.title = title
       self.description = description
       self.updatedAt = updated_at
+      self.url = url
       self.createdAt = created_at
       self.timeline = timeline.id
     }
 
-    const updateEvent = flow(function * (event: { id: string, title: string, description: string }) {
+    const updateEvent = flow(function * (event: { id: string, title: string, url?: string, description: string }) {
       const result: Types.PutEventResult = yield self.environment.api.updateEvent(event)
 
       if (result.kind === "ok") {
@@ -66,6 +67,7 @@ export const EventModelFromData = (event: Types.TimelineEvent | Types.Event): Ev
     id: event.id.toString(),
     title: event.title,
     description: event.description,
+    url: event.url,
     timeline: timelineId,
     createdAt: event.created_at,
     updatedAt: event.updated_at

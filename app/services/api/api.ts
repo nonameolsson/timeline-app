@@ -88,7 +88,7 @@ export class Api {
  */
   async getUser(id: number): Promise<Types.GetUserResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`, {}, { headers: { Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk0MjE2ODE2LCJleHAiOjE1OTY4MDg4MTZ9.LuPgVDDzBrJsHyxJ39RPeq_7qf900rxtb8Hr4Vc7NqY' } })
+    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -330,7 +330,7 @@ export class Api {
    * @returns {Promise<Types.PutEventResult>}
    * @memberof Api
    */
-  async createEvent(event: { timeline: string, title: string, description?: string }): Promise<Types.PostEventResult> { // TODO: Add correct type for event
+  async createEvent(event: { timeline: string, title: string, description?: string, url: string | null }): Promise<Types.PostEventResult> { // TODO: Add correct type for event
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.post(`/events`, { ...event })
 
