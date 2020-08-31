@@ -11757,10 +11757,10 @@ react-native-portalize@^1.0.5:
   resolved "https://registry.yarnpkg.com/react-native-portalize/-/react-native-portalize-1.0.5.tgz#755167f1990b809c11b690c0169a9d072e0327c8"
   integrity sha512-3LAF/JfoJ340po2XqGLdmpXF2nRkhx07gxgfHQ5ATsU5I3twREWjR8vSltmcvl0Noe3Mmtwn9sbVK7AaHnHzxQ==
 
-react-native-reanimated@~1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.9.0.tgz#38676c99dd585504fdc7331efb45e5f48ec7339a"
-  integrity sha512-Aj+spgIHRiVv7ezGADxnSH1EoKrQRD2+XaSiGY0MiB/pvRNNrZPSJ+3NVpvLwWf9lZMOP7dwqqyJIzoZgBDt8w==
+react-native-reanimated@~1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.11.0.tgz#9fd2e65c3e0886039673667ba99e228776a85764"
+  integrity sha512-jiJUN1P7J4gwac1AUvYdedYThTDlFuUU1iXCB9RMcclLiuXbkNGiKDIyeOVIjWc0GwZceKBvaIgoW1RICNrvTg==
   dependencies:
     fbjs "^1.0.0"
 
