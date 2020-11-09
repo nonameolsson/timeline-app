@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 
-import { EventModelFromData, Event } from "../event/event"
+import { Event, EventModel } from "../event/event"
 import { Timeline, TimelineModel } from "../timeline/timeline"
 import { withEnvironment } from "../extensions/with-environment"
 import * as Types from "services/api/api.types"
@@ -28,8 +28,8 @@ export const TimelineStoreModel = types
       return timeline.events.find(event => event.id === eventId)
     },
 
-    getTimeline: (id: string): Timeline | undefined => {
-      const timeline = self.timelines.get(id)
+    getTimeline: (id: number): Timeline | undefined => {
+      const timeline = self.timelines.get(id.toString())
 
       // if (!timeline) throw new Error(`No timeline with id ${id} was found`)
 
@@ -51,20 +51,30 @@ export const TimelineStoreModel = types
     },
 
     addTimelinesToStore: (timelineSnapshot: Types.TimelineResponse[]) => {
-      const timelineModelFromSnapshot = timeline => {
+      const createEventModelFromData = (event: Types.TimelineEvent) => {
+        return EventModel.create({
+          id: event.id,
+          title: event.title,
+          description: event.description,
+          url: event.url,
+          timeline: event.timeline,
+          created_at: event.created_at,
+          updated_at: event.updated_at
+        })
+      }
+
+      const timelineModelFromSnapshot = (timeline: Types.TimelineResponse) => {
         return TimelineModel.create({
-          id: timeline.id.toString(),
+          id: timeline.id,
           title: timeline.title,
           description: timeline.description,
-          events: timeline.events.map(event => EventModelFromData(event)),
+          events: timeline.events.map(event => createEventModelFromData(event)),
           created_at: timeline.created_at,
           updated_at: timeline.updated_at,
         })
       }
+      const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => timelineModelFromSnapshot(timeline))
 
-      const timelinesModel: Timeline[] = timelineSnapshot.map(timeline =>
-        timelineModelFromSnapshot(timeline),
-      )
       timelinesModel.forEach(timeline => {
         // Do not add/update timeline if it already exits
         if (!self.timelines.has(timeline.id.toString())) {

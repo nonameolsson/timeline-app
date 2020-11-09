@@ -30,7 +30,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
     resolver: yupResolver(EventFormSchema),
     mode: "onBlur",
     defaultValues: {
-      id: event?.id || undefined,
+      id: event?.id || null,
       title: event?.title || "",
       description: event?.description || "",
       url: event?.url || "",
@@ -40,13 +40,10 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
   React.useLayoutEffect(() => {
     const localSubmit = (data: EventFormData) => {
       const updatedData: EventFormData = {
+        id: event ? event.id : null,
         title: data.title,
         description: data.description,
         url: data.url,
-      }
-
-      if (event?.id) {
-        updatedData.id = event.id
       }
 
       onSubmit(updatedData)
@@ -65,7 +62,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
         </MaterialHeaderButtons>
       ),
     })
-  }, [event?.id, formState.isSubmitting, formState.isValid, handleSubmit, navigation, onSubmit])
+  }, [event, event?.id, formState.isSubmitting, formState.isValid, handleSubmit, navigation, onSubmit])
 
   return (
     <View>

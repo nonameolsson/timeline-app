@@ -34,7 +34,7 @@ export interface DeleteTimelineResponse {
   events: TimelineEvent[]
 }
 
-interface TimelineEvent {
+export interface TimelineEvent {
   id: number
   title: string
   description: string | null

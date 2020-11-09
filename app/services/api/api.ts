@@ -205,7 +205,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.PostTimelineResponse = response.data
+      const data: Types.TimelineResponse = response.data
 
       return { kind: "ok", data }
     } catch {
@@ -237,7 +237,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.PutTimelineResponse = response.data
+      const data: Types.TimelineResponse = response.data
 
       return { kind: "ok", data }
     } catch {

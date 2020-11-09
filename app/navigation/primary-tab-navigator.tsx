@@ -67,10 +67,10 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({
     routeName === "timelines"
       ? "timeline-plus-outline"
       : routeName === "people"
-      ? "account-plus-outline"
-      : routeName === "places"
-      ? "map-plus"
-      : "plus"
+        ? "account-plus-outline"
+        : routeName === "places"
+          ? "map-plus"
+          : "plus"
 
   const onFabPress = () => {
     if (routeName === "timelines") {

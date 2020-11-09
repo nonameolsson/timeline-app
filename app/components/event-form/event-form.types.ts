@@ -1,6 +1,6 @@
 export type EventFormData = {
-  id?: string
+  id: number | null
   title: string
-  description?: string
-  url?: string
+  description: string | null
+  url: string | null
 }

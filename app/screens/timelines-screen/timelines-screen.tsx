@@ -44,7 +44,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
       if (!params || !params.action) return
       const { action } = params
 
-      const deleteTimeline = async (timelineId: string) => {
+      const deleteTimeline = async (timelineId: number) => {
         const timeline = timelineStore.getTimeline(timelineId)
         if (!timeline) return
 
@@ -77,13 +77,14 @@ export const TimelinesScreen = observer(function TimelinesScreen({
 
   const renderList = () => {
     const timelines = timelineStore.getTimelinesArray()
+
     if (!timelines) return null
 
     return (
       <FlatList
         data={timelineStore.getTimelinesArray()}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id.toString()}
       />
     )
   }

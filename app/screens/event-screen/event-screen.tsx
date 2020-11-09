@@ -25,7 +25,7 @@ export const EventScreen: Component = observer(function EventScreen() {
     useCallback(() => {
       if (!params.action || !event) return
       if (params.action.type === "EDIT_EVENT") {
-        event.updateEvent(params.action.payload)
+        event.updateEvent(params.action.payload, params.action.payload.id)
       }
     }, [event, params.action]),
   )
@@ -123,7 +123,7 @@ export const EventScreen: Component = observer(function EventScreen() {
         <Subheading>Description</Subheading>
         <Text>{event.description}</Text>
         <Headline>References</Headline>
-        {event.url && renderUrlList()}
+        {renderUrlList()}
       </View>
     </SafeAreaView>
   )

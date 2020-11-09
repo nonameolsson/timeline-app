@@ -155,7 +155,7 @@ export class Reactotron {
       Tron.onCustomCommand({
         title: "Log in as Jasmin",
         command: "logInJasmin",
-        handler: () => this.rootStore.userStore.login("zetajaz@gmail.com", "password"),
+        handler: () => this.rootStore.userStore.login("zetajaz@gmail.com", "Abc123!"),
       })
 
       Tron.onCustomCommand({

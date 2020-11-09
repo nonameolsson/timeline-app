@@ -65,12 +65,12 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
       if (!params.action || !timeline) return
       const { action } = params
 
-      const deleteEvent = async (eventId: string) => {
+      const deleteEvent = async (eventId: number) => {
         await timeline.deleteEvent(eventId)
       }
 
       const editTimeline = async (payload: Timeline) => {
-        await timeline.editTimeline(payload)
+        await timeline.editTimeline(payload, payload.id)
       }
 
       if (action.type === "DELETE_EVENT") {
@@ -84,7 +84,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   // Make sure all data exists before using it
   if (!timeline) return null
 
-  const openEvent = (eventId: string) => {
+  const openEvent = (eventId: number) => {
     const event = timeline.getEvent(eventId)
 
     navigation.navigate("event", { title: event?.title, timelineId: params.id, eventId })

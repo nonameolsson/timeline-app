@@ -41,13 +41,17 @@ export type TimelineParamList = {
   }
   // NOTE: Timeline interfaces should only be optional when goint BACK to TimelineScreen from EventScreen. Fix this.
   timeline: {
-    id: string
+    id: number
     title?: string
     action?: DeleteEventAction | EditTimelineAction
   }
-  editTimeline: { id: string }
-  event: { title?: string; timelineId: string; eventId: string; action?: EditEventAction }
-  editEvent: { timelineId: string; eventId: string }
+  editTimeline: { id: number }
+  event: { title?: string; timelineId: number; eventId: number; action?: EditEventAction }
+  editEvent: {
+    /** ID of the timeline to wich the event corresponds */
+    timelineId: number;
+    /** ID of the event */
+    eventId: number }
 }
 
 /**

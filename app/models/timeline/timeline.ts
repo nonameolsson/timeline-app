@@ -77,7 +77,12 @@ export const TimelineModel = types
       }
     }),
 
-    editTimeline: flow(function * (data: Types.PutTimelineRequest, id: number) {
+    editTimeline: flow(function * (
+      /** Data for updated timeline */
+      data: Types.PutTimelineRequest,
+      /** ID of timeline to update */
+      id: number
+    ) {
       const result: Types.PutTimelineResult = yield self.environment.api.updateTimeline(data, id)
 
       if (result.kind === "ok") {
