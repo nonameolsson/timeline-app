@@ -1,10 +1,6 @@
-# timeline
+# <%= props.name %>
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6ca7fcd6618140748532f2a9c3c4906c)](https://app.codacy.com/manual/noname.olsson/timeline?utm_source=github.com&utm_medium=referral&utm_content=nonameolsson/timeline&utm_campaign=Badge_Grade_Dashboard)
 [![CircleCI](https://circleci.com/gh/infinitered/ignite-bowser.svg?style=svg)](https://circleci.com/gh/infinitered/ignite-bowser)
-[![CodeFactor](https://www.codefactor.io/repository/github/nonameolsson/timeline/badge)](https://www.codefactor.io/repository/github/nonameolsson/timeline)
-[![DeepScan grade](https://deepscan.io/api/teams/7648/projects/13404/branches/224591/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=7648&pid=13404&bid=224591)
-<a href="https://codeclimate.com/github/nonameolsson/timeline/maintainability"><img src="https://api.codeclimate.com/v1/badges/834537e7006956722c0f/maintainability" /></a>
 
 ## The latest and greatest boilerplate for Infinite Red opinions
 
@@ -25,47 +21,55 @@ The Ignite Bowser boilerplate project's structure will look similar to this:
 ```
 ignite-project
 ├── app
-│   ├── components
-│   ├── i18n
-│   ├── utils
-│   ├── models
-│   ├── navigation
-│   ├── screens
-│   ├── services
-│   ├── theme
-│   ├── app.tsx
+│   ├── components
+│   ├── i18n
+│   ├── utils
+│   ├── models
+│   ├── navigation
+│   ├── screens
+│   ├── services
+│   ├── theme
+│   ├── app.tsx
 ├── storybook
-│   ├── views
-│   ├── index.ts
-│   ├── storybook-registry.ts
-│   ├── storybook.ts
+│   ├── views
+│   ├── index.ts
+│   ├── storybook-registry.ts
+│   ├── storybook.ts
 ├── test
-│   ├── __snapshots__
-│   ├── storyshots.test.ts.snap
-│   ├── mock-i18n.ts
-│   ├── mock-reactotron.ts
-│   ├── setup.ts
-│   ├── storyshots.test.ts
+│   ├── __snapshots__
+│   ├── storyshots.test.ts.snap
+│   ├── mock-i18n.ts
+│   ├── mock-reactotron.ts
+│   ├── setup.ts
+│   ├── storyshots.test.ts
 ├── README.md
+<% if (!props.useExpo) { -%>
 ├── android
-│   ├── app
-│   ├── build.gradle
-│   ├── gradle
-│   ├── gradle.properties
-│   ├── gradlew
-│   ├── gradlew.bat
-│   ├── keystores
-│   └── settings.gradle
+│   ├── app
+│   ├── build.gradle
+│   ├── gradle
+│   ├── gradle.properties
+│   ├── gradlew
+│   ├── gradlew.bat
+│   ├── keystores
+│   └── settings.gradle
+<% } -%>
 ├── ignite
-│   ├── ignite.json
-│   └── plugins
+│   ├── ignite.json
+│   └── plugins
+<% if (props.useExpo) { -%>
+├── App.js
+<% } else { -%>
 ├── index.js
+<% } -%>
+<% if (!props.useExpo) { -%>
 ├── ios
-│   ├── IgniteProject
-│   ├── IgniteProject-tvOS
-│   ├── IgniteProject-tvOSTests
-│   ├── IgniteProject.xcodeproj
-│   └── IgniteProjectTests
+│   ├── IgniteProject
+│   ├── IgniteProject-tvOS
+│   ├── IgniteProject-tvOSTests
+│   ├── IgniteProject.xcodeproj
+│   └── IgniteProjectTests
+<% } -%>
 ├── .env
 └── package.json
 
@@ -133,8 +137,11 @@ This directory will hold your Jest configs and mocks, as well as your [storyshot
 From the command line in your generated app's root directory, enter `yarn run storybook`
 This starts up the storybook server.
 
+<% if (props.useExpo) { -%>
+In `App.js`, change `SHOW_STORYBOOK` to `true` and reload the app.
+<% } else { -%>
 In `index.js`, change `SHOW_STORYBOOK` to `true` and reload the app.
-
+<% } -%>
 For Visual Studio Code users, there is a handy extension that makes it easy to load Storybook use cases into a running emulator via tapping on items in the editor sidebar. Install the `React Native Storybook` extension by `Orta`, hit `cmd + shift + P` and select "Reconnect Storybook to VSCode". Expand the STORYBOOK section in the sidebar to see all use cases for components that have `.story.tsx` files in their directories.
 
 ## Previous Boilerplates

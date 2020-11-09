@@ -29,8 +29,8 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     mode: "onChange",
     defaultValues: {
       title: event.title,
-      description: event.description,
-      url: event.url,
+      description: event.description || '',
+      url: event.url || '',
     },
   })
 

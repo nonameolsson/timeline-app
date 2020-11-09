@@ -16,7 +16,7 @@
     "noUnusedLocals": true,
     "sourceMap": true,
     "target": "esnext",
-    "lib": ["esnext"],
+    "lib": ["es6"],
     "skipLibCheck": true,
     "strict": true,
     "paths": {
@@ -30,5 +30,5 @@
     }
   },
   "exclude": ["node_modules"],
-  "include": ["index.js", "app", "test", "storybook"]
+  "include": ["App.js", "app", "test", "storybook"]
 }

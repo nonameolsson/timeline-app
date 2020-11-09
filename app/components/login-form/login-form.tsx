@@ -16,6 +16,10 @@ interface LoginFormProps {
 export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, errorText }) => {
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
     resolver: yupResolver(LoginSchema),
+    defaultValues: {
+      email: '',
+      password: ''
+    },
     mode: "onBlur",
   })
 

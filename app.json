@@ -17,11 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
-    },
-    "experiments": {
-      "redesignedLogBox": true
-    },
-    "sdkVersion": "38.0.0"
+    }
   },
   "name": "timeline"
 }
