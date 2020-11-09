@@ -60,7 +60,7 @@ export interface Event extends EventType {}
 type EventSnapshotType = SnapshotOut<typeof EventModel>
 export interface EventSnapshot extends EventSnapshotType {}
 
-export const EventModelFromData = (event: Types.EventResponse | Types.EventResponse) => {
+export const EventModelFromData = (event: Types.EventResponse | Types.EventResponse): EventType => {
   return EventModel.create({
     id: event.id,
     title: event.title,

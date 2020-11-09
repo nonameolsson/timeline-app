@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types, flow, getRoot } from "mobx-state-tree"
-import { UserModel, UserSnapshot } from "../user/user"
+import { User, UserModel, UserSnapshot } from "../user/user"
 import { withEnvironment } from "../extensions/with-environment"
-import { User, GetUserResult, GetLoginResult } from "../../services/api"
+import * as Types from "../../services/api"
 import { RootStore } from ".."
 
 /**
@@ -30,6 +30,7 @@ export const UserStoreModel = types
     },
     saveUser: (userSnapshot: UserSnapshot) => {
       const userModel: User = UserModel.create(userSnapshot) // create model instances from the plain objects
+
       self.user = userModel // Replace the existing data with the new data
     },
   }))
@@ -44,8 +45,8 @@ export const UserStoreModel = types
       // Reset Apisauce
       self.environment.api.apisauce.deleteHeader("Authorization")
     },
-    login: flow(function*(identifier: string, password: string) {
-      const result: GetLoginResult = yield self.environment.api.login(identifier, password)
+    login: flow(function * (identifier: string, password: string) {
+      const result: Types.PostLoginResult = yield self.environment.api.login(identifier, password)
 
       if (result.kind === "ok") {
         self.saveUser(result.data.user)
@@ -56,11 +57,11 @@ export const UserStoreModel = types
         return result
       }
     }),
-    getUser: flow(function*(user: number) {
-      const result: GetUserResult = yield self.environment.api.getUser(user)
+    getUser: flow(function * (user: number) {
+      const result: Types.GetUserResult = yield self.environment.api.getUser(user)
 
       if (result.kind === "ok") {
-        self.saveUser(result.user)
+        self.saveUser(result.data.user)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }

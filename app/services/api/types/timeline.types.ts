@@ -2,6 +2,28 @@
 
 import { GeneralApiProblem } from "../api-problem"
 
+export interface TimelineEvent {
+  id: number
+  title: string
+  description: string | null
+  timeline: number
+  url: null | string
+  created_at: string
+  updated_at: string
+}
+
+interface TimelineUser {
+  id: number
+  username: string
+  email: string
+  provider: string
+  confirmed: boolean
+  blocked: boolean
+  role: number
+  created_at: string
+  updated_at: string
+}
+
 export interface TimelineResponse {
   id: number
   title: string
@@ -32,28 +54,6 @@ export interface DeleteTimelineResponse {
   created_at: string
   updated_at: string
   events: TimelineEvent[]
-}
-
-export interface TimelineEvent {
-  id: number
-  title: string
-  description: string | null
-  timeline: number
-  url: null | string
-  created_at: string
-  updated_at: string
-}
-
-interface TimelineUser {
-  id: number
-  username: string
-  email: string
-  provider: string
-  confirmed: boolean
-  blocked: boolean
-  role: number
-  created_at: string
-  updated_at: string
 }
 
 export type GetTimelinesResult = { kind: "ok"; data: TimelineResponse[] } | GeneralApiProblem

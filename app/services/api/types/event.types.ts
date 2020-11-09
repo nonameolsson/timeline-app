@@ -1,6 +1,15 @@
 /* eslint-disable camelcase */
 import { GeneralApiProblem } from "../api-problem"
 
+interface EventTimeline {
+  id: number
+  title: string
+  description: string | null
+  user: number
+  created_at: string
+  updated_at: string
+}
+
 export interface EventResponse {
   id: number
   title: string
@@ -16,15 +25,6 @@ export interface EventRequest {
   description: string | null
   timeline: number
   url: string | null
-}
-
-interface EventTimeline {
-  id: number
-  title: string
-  description: string | null
-  user: number
-  created_at: string
-  updated_at: string
 }
 
 export type GetEventsResult = { kind: "ok"; data: EventResponse[] } | GeneralApiProblem

@@ -1,9 +1,22 @@
 /* eslint-disable camelcase */
 import { GeneralApiProblem } from "../api-problem"
 
-/**
- * LOGIN
- */
+interface UserClassRole {
+  id: number
+  name: string
+  description: string
+  type: string
+}
+
+interface UserClassTimeline {
+  id: number
+  title: string
+  description: string
+  user: number
+  created_at: string
+  updated_at: string
+}
+
 export interface PostLoginRequest {
   identifier: string
   password: string
@@ -25,22 +38,6 @@ interface UserClass {
   created_at: string
   updated_at: string
   timelines: UserClassTimeline[]
-}
-
-interface UserClassRole {
-  id: number
-  name: string
-  description: string
-  type: string
-}
-
-interface UserClassTimeline {
-  id: number
-  title: string
-  description: string
-  user: number
-  created_at: string
-  updated_at: string
 }
 
 export type PostLoginResult = { kind: "ok"; data: PostLoginResponse } | GeneralApiProblem
