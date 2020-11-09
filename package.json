@@ -51,7 +51,7 @@
     "react-hook-form": "^6.9.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
     "react-native-gesture-handler": "~1.7.0",
-    "react-native-keychain": "6.1.1",
+    "react-native-keychain": "6.2.0",
     "react-native-modalize": "^2.0.5",
     "react-native-paper": "^4.0.1",
     "react-native-portalize": "^1.0.5",
