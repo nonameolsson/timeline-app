@@ -1,5 +1,5 @@
 import Tron from "reactotron-react-native"
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from "@react-native-community/async-storage"
 import { RootStore } from "../../models/root-store/root-store"
 import { onSnapshot } from "mobx-state-tree"
 import { ReactotronConfig, DEFAULT_REACTOTRON_CONFIG } from "./reactotron-config"
@@ -143,19 +143,19 @@ export class Reactotron {
       Tron.onCustomCommand({
         title: "Log out",
         command: "logOut",
-        handler: () => this.rootStore.userStore.logOut()
+        handler: () => this.rootStore.userStore.logOut(),
       })
 
       Tron.onCustomCommand({
         title: "Log in as Kalle",
         command: "logInKalle",
-        handler: () => this.rootStore.userStore.login("kalle@timeline.app", "password")
+        handler: () => this.rootStore.userStore.login("kalle@timeline.app", "password"),
       })
 
       Tron.onCustomCommand({
         title: "Log in as Jasmin",
         command: "logInJasmin",
-        handler: () => this.rootStore.userStore.login("zetajaz@gmail.com", "password")
+        handler: () => this.rootStore.userStore.login("zetajaz@gmail.com", "Abc123!"),
       })
 
       Tron.onCustomCommand({
@@ -200,10 +200,10 @@ export class Reactotron {
       })
 
       Tron.onCustomCommand({
-        title: 'Toggle theme',
-        description: 'Toggles between light and dark theme',
-        command: 'toggleTheme',
-        handler: () => this.rootStore.uiStore.toggleTheme()
+        title: "Toggle theme",
+        description: "Toggles between light and dark theme",
+        command: "toggleTheme",
+        handler: () => this.rootStore.uiStore.toggleTheme(),
       })
 
       // clear if we should

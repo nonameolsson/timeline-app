@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
-import { RoleModel } from '../role/role'
+import { RoleModel } from "../role/role"
 
 /**
  * Model description here for TypeScript hints.
@@ -15,8 +16,8 @@ export const UserModel = types
     confirmed: types.boolean,
     blocked: types.boolean,
     role: types.maybe(RoleModel),
-    createdAt: types.string,
-    updatedAt: types.string
+    created_at: types.string,
+    updated_at: types.string,
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

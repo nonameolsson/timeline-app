@@ -7,7 +7,7 @@ import { useFocusEffect } from "@react-navigation/native"
 import { useStores } from "models"
 import { styles } from "./timelines-screen.styles"
 
-import { EmptyState } from 'components'
+import { EmptyState } from "components"
 
 // type TimelinesScreenProp = {
 //   navigation: CompositeNavigationProp<
@@ -21,7 +21,10 @@ import { EmptyState } from 'components'
 //   route: TimelineRouteProp<"timelines">
 // };
 
-export const TimelinesScreen = observer(function TimelinesScreen({ navigation, route: { params } }: any) {
+export const TimelinesScreen = observer(function TimelinesScreen({
+  navigation,
+  route: { params },
+}: any) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   // Fix to get correct type
@@ -33,7 +36,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
       if (userStore.user) {
         timelineStore.getTimelines(userStore.user.id).then(() => setIsLoading(false))
       }
-    }, [timelineStore, userStore.user])
+    }, [timelineStore, userStore.user]),
   )
 
   useFocusEffect(
@@ -41,7 +44,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
       if (!params || !params.action) return
       const { action } = params
 
-      const deleteTimeline = async (timelineId: string) => {
+      const deleteTimeline = async (timelineId: number) => {
         const timeline = timelineStore.getTimeline(timelineId)
         if (!timeline) return
 
@@ -49,13 +52,13 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
         await timelineStore.deleteTimeline(timelineId)
       }
 
-      if (action.type === 'DELETE_TIMELINE') {
+      if (action.type === "DELETE_TIMELINE") {
         setIsLoading(true)
         deleteTimeline(action.meta.id)
         setIsLoading(false)
       }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params]),
   )
 
   const openTimeline = (id: string, title: string): void => {
@@ -74,13 +77,16 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
 
   const renderList = () => {
     const timelines = timelineStore.getTimelinesArray()
+
     if (!timelines) return null
 
-    return <FlatList
-      data={timelineStore.getTimelinesArray()}
-      renderItem={renderItem}
-      keyExtractor={item => item.id}
-    />
+    return (
+      <FlatList
+        data={timelineStore.getTimelinesArray()}
+        renderItem={renderItem}
+        keyExtractor={item => item.id.toString()}
+      />
+    )
   }
 
   const emptyState = () => {
@@ -89,9 +95,12 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
         <EmptyState
           title="Empty in timelines"
           description="Start by creating a timeline and it will show up here"
-          icon="timeline-plus-outline" />
+          icon="timeline-plus-outline"
+        />
         <View style={styles.emptyStateButtonWrapper}>
-          <Button onPress={() => navigation.navigate('addTimeline')} mode="contained">Create timeline</Button>
+          <Button onPress={() => navigation.navigate("addTimeline")} mode="contained">
+            Create timeline
+          </Button>
         </View>
       </View>
     )
@@ -102,12 +111,13 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
       <View style={styles.container}>
         {userStore.isLoggedIn() ? (
           <>
-            {isLoading
-              ? <ActivityIndicator />
-              : timelineStore.hasTimelines()
-                ? renderList()
-                : emptyState()
-            }
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : timelineStore.hasTimelines() ? (
+              renderList()
+            ) : (
+              emptyState()
+            )}
           </>
         ) : (
           <Text>Logging in...</Text>

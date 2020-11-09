@@ -37,6 +37,7 @@
     "color": "^3.1.2",
     "expo": "^38.0.0",
     "expo-localization": "~8.2.1",
+    "expo-web-browser": "~8.3.1",
     "i18n-js": "^3.0.11",
     "lodash.throttle": "4.1.1",
     "mobx": "^4.15.4",

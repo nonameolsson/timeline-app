@@ -5,10 +5,10 @@ import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/nativ
 import React, { FunctionComponent as Component, useCallback } from "react"
 
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
-import { Timeline } from 'navigation/types'
+import { Timeline } from "navigation/types"
 import { useStores } from "models"
-import { styles } from './timeline-screen.styles'
-import { MaterialHeaderButtons, Item } from 'components'
+import { styles } from "./timeline-screen.styles"
+import { MaterialHeaderButtons, Item } from "components"
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
   const { timelineStore } = useStores()
@@ -22,11 +22,13 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   const timeline = timelineStore.getTimeline(params.id)
 
   const goToEditTimelineScreen = useCallback(() => {
-    navigation.navigate('editTimeline', { id: params.id })
+    navigation.navigate("editTimeline", { id: params.id })
   }, [navigation, params.id])
 
   const deleteTimeline = useCallback(() => {
-    navigation.navigate('timelines', { action: { type: 'DELETE_TIMELINE', meta: { id: params.id } } })
+    navigation.navigate("timelines", {
+      action: { type: "DELETE_TIMELINE", meta: { id: params.id } },
+    })
   }, [navigation, params.id])
 
   const showDeleteAlert = useCallback(() => {
@@ -37,11 +39,11 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
-        { text: "OK", onPress: () => deleteTimeline() }
+        { text: "OK", onPress: () => deleteTimeline() },
       ],
-      { cancelable: false }
+      { cancelable: false },
     )
   }, [deleteTimeline])
 
@@ -63,29 +65,29 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
       if (!params.action || !timeline) return
       const { action } = params
 
-      const deleteEvent = async (eventId: string) => {
+      const deleteEvent = async (eventId: number) => {
         await timeline.deleteEvent(eventId)
       }
 
       const editTimeline = async (payload: Timeline) => {
-        await timeline.editTimeline(payload)
+        await timeline.editTimeline(payload, payload.id)
       }
 
-      if (action.type === 'DELETE_EVENT') {
+      if (action.type === "DELETE_EVENT") {
         deleteEvent(action.meta.id)
-      } else if (action.type === 'EDIT_TIMELINE') {
+      } else if (action.type === "EDIT_TIMELINE") {
         editTimeline(action.payload)
       }
-    }, [params, timeline])
+    }, [params, timeline]),
   )
 
   // Make sure all data exists before using it
   if (!timeline) return null
 
-  const openEvent = (eventId: string) => {
+  const openEvent = (eventId: number) => {
     const event = timeline.getEvent(eventId)
 
-    navigation.navigate('event', { title: event?.title, timelineId: params.id, eventId })
+    navigation.navigate("event", { title: event?.title, timelineId: params.id, eventId })
   }
 
   const renderEventList = () => {

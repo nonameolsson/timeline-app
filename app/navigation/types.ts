@@ -1,23 +1,28 @@
-
 /**
  * Inspired by https://redux.js.org/recipes/usage-with-typescript/
  */
 
-export const DELETE_TIMELINE = 'DELETE_TIMELINE'
-export const EDIT_TIMELINE = 'EDIT_TIMELINE'
-export const EDIT_EVENT = 'EDIT_EVENT'
-export const DELETE_EVENT = 'DELETE_EVENT'
+export const DELETE_TIMELINE = "DELETE_TIMELINE"
+export const EDIT_TIMELINE = "EDIT_TIMELINE"
+export const EDIT_EVENT = "EDIT_EVENT"
+export const DELETE_EVENT = "DELETE_EVENT"
 
 export interface Timeline {
-  id: string
+  id: number
   title: string
   description: string
 }
 
 export interface Event {
-  id: string
+  // eslint-disable-next-line camelcase
+  created_at: string
+  // eslint-disable-next-line camelcase
+  updated_at: string
+  id: number
   title: string
-  description: string
+  description: string | null
+  url: string | null
+  timeline: number
 }
 
 export interface EditTimelineAction {
@@ -28,7 +33,7 @@ export interface EditTimelineAction {
 export interface DeleteTimelineAction {
   type: typeof DELETE_TIMELINE
   meta: {
-    id: string
+    id: number
   }
 }
 
@@ -40,7 +45,7 @@ export interface EditEventAction {
 export interface DeleteEventAction {
   type: typeof DELETE_EVENT
   meta: {
-    id: string
+    id: number
   }
 }
 

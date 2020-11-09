@@ -1,4 +1,4 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNTk4MzQ1MDU1LCJleHAiOjE2MDA5MzcwNTV9.4MC1v-lGQzUGOjpwcfeoNcmayx2UB5g3KovikSHpzDk
+@token =
 
 ###
 
@@ -17,7 +17,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "title": "Hej3",
+  "title": "Hejsan!",
   "description": "En riktigt spännande historia!",
   "events": [],
   "user": 1

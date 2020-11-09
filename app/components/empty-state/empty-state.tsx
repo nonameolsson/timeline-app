@@ -1,7 +1,7 @@
 import React from "react"
 import { View } from "react-native"
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { Title, Subheading } from 'react-native-paper'
+import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { Title, Subheading } from "react-native-paper"
 import { emptyStateStyles as styles } from "./empty-state.styles"
 
 export interface EmptyStateProps {
