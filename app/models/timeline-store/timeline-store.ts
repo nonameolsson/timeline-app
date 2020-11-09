@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 
 import { EventModelFromData, Event } from "../event/event"
@@ -18,8 +19,8 @@ export const TimelineStoreModel = types
     hasTimelines: () => {
       return self.timelines.size > 0
     },
-    getEventFromTimeline: (id: string, eventId: string): Event | undefined => {
-      const timeline = self.timelines.get(id)
+    getEventFromTimeline: (id: number, eventId: number): Event | undefined => {
+      const timeline = self.timelines.get(id.toString())
 
       if (!timeline) return undefined
       // if (!timeline) throw new Error(`No timeline with id ${id} was found`)
@@ -49,15 +50,15 @@ export const TimelineStoreModel = types
       self.timelines.clear()
     },
 
-    addTimelinesToStore: (timelineSnapshot: Types.GetTimelineResponse[]) => {
+    addTimelinesToStore: (timelineSnapshot: Types.TimelineResponse[]) => {
       const timelineModelFromSnapshot = timeline => {
         return TimelineModel.create({
           id: timeline.id.toString(),
           title: timeline.title,
           description: timeline.description,
           events: timeline.events.map(event => EventModelFromData(event)),
-          createdAt: timeline.created_at,
-          updatedAt: timeline.updated_at,
+          created_at: timeline.created_at,
+          updated_at: timeline.updated_at,
         })
       }
 
@@ -66,57 +67,43 @@ export const TimelineStoreModel = types
       )
       timelinesModel.forEach(timeline => {
         // Do not add/update timeline if it already exits
-        if (!self.timelines.has(timeline.id)) {
-          self.timelines.set(timeline.id, timeline)
+        if (!self.timelines.has(timeline.id.toString())) {
+          self.timelines.set(timeline.id.toString(), timeline)
         }
       })
     },
 
-    deleteTimelineFromStore: (timelineId: string) => {
-      self.timelines.delete(timelineId)
+    deleteTimelineFromStore: (timelineId: number) => {
+      self.timelines.delete(timelineId.toString())
     },
   }))
   /**
    * Following actions will send requests to the API, and call actions defined in the first action definition
    */
   .actions(self => ({
-    createTimeline: flow(function*({
-      user,
-      title,
-      description,
-    }: {
-      user: string
-      title: string
-      description?: string
-    }) {
-      const result: Types.PostTimelineResult = yield self.environment.api.createTimeline({
-        user,
-        title,
-        description,
-      })
+    createTimeline: flow(function * (data: Types.PostTimelineRequest) {
+      const result: Types.PostTimelineResult = yield self.environment.api.createTimeline(data)
 
       if (result.kind === "ok") {
-        const timelineToAdd: any[] = [] // NOTE: Since `addTimelineToStore` expects an array, we create one for just this timeline.
-        timelineToAdd.push(result.timeline)
+        const timelineToAdd: Types.TimelineResponse[] = [] // NOTE: Since `addTimelineToStore` expects an array, we create one for just this timeline.
+        timelineToAdd.push(result.data)
         self.addTimelinesToStore(timelineToAdd)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
     }),
-    getTimelines: flow(function*(userId: number) {
+    getTimelines: flow(function * (userId: number) {
       const result: Types.GetTimelinesResult = yield self.environment.api.getTimelinesByUser(userId)
 
       if (result.kind === "ok") {
-        self.addTimelinesToStore(result.timelines)
+        self.addTimelinesToStore(result.data)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
     }),
 
-    deleteTimeline: flow(function*(timelineId: string) {
-      const result: Types.DeleteTimelineResult = yield self.environment.api.deleteTimeline(
-        timelineId,
-      )
+    deleteTimeline: flow(function * (timelineId: number) {
+      const result: Types.DeleteTimelineResult = yield self.environment.api.deleteTimeline(timelineId)
 
       if (result.kind === "ok") {
         self.deleteTimelineFromStore(timelineId)

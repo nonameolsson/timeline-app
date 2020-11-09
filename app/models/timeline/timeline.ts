@@ -38,14 +38,14 @@ export const TimelineModel = types
    * Following actions will be called with data received from the API and modify the store.
    */
   .actions(self => ({
-    updateTimelineInStore: (timelineSnapshot: Types.GetTimelineResponse) => {
+    updateTimelineInStore: (timelineSnapshot: Types.TimelineResponse) => {
       // eslint-disable-next-line
       const { created_at, description, title, updated_at } = timelineSnapshot
 
       // eslint-disable-next-line
-      self.created_at = created_at // TODO: Don't use camelCase in store
+      self.created_at = created_at
       // eslint-disable-next-line
-      self.updated_at = updated_at // TODO: Don't use camelCase in store
+      self.updated_at = updated_at
       self.title = title
       self.description = description
     },
@@ -57,8 +57,10 @@ export const TimelineModel = types
     },
 
     deleteEventFromStore: (id: number) => {
-      const eventToDelete = self.getEvent(id) as Event // TODO: Should we use type casting or make sure higher in the tree it will be an Event?
-      destroy(eventToDelete)
+      const eventToDelete = self.getEvent(id)
+      if (eventToDelete) {
+        destroy(eventToDelete)
+      }
     },
   }))
   /**
@@ -85,18 +87,18 @@ export const TimelineModel = types
       }
     }),
 
-    deleteEvent: flow(function * (id: string) {
+    deleteEvent: flow(function * (id: number) {
       const result: Types.DeleteEventResult = yield self.environment.api.deleteEvent(id)
 
       if (result.kind === "ok") {
-        self.deleteEventFromStore(result.event)
+        self.deleteEventFromStore(result.data.id)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
     }),
 
     deleteAllEvents: flow(function * () {
-      const eventsToDelete: string[] = []
+      const eventsToDelete: number[] = []
 
       yield Promise.all(
         self.events.map(async event => {

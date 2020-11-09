@@ -149,7 +149,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.GetTimelineResponse[] = response.data
+      const data: Types.TimelineResponse[] = response.data
 
       return { kind: "ok", data }
     } catch {
@@ -177,7 +177,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.GetTimelineResponse[] = response.data
+      const data: Types.TimelineResponse[] = response.data
 
       return { kind: "ok", data }
     } catch {
@@ -248,12 +248,12 @@ export class Api {
   /**
    * Delete a timeline
    *
-   * @param id {string} ID of timeline to delete
+   * @param id {number} ID of timeline to delete
    *
    * @returns {Promise<Types.DeleteTimelinesResult>}
    * @memberof Api
    */
-  async deleteTimeline(id: string): Promise<Types.DeleteTimelineResult> {
+  async deleteTimeline(id: number): Promise<Types.DeleteTimelineResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.delete(`/timelines/${id}`)
 

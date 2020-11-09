@@ -2,7 +2,7 @@
 
 import { GeneralApiProblem } from "../api-problem"
 
-export interface GetTimelineResponse {
+export interface TimelineResponse {
   id: number
   title: string
   description: string | null
@@ -19,29 +19,9 @@ export interface PostTimelineRequest {
   user: number
 }
 
-export interface PostTimelineResponse {
-  id: number
-  title: string
-  description: string | null
-  user: TimelineUser
-  created_at: string
-  updated_at: string
-  events: TimelineEvent[]
-}
-
 export interface PutTimelineRequest {
   title: string | null
   description: string | null
-}
-
-export interface PutTimelineResponse {
-  id: number
-  title: string | null
-  description: string | null
-  user: TimelineUser
-  created_at: string
-  updated_at: string
-  events: Event[]
 }
 
 export interface DeleteTimelineResponse {
@@ -76,9 +56,9 @@ interface TimelineUser {
   updated_at: string
 }
 
-export type GetTimelinesResult = { kind: "ok"; data: GetTimelineResponse[] } | GeneralApiProblem
-export type GetTimelineResult = { kind: "ok"; data: GetTimelineResponse } | GeneralApiProblem
+export type GetTimelinesResult = { kind: "ok"; data: TimelineResponse[] } | GeneralApiProblem
+export type GetTimelineResult = { kind: "ok"; data: TimelineResponse } | GeneralApiProblem
 
-export type PutTimelineResult = { kind: "ok"; data: PutTimelineResponse } | GeneralApiProblem
-export type PostTimelineResult = { kind: "ok"; data: PostTimelineResponse } | GeneralApiProblem
+export type PutTimelineResult = { kind: "ok"; data: TimelineResponse } | GeneralApiProblem
+export type PostTimelineResult = { kind: "ok"; data: TimelineResponse } | GeneralApiProblem
 export type DeleteTimelineResult = { kind: "ok"; data: DeleteTimelineResponse } | GeneralApiProblem
