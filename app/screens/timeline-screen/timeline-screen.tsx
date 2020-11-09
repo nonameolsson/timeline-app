@@ -6,9 +6,11 @@ import React, { FunctionComponent as Component, useCallback } from "react"
 
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { Timeline } from "navigation/types"
+import { MaterialHeaderButtons, Item } from "components"
+import { formatDateYear } from "utils/date"
+
 import { useStores } from "models"
 import { styles } from "./timeline-screen.styles"
-import { MaterialHeaderButtons, Item } from "components"
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
   const { timelineStore } = useStores()
@@ -91,12 +93,12 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   }
 
   const renderEventList = () => {
-    const events = timeline.events.map(event => (
+    const events = timeline.events.sort((a, b) => a.date > b.date ? 1 : a.date < b.date ? -1 : 0).map(event => (
       <List.Item
         key={event.id}
         onPress={() => openEvent(event.id)}
         title={event.title}
-        description={event.description}
+        description={formatDateYear(event.date)}
       />
     ))
 
@@ -110,7 +112,6 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
           <Text>{timeline.description}</Text>
         </Card>
 
-        {/* <Button onPress={() => navigation.navigate(null, { timelineId: timeline.id })}>Add new event</Button> */}
         <Headline>Events - {timeline.events.length}</Headline>
 
         {renderEventList()}

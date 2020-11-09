@@ -59,7 +59,8 @@ export const TimelineStoreModel = types
           url: event.url,
           timeline: event.timeline,
           created_at: event.created_at,
-          updated_at: event.updated_at
+          updated_at: event.updated_at,
+          date: new Date(event.date)
         })
       }
 
