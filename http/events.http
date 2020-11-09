@@ -1,4 +1,4 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjA0OTA2NzkxLCJleHAiOjE2MDc0OTg3OTF9.6tC7S_aK-dP7FDDLA4UbfPAQR4XqEGn3ttZkuOfqS-w
+@token =
 
 GET http://localhost:1337/events
 Authorization: Bearer {{token}}
