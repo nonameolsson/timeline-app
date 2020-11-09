@@ -26,8 +26,8 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
     resolver: yupResolver(EditTimelineFormSchema),
     mode: "onChange",
     defaultValues: {
-      title: timeline?.title,
-      description: timeline?.description,
+      title: timeline.title || '',
+      description: timeline.description || '',
     },
   })
 

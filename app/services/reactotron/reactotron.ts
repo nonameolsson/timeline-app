@@ -122,6 +122,8 @@ export class Reactotron {
       if (this.config.useAsyncStorage) {
         Tron.setAsyncStorageHandler(AsyncStorage)
       }
+
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       Tron.useReactNative({
         asyncStorage: this.config.useAsyncStorage ? undefined : false,
       })

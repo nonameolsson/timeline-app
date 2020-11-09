@@ -28,6 +28,10 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
     resolver: yupResolver(AddTimelineFormSchema),
     mode: "onBlur",
+    defaultValues: {
+      title: '',
+      description: ''
+    }
   })
 
   React.useLayoutEffect(() => {
