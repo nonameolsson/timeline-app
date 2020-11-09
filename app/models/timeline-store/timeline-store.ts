@@ -11,7 +11,7 @@ import * as Types from "services/api/api.types"
 export const TimelineStoreModel = types
   .model("TimelineStore")
   .props({
-    timelines: types.map(TimelineModel)
+    timelines: types.map(TimelineModel),
   })
   .extend(withEnvironment)
   .views(self => ({
@@ -39,7 +39,7 @@ export const TimelineStoreModel = types
       const modifiedArr = arr.map(item => item[1])
 
       return modifiedArr
-    }
+    },
   }))
   /**
    * Following actions will be called with data received from the API and modify the store.
@@ -49,19 +49,21 @@ export const TimelineStoreModel = types
       self.timelines.clear()
     },
 
-    addTimelinesToStore: (timelineSnapshot: Types.Timeline[]) => {
-      const timelineModelFromSnapshot = (timeline) => {
+    addTimelinesToStore: (timelineSnapshot: Types.GetTimelineResponse[]) => {
+      const timelineModelFromSnapshot = timeline => {
         return TimelineModel.create({
           id: timeline.id.toString(),
           title: timeline.title,
           description: timeline.description,
           events: timeline.events.map(event => EventModelFromData(event)),
           createdAt: timeline.created_at,
-          updatedAt: timeline.updated_at
+          updatedAt: timeline.updated_at,
         })
       }
 
-      const timelinesModel: Timeline[] = timelineSnapshot.map(timeline => timelineModelFromSnapshot(timeline))
+      const timelinesModel: Timeline[] = timelineSnapshot.map(timeline =>
+        timelineModelFromSnapshot(timeline),
+      )
       timelinesModel.forEach(timeline => {
         // Do not add/update timeline if it already exits
         if (!self.timelines.has(timeline.id)) {
@@ -72,16 +74,28 @@ export const TimelineStoreModel = types
 
     deleteTimelineFromStore: (timelineId: string) => {
       self.timelines.delete(timelineId)
-    }
+    },
   }))
   /**
    * Following actions will send requests to the API, and call actions defined in the first action definition
    */
   .actions(self => ({
-    createTimeline: flow(function * ({ user, title, description }: { user: string, title: string, description?: string}) {
-      const result: Types.PostTimelineResult = yield self.environment.api.createTimeline({ user, title, description })
+    createTimeline: flow(function*({
+      user,
+      title,
+      description,
+    }: {
+      user: string
+      title: string
+      description?: string
+    }) {
+      const result: Types.PostTimelineResult = yield self.environment.api.createTimeline({
+        user,
+        title,
+        description,
+      })
 
-      if (result.kind === 'ok') {
+      if (result.kind === "ok") {
         const timelineToAdd: any[] = [] // NOTE: Since `addTimelineToStore` expects an array, we create one for just this timeline.
         timelineToAdd.push(result.timeline)
         self.addTimelinesToStore(timelineToAdd)
@@ -89,7 +103,7 @@ export const TimelineStoreModel = types
         __DEV__ && console.tron.log(result.kind)
       }
     }),
-    getTimelines: flow(function * (userId: number) {
+    getTimelines: flow(function*(userId: number) {
       const result: Types.GetTimelinesResult = yield self.environment.api.getTimelinesByUser(userId)
 
       if (result.kind === "ok") {
@@ -99,8 +113,10 @@ export const TimelineStoreModel = types
       }
     }),
 
-    deleteTimeline: flow(function * (timelineId: string) {
-      const result: Types.DeleteTimelineResult = yield self.environment.api.deleteTimeline(timelineId)
+    deleteTimeline: flow(function*(timelineId: string) {
+      const result: Types.DeleteTimelineResult = yield self.environment.api.deleteTimeline(
+        timelineId,
+      )
 
       if (result.kind === "ok") {
         self.deleteTimelineFromStore(timelineId)

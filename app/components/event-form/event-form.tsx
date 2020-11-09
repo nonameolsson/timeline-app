@@ -1,17 +1,18 @@
 import React from "react"
 import { View } from "react-native"
-import { Text, useTheme, HelperText, TextInput } from "react-native-paper"
+import { useTheme, HelperText, TextInput } from "react-native-paper"
 import { useNavigation } from "@react-navigation/native"
 import { useForm, Controller } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers"
 
 import { MaterialHeaderButtons, Item } from "components"
-import { AddEventFormSchema } from "./add-event-form.validation"
-import { AddEventFormData } from "./add-event-form.types"
+import { EventFormSchema } from "./event-form.validation"
+import { EventFormData } from "./event-form.types"
+import { Event } from "models"
 
-export interface AddEventFormProps {
-  onSubmit: (data: AddEventFormData) => void
-  errorText: string | null
+export interface EventFormProps {
+  event?: Event
+  onSubmit: (data: EventFormData) => void
 }
 
 /**
@@ -19,28 +20,33 @@ export interface AddEventFormProps {
  *
  * Component description here for TypeScript tips.
  */
-export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
+export const EventForm = ({ event, onSubmit }: EventFormProps) => {
   const navigation = useNavigation()
   const {
     colors: { error },
   } = useTheme()
 
-  const { control, formState, handleSubmit, errors } = useForm<AddEventFormData>({
-    resolver: yupResolver(AddEventFormSchema),
+  const { control, formState, handleSubmit, errors } = useForm<EventFormData>({
+    resolver: yupResolver(EventFormSchema),
     mode: "onBlur",
     defaultValues: {
-      description: "",
-      title: "",
-      url: "https://",
+      id: event?.id || undefined,
+      title: event?.title || "",
+      description: event?.description || "",
+      url: event?.url || "",
     },
   })
 
   React.useLayoutEffect(() => {
-    const localSubmit = (data: AddEventFormData) => {
-      const updatedData: AddEventFormData = {
+    const localSubmit = (data: EventFormData) => {
+      const updatedData: EventFormData = {
         title: data.title,
         description: data.description,
         url: data.url,
+      }
+
+      if (event?.id) {
+        updatedData.id = event.id
       }
 
       onSubmit(updatedData)
@@ -49,11 +55,6 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
     navigation.setOptions({
       // in your app, extract the arrow function into a separate component
       // to avoid creating a new one every time
-      headerLeft: () => (
-        <MaterialHeaderButtons left={true}>
-          <Item title="Cancel" onPress={() => navigation.goBack()} />
-        </MaterialHeaderButtons>
-      ),
       headerRight: () => (
         <MaterialHeaderButtons left={true}>
           <Item
@@ -64,7 +65,7 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
         </MaterialHeaderButtons>
       ),
     })
-  }, [formState.isSubmitting, formState.isValid, handleSubmit, navigation, onSubmit])
+  }, [event?.id, formState.isSubmitting, formState.isValid, handleSubmit, navigation, onSubmit])
 
   return (
     <View>
@@ -130,8 +131,6 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
           </>
         )}
       />
-
-      <Text>{errorText || ""}</Text>
     </View>
   )
 }

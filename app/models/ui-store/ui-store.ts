@@ -6,25 +6,25 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 export const UiStoreModel = types
   .model("UiStore")
   .props({
-    theme: types.enumeration('Theme', ['light', 'dark'])
+    theme: types.enumeration("Theme", ["light", "dark"]),
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     setDarkTheme: () => {
-      self.theme = 'dark'
+      self.theme = "dark"
     },
 
     setLightTheme: () => {
-      self.theme = 'light'
+      self.theme = "light"
     },
 
     toggleTheme: () => {
-      if (self.theme === 'light') {
-        self.theme = 'dark'
+      if (self.theme === "light") {
+        self.theme = "dark"
       } else {
-        self.theme = 'light'
+        self.theme = "light"
       }
-    }
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**

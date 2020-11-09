@@ -11,13 +11,13 @@ export const UserStoreModel = types
   .model("UserStore")
   .props({
     jwt: types.maybeNull(types.string),
-    user: types.maybeNull(UserModel)
+    user: types.maybeNull(UserModel),
   })
   .extend(withEnvironment)
   .views(self => ({
     isLoggedIn: () => {
       return !!self.jwt
-    }
+    },
   }))
   .actions(self => ({
     resetStore: () => {
@@ -26,12 +26,12 @@ export const UserStoreModel = types
     },
     saveJwt: (jwt: string) => {
       self.jwt = jwt
-      self.environment.api.apisauce.setHeader('Authorization', `Bearer ${jwt}`)
+      self.environment.api.apisauce.setHeader("Authorization", `Bearer ${jwt}`)
     },
     saveUser: (userSnapshot: UserSnapshot) => {
       const userModel: User = UserModel.create(userSnapshot) // create model instances from the plain objects
       self.user = userModel // Replace the existing data with the new data
-    }
+    },
   }))
   .actions(self => ({
     logOut: () => {
@@ -42,21 +42,21 @@ export const UserStoreModel = types
       root.timelineStore.resetStore()
 
       // Reset Apisauce
-      self.environment.api.apisauce.deleteHeader('Authorization')
+      self.environment.api.apisauce.deleteHeader("Authorization")
     },
-    login: flow(function * (identifier: string, password: string) {
+    login: flow(function*(identifier: string, password: string) {
       const result: GetLoginResult = yield self.environment.api.login(identifier, password)
 
       if (result.kind === "ok") {
         self.saveUser(result.data.user)
         self.saveJwt(result.data.jwt)
-        self.environment.api.apisauce.setHeader('Authorization', `Bearer ${result.data.jwt}`)
+        self.environment.api.apisauce.setHeader("Authorization", `Bearer ${result.data.jwt}`)
       } else {
         __DEV__ && console.tron.log(result.kind)
         return result
       }
     }),
-    getUser: flow(function * (user: number) {
+    getUser: flow(function*(user: number) {
       const result: GetUserResult = yield self.environment.api.getUser(user)
 
       if (result.kind === "ok") {
@@ -64,7 +64,7 @@ export const UserStoreModel = types
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
-    })
+    }),
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**

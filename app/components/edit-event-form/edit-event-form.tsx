@@ -5,11 +5,11 @@ import React, { FunctionComponent as Component } from "react"
 
 import { EditEventFormSchema } from "./edit-event-form.validation"
 import { Event } from "models"
-import { useHeaderButtons } from 'utils/hooks'
+import { useHeaderButtons } from "utils/hooks"
 
 export type EditEventFormData = {
-  title: string,
-  description: string,
+  title: string
+  description: string
   url?: string
 }
 
@@ -26,12 +26,12 @@ export interface EditEventFormProps {
 export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }) => {
   const { control, errors, formState, handleSubmit } = useForm<EditEventFormData>({
     resolver: yupResolver(EditEventFormSchema),
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
       title: event.title,
       description: event.description,
-      url: event.url
-    }
+      url: event.url,
+    },
   })
 
   const localSubmit = (data: EditEventFormData) => {
@@ -45,7 +45,13 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     onSubmit(updatedData)
   }
 
-  const headerRight = () => <Appbar.Action disabled={!formState.isValid || formState.isSubmitting} icon="check" onPress={handleSubmit(localSubmit)} />
+  const headerRight = () => (
+    <Appbar.Action
+      disabled={!formState.isValid || formState.isSubmitting}
+      icon="check"
+      onPress={handleSubmit(localSubmit)}
+    />
+  )
 
   useHeaderButtons({ right: headerRight })
 
@@ -54,7 +60,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       <Controller
         control={control}
         name="title"
-        label='Title'
+        label="Title"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
@@ -74,7 +80,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       <Controller
         control={control}
         name="description"
-        label='Description'
+        label="Description"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
@@ -94,7 +100,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       <Controller
         control={control}
         name="url"
-        label='URL'
+        label="URL"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput

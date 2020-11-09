@@ -1,14 +1,14 @@
 import React, { FunctionComponent as Component, useCallback } from "react"
 import { Alert, SafeAreaView, View } from "react-native"
-import * as WebBroser from 'expo-web-browser'
+import * as WebBrowser from "expo-web-browser"
 import { Text, useTheme, Subheading, Headline, List } from "react-native-paper"
-import { observer } from 'mobx-react-lite'
+import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 
 import { useStores } from "models"
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
-import { styles } from './event-screen.styles'
-import { MaterialHeaderButtons, Item } from 'components'
+import { styles } from "./event-screen.styles"
+import { MaterialHeaderButtons, Item } from "components"
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
@@ -24,76 +24,94 @@ export const EventScreen: Component = observer(function EventScreen() {
   useFocusEffect(
     useCallback(() => {
       if (!params.action || !event) return
-
-      if (params.action.type === 'EDIT_EVENT') {
+      if (params.action.type === "EDIT_EVENT") {
         event.updateEvent(params.action.payload)
       }
-    }, [event, params.action])
+    }, [event, params.action]),
   )
 
   const deleteEvent = useCallback(() => {
     const currentEvent = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
     if (!currentEvent) return
 
-    navigation.navigate('timeline', {
+    navigation.navigate("timeline", {
       id: params.timelineId,
       action: {
-        type: 'DELETE_EVENT',
+        type: "DELETE_EVENT",
         meta: {
-          id: currentEvent.id
-        }
-      }
+          id: currentEvent.id,
+        },
+      },
     })
   }, [navigation, params.eventId, params.timelineId, timelineStore])
 
-  const showDeleteAlert = useCallback(function showDeleteAlert() {
-    Alert.alert(
-      "Delete event",
-      "Do you really want to delete it?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => deleteEvent() }
-      ],
-      { cancelable: false }
-    )
-  }, [deleteEvent])
+  const showDeleteAlert = useCallback(
+    function showDeleteAlert() {
+      Alert.alert(
+        "Delete event",
+        "Do you really want to delete it?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => deleteEvent() },
+        ],
+        { cancelable: false },
+      )
+    },
+    [deleteEvent],
+  )
 
-  React.useLayoutEffect(function HeaderButtons () {
-    if (event) {
-      navigation.setOptions({
-      // in your app, extract the arrow function into a separate component
-      // to avoid creating a new one every time
-        headerRight: () => (
-          <MaterialHeaderButtons>
-            <Item title="Delete" iconName="delete" onPress={showDeleteAlert} />
-            <Item title="Edit" iconName="edit" onPress={() => navigation.navigate("editEvent", { eventId: event.id, timelineId: params.timelineId })} />
-          </MaterialHeaderButtons>
-        ),
-      })
-    }
-  }, [event, event?.id, navigation, params.timelineId, showDeleteAlert])
+  React.useLayoutEffect(
+    function HeaderButtons() {
+      if (event) {
+        navigation.setOptions({
+          // in your app, extract the arrow function into a separate component
+          // to avoid creating a new one every time
+          headerRight: () => (
+            <MaterialHeaderButtons>
+              <Item title="Delete" iconName="delete" onPress={showDeleteAlert} />
+              <Item
+                title="Edit"
+                iconName="edit"
+                onPress={() =>
+                  navigation.navigate("editEvent", {
+                    eventId: event.id,
+                    timelineId: params.timelineId,
+                  })
+                }
+              />
+            </MaterialHeaderButtons>
+          ),
+        })
+      }
+    },
+    [event, event?.id, navigation, params.timelineId, showDeleteAlert],
+  )
 
   if (!event) return null
 
   const openBrowser = async () => {
     if (event.url) {
-      await WebBroser.openBrowserAsync(event.url, { enableBarCollapsing: true, enableDefaultShareMenuItem: true })
+      try {
+        const res = await WebBrowser.openBrowserAsync(event.url, {
+          enableBarCollapsing: true,
+          enableDefaultShareMenuItem: true,
+        })
+        console.log("res", res)
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 
   const renderUrlList = () => {
     if (event.url) {
-      return (
-        <List.Item title={event.url} onPress={openBrowser} />
-      )
+      return <List.Item title={event.url} onPress={openBrowser} />
     } else {
-      return (
-        <List.Item title="No refefence added" />
-      )
+      return <List.Item title="No refefence added" />
     }
   }
 

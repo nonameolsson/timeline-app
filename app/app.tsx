@@ -16,15 +16,15 @@ import {
   NavigationContainerRef,
   DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme,
-} from '@react-navigation/native'
+} from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
 import {
   DefaultTheme as PaperDefaultTheme,
   DarkTheme as PaperDarkTheme,
-  Provider as PaperProvider
-} from 'react-native-paper'
-import { OverflowMenuProvider } from 'react-navigation-header-buttons'
+  Provider as PaperProvider,
+} from "react-native-paper"
+import { OverflowMenuProvider } from "react-navigation-header-buttons"
 
 import { initFonts } from "./theme/fonts"
 import * as storage from "./utils/storage"
@@ -57,9 +57,9 @@ const CombinedDefaultTheme = {
   ...NavigationDefaultTheme,
   colors: {
     ...PaperDefaultTheme.colors,
-    ...NavigationDefaultTheme.colors
+    ...NavigationDefaultTheme.colors,
   },
-  mode: 'adaptive'
+  mode: "adaptive",
 }
 
 /**
@@ -90,7 +90,7 @@ const App = observer(() => {
   // with your own loading component if you wish.
   if (!rootStore) return null
 
-  const theme = rootStore.uiStore.theme === 'light' ? CombinedDefaultTheme : CombinedDarkTheme
+  const theme = rootStore.uiStore.theme === "light" ? CombinedDefaultTheme : CombinedDarkTheme
 
   // otherwise, we're ready to render the app
   return (

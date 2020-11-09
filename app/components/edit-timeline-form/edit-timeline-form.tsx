@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers"
 import { Timeline } from "models"
 import { EditTimelineFormSchema } from "./edit-timeline-form.validation"
 
-import { useHeaderButtons } from 'utils/hooks'
+import { useHeaderButtons } from "utils/hooks"
 
 export interface EditTimelineFormProps {
   timeline: Timeline
@@ -14,8 +14,8 @@ export interface EditTimelineFormProps {
 }
 
 export type EditTimelineFormData = {
-  title: string,
-  description: string,
+  title: string
+  description: string
 }
 
 /**
@@ -24,11 +24,11 @@ export type EditTimelineFormData = {
 export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, onSubmit }) => {
   const { control, errors, formState, handleSubmit } = useForm<EditTimelineFormData>({
     resolver: yupResolver(EditTimelineFormSchema),
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
       title: timeline?.title,
-      description: timeline?.description
-    }
+      description: timeline?.description,
+    },
   })
 
   const localSubmit = (data: EditTimelineFormData) => {
@@ -41,7 +41,13 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
     onSubmit(updatedData)
   }
 
-  const headerRight = () => <Appbar.Action disabled={!formState.isValid || formState.isSubmitting} icon="check" onPress={handleSubmit(localSubmit)} />
+  const headerRight = () => (
+    <Appbar.Action
+      disabled={!formState.isValid || formState.isSubmitting}
+      icon="check"
+      onPress={handleSubmit(localSubmit)}
+    />
+  )
 
   useHeaderButtons({ right: headerRight })
 
@@ -50,7 +56,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
       <Controller
         control={control}
         name="title"
-        label='Title'
+        label="Title"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
@@ -70,7 +76,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
       <Controller
         control={control}
         name="description"
-        label='Description'
+        label="Description"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput

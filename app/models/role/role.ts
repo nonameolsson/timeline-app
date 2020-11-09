@@ -9,7 +9,7 @@ export const RoleModel = types
     id: types.identifierNumber,
     name: types.string,
     description: types.string,
-    type: types.enumeration(['authenticated', 'public'])
+    type: types.enumeration(["authenticated", "public"]),
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

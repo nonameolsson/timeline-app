@@ -2,12 +2,14 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import { SafeAreaView, View } from "react-native"
 
-import { AddTimelineForm } from 'components'
-import { useStores } from 'models'
-import { addTimelineScreenStyles as styles } from './add-timeline-screen.styles'
-import { AddTimelineScreenProps } from './add-timeline-screen.interfaces'
+import { AddTimelineForm } from "components"
+import { useStores } from "models"
+import { addTimelineScreenStyles as styles } from "./add-timeline-screen.styles"
+import { AddTimelineScreenProps } from "./add-timeline-screen.interfaces"
 
-export const AddTimelineScreen = observer(function AddTimelineScreen({ navigation }: AddTimelineScreenProps) {
+export const AddTimelineScreen = observer(function AddTimelineScreen({
+  navigation,
+}: AddTimelineScreenProps) {
   const { userStore, timelineStore } = useStores()
 
   const handleSubmit = async ({ title, description }) => {

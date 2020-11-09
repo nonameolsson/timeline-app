@@ -12,7 +12,7 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "models"
 
 import { AuthNavigator } from "./auth-navigator"
-import { ModalStackScreen } from './modal-stack'
+import { ModalStackScreen } from "./modal-stack"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -42,15 +42,9 @@ const RootStack = observer(function RootStack() {
       }}
     >
       {userStore.isLoggedIn() ? (
-        <Stack.Screen
-          name="modalStack"
-          component={ModalStackScreen}
-        />
+        <Stack.Screen name="modalStack" component={ModalStackScreen} />
       ) : (
-        <Stack.Screen
-          name="authStack"
-          component={AuthNavigator}
-        />
+        <Stack.Screen name="authStack" component={AuthNavigator} />
       )}
     </Stack.Navigator>
   )

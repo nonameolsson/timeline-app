@@ -1,6 +1,6 @@
-import color from 'color'
-import { Animated } from 'react-native'
-import { DarkTheme } from 'react-native-paper'
+import color from "color"
+import { Animated } from "react-native"
+import { DarkTheme } from "react-native-paper"
 
 const elevationOverlayTransparency: { [id: number]: number } = {
   1: 5,
@@ -39,13 +39,13 @@ const calculateColor = (surfaceColor: string, elevation: number) => {
     overlayTransparency = elevationOverlayTransparency[1]
   }
   return color(surfaceColor)
-    .mix(color('white'), overlayTransparency * 0.01)
+    .mix(color("white"), overlayTransparency * 0.01)
     .hex()
 }
 
 export const overlay = (
   elevation: number | Animated.Value = 1,
-  surfaceColor: string = DarkTheme.colors.surface
+  surfaceColor: string = DarkTheme.colors.surface,
 ) => {
   if (elevation instanceof Animated.Value) {
     const inputRange = [0, 1, 2, 3, 8, 24]

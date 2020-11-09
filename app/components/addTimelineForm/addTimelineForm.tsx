@@ -1,16 +1,16 @@
 import React from "react"
 import { TextInput, Text, HelperText, useTheme } from "react-native-paper"
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm } from "react-hook-form"
 import { View } from "react-native"
-import { yupResolver } from '@hookform/resolvers'
+import { yupResolver } from "@hookform/resolvers"
 
-import { FormData } from './addTimelineForm.types'
-import { AddTimelineFormSchema } from './addTimelineForm.validation'
-import { MaterialHeaderButtons, Item } from 'components'
-import { useNavigation } from '@react-navigation/native'
+import { FormData } from "./addTimelineForm.types"
+import { AddTimelineFormSchema } from "./addTimelineForm.validation"
+import { MaterialHeaderButtons, Item } from "components"
+import { useNavigation } from "@react-navigation/native"
 
 interface AddTimelineFormProps {
-  onSubmit: (data: { title: string, description: string }) => void
+  onSubmit: (data: { title: string; description: string }) => void
   errorText: string | null
 }
 
@@ -27,7 +27,7 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
 
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
     resolver: yupResolver(AddTimelineFormSchema),
-    mode: 'onBlur'
+    mode: "onBlur",
   })
 
   React.useLayoutEffect(() => {
@@ -50,7 +50,11 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
       ),
       headerRight: () => (
         <MaterialHeaderButtons left={true}>
-          <Item title="Save" disabled={!formState.isValid || formState.isSubmitting} onPress={handleSubmit(localSubmit)} />
+          <Item
+            title="Save"
+            disabled={!formState.isValid || formState.isSubmitting}
+            onPress={handleSubmit(localSubmit)}
+          />
         </MaterialHeaderButtons>
       ),
     })
@@ -67,17 +71,8 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
               autoCapitalize="words" // TODO: Only on English, not Swedish
               autoCorrect={false}
               label="Title"
-              left={
-                <TextInput.Icon
-                  name="format-title"
-                />
-              }
-              right={errors.title &&
-              <TextInput.Icon
-                name="alert-circle"
-                color={error}
-              />
-              }
+              left={<TextInput.Icon name="format-title" />}
+              right={errors.title && <TextInput.Icon name="alert-circle" color={error} />}
               disabled={formState.isSubmitting}
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
@@ -97,11 +92,7 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
           <TextInput
             disabled={formState.isSubmitting}
             onBlur={onBlur}
-            left={
-              <TextInput.Icon
-                name="script-text-outline"
-              />
-            }
+            left={<TextInput.Icon name="script-text-outline" />}
             onChangeText={text => onChange(text)}
             label="Description"
             spellCheck={true}
@@ -111,7 +102,7 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
         )}
       />
 
-      <Text>{errorText || ''}</Text>
+      <Text>{errorText || ""}</Text>
     </View>
   )
 }

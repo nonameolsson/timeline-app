@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/camelcase */
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 import { withEnvironment } from "models/extensions/with-environment"
@@ -9,40 +10,40 @@ import * as Types from "services/api/api.types"
 export const EventModel = types
   .model("Event")
   .props({
-    id: types.identifier,
+    id: types.identifierNumber,
     title: types.string,
-    description: types.string,
-    timeline: types.number,
+    description: types.maybeNull(types.string),
+    timeline: types.maybeNull(types.number),
     url: types.maybeNull(types.string),
-    createdAt: types.string,
-    updatedAt: types.string
+    created_at: types.string,
+    updated_at: types.string,
   })
   .extend(withEnvironment)
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   // Following actions will send requests to the API, and call actions defined in the first action definition
   .actions(self => {
-    const updateEventInStore = (eventSnapshot: Types.Event) => {
+    const updateEventInStore = (eventSnapshot: Types.EventResponse) => {
       const { title, description, created_at, url, timeline, updated_at } = eventSnapshot
       self.title = title
       self.description = description
-      self.updatedAt = updated_at
       self.url = url
-      self.createdAt = created_at
-      self.timeline = timeline.id
+      self.timeline = timeline ? timeline.id : null
+      self.updated_at = updated_at
+      self.created_at = created_at
     }
 
-    const updateEvent = flow(function * (event: { id: string, title: string, url?: string, description: string }) {
-      const result: Types.PutEventResult = yield self.environment.api.updateEvent(event)
+    const updateEvent = flow(function * (event: Types.EventRequest, id: number) {
+      const result: Types.PutEventResult = yield self.environment.api.updateEvent(event, id)
 
       if (result.kind === "ok") {
-        updateEventInStore(result.event)
+        updateEventInStore(result.data)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
     })
 
     return {
-      updateEvent
+      updateEvent,
     }
   })
 
@@ -59,17 +60,14 @@ export interface Event extends EventType {}
 type EventSnapshotType = SnapshotOut<typeof EventModel>
 export interface EventSnapshot extends EventSnapshotType {}
 
-export const EventModelFromData = (event: Types.TimelineEvent | Types.Event): EventType => {
-  // Extract the ID if neccessary. On some endpoints the API returns a timeline instead of just the id
-  const timelineId = typeof (event.timeline) === 'number' ? event.timeline : event.timeline.id
-
+export const EventModelFromData = (event: Types.EventResponse) => {
   return EventModel.create({
-    id: event.id.toString(),
+    id: event.id,
     title: event.title,
     description: event.description,
     url: event.url,
-    timeline: timelineId,
-    createdAt: event.created_at,
-    updatedAt: event.updated_at
+    timeline: event.timeline ? event.timeline.id : null,
+    created_at: event.created_at,
+    updated_at: event.updated_at
   })
 }

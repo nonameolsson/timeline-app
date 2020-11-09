@@ -61,31 +61,24 @@ export class Api {
       if (problem) return problem
     }
 
-    const convertUser = raw => {
-      return {
-        id: raw.id,
-        name: raw.name,
-      }
-    }
-
     // transform the data into the format we are expecting
     try {
-      const rawUsers = response.data
-      const resultUsers: Types.User[] = rawUsers.map(convertUser)
+      const data: Types.GetUserResponse[] = response.data
 
-      return { kind: "ok", users: resultUsers }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
   }
 
   /**
- * Gets a single user by ID
- *
- * @param {number} id
- * @returns {Promise<Types.GetUserResult>}
- * @memberof Api
- */
+   * Gets a single user by ID
+   *
+   * @param {number} id ID of user
+   *
+   * @returns {Promise<Types.GetUserResult>}
+   * @memberof Api
+   */
   async getUser(id: number): Promise<Types.GetUserResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`)
@@ -98,35 +91,29 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const resultUser: Types.User = {
-        id: response.data.id,
-        email: response.data.email,
-        username: response.data.username,
-        blocked: response.data.blocked,
-        confirmed: response.data.confirmed,
-        createdAt: response.data.created_at,
-        updatedAt: response.data.updated_at,
-        provider: response.data.provider,
-        role: response.data.role,
-      }
+      const data: Types.GetUserResponse = response.data
 
-      return { kind: "ok", user: resultUser }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
   }
 
   /**
- * Login a user with identifier and password
- *
- * @param {string} identifier Could be something like e-mail or username
- * @param {string} password The password used to login
- * @returns {Promise<Types.GetLoginResult>}
- * @memberof Api
- */
-  async login(identifier: string, password: string): Promise<Types.GetLoginResult> {
+   * Login a user with identifier and password
+   *
+   * @param {string} identifier Could be something like e-mail or username
+   * @param {string} password The password used to login
+   *
+   * @returns {Promise<Types.PostLoginResult>}
+   * @memberof Api
+   */
+  async login(identifier: string, password: string): Promise<Types.PostLoginResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.post(`/auth/local`, { identifier, password })
+    const response: ApiResponse<any> = await this.apisauce.post(`/auth/local`, {
+      identifier,
+      password,
+    })
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -136,22 +123,9 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const rawLogin: Types.Login = {
-        jwt: response.data.jwt,
-        user: {
-          id: response.data.user.id,
-          email: response.data.user.email,
-          username: response.data.user.username,
-          blocked: response.data.user.blocked,
-          confirmed: response.data.user.confirmed,
-          createdAt: response.data.user.created_at,
-          updatedAt: response.data.user.updated_at,
-          provider: response.data.user.provider,
-          role: response.data.user.role,
-        }
-      }
+      const data: Types.PostLoginResponse = response.data
 
-      return { kind: "ok", data: rawLogin }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
@@ -173,20 +147,11 @@ export class Api {
       if (problem) return problem
     }
 
-    const convertTimeline = raw => {
-      return {
-        id: raw.id,
-        title: raw.title,
-        description: raw.description
-      }
-    }
-
     // transform the data into the format we are expecting
     try {
-      const rawTimelines = response.data
-      const resultTimelines: Types.Timeline[] = rawTimelines.map(convertTimeline)
+      const data: Types.GetTimelineResponse[] = response.data
 
-      return { kind: "ok", timelines: resultTimelines }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
@@ -195,13 +160,14 @@ export class Api {
   /**
    * Get all timelines for a specific user.
    *
-   * @param {number} userId
+   * @param id {number} ID of the user used to retrieve all timelines
+   *
    * @returns {Promise<Types.GetTimelinesResult>}
    * @memberof Api
    */
-  async getTimelinesByUser(userId: number): Promise<Types.GetTimelinesResult> {
+  async getTimelinesByUser(id: number): Promise<Types.GetTimelinesResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/timelines/?user.id=${userId}`)
+    const response: ApiResponse<any> = await this.apisauce.get(`/timelines/?user.id=${id}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -211,9 +177,9 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const rawTimelines = response.data
+      const data: Types.GetTimelineResponse[] = response.data
 
-      return { kind: "ok", timelines: rawTimelines }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
@@ -222,10 +188,12 @@ export class Api {
   /**
    * Create a new timeline
    *
+   * @param data {Types.PostTimelineRequest} Data used to create a new timeline
+   *
    * @returns {Promise<Types.PostTimelineResult>}
    * @memberof Api
    */
-  async createTimeline(data: { user: string, title: string, description?: string }): Promise<Types.PostTimelineResult> { // TODO: Add correct type for timeline
+  async createTimeline(data: Types.PostTimelineRequest): Promise<Types.PostTimelineResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.post(`/timelines`, data)
 
@@ -237,9 +205,9 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const resultTimeline: Types.Timeline = response.data
+      const data: Types.PostTimelineResponse = response.data
 
-      return { kind: "ok", timeline: resultTimeline }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
@@ -248,12 +216,18 @@ export class Api {
   /**
    * Update a specific timeline
    *
+   * @param data {Types.PutTimelineRequest} Data used to updated existing timeline
+   * @param id {number} ID the timeline to update
+   *
    * @returns {Promise<Types.PutTimelineResult>}
    * @memberof Api
    */
-  async updateTimeline(timeline: { id: string, title: string, description: string }): Promise<Types.PutTimelineResult> { // TODO: Add correct type for timeline
+  async updateTimeline(data: Types.PutTimelineRequest, id: number): Promise<Types.PutTimelineResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.put(`/timelines/${timeline.id}`, timeline)
+    const response: ApiResponse<any> = await this.apisauce.put(
+      `/timelines/${id}`,
+      data,
+    )
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -263,9 +237,9 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const resultTimeline: Types.Timeline = response.data
+      const data: Types.PutTimelineResponse = response.data
 
-      return { kind: "ok", timeline: resultTimeline }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
@@ -274,12 +248,14 @@ export class Api {
   /**
    * Delete a timeline
    *
-   * @returns {Promise<Types.deleteTimelinesResult>}
+   * @param id {string} ID of timeline to delete
+   *
+   * @returns {Promise<Types.DeleteTimelinesResult>}
    * @memberof Api
    */
-  async deleteTimeline(timelineId: string): Promise<Types.DeleteTimelineResult> { // TODO: Add correct type for timeline
+  async deleteTimeline(id: string): Promise<Types.DeleteTimelineResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.delete(`/timelines/${timelineId}`)
+    const response: ApiResponse<any> = await this.apisauce.delete(`/timelines/${id}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -289,9 +265,9 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const resultTimeline: Types.Timeline = response.data
+      const data: Types.DeleteTimelineResponse = response.data
 
-      return { kind: "ok", timeline: resultTimeline }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
@@ -315,10 +291,9 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const rawEvents = response.data
-      // const resultEvents: Types.Event[] = rawEvents.map(convertEvent)
+      const data: Types.EventResponse[] = response.data
 
-      return { kind: "ok", events: rawEvents }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
@@ -327,12 +302,14 @@ export class Api {
   /**
    * Create an event
    *
+   * @param data {Types.EventRequest} The new event to create
+   *
    * @returns {Promise<Types.PutEventResult>}
    * @memberof Api
    */
-  async createEvent(event: { timeline: string, title: string, description?: string, url: string | null }): Promise<Types.PostEventResult> { // TODO: Add correct type for event
+  async createEvent(data: Types.EventRequest): Promise<Types.PostEventResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.post(`/events`, { ...event })
+    const response: ApiResponse<any> = await this.apisauce.post(`/events`, { ...data })
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -342,9 +319,9 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const resultEvent: Types.Event = response.data
+      const data: Types.EventResponse = response.data
 
-      return { kind: "ok", event: resultEvent }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
@@ -353,12 +330,15 @@ export class Api {
   /**
    * Update a specific event
    *
+   * @param data {Types.EventRequest} New data used to update existing event
+   * @param id {number} ID of the event to update
+   *
    * @returns {Promise<Types.PutEventResult>}
    * @memberof Api
    */
-  async updateEvent(event: { id: string, title: string, description: string }): Promise<Types.PutEventResult> { // TODO: Add correct type for event
+  async updateEvent(data: Types.EventRequest, id: number): Promise<Types.PutEventResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.put(`/events/${event.id}`, event)
+    const response: ApiResponse<any> = await this.apisauce.put(`/events/${id}`, data)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -368,9 +348,9 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const resultEvent: Types.Event = response.data
+      const data: Types.EventResponse = response.data
 
-      return { kind: "ok", event: resultEvent }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }
@@ -378,11 +358,12 @@ export class Api {
 
   /**
    * Delete a event
+   * @param id {number} ID of event to delete
    *
    * @returns {Promise<Types.DeleteEventResult>}
    * @memberof Api
    */
-  async deleteEvent(id: string): Promise<Types.DeleteEventResult> { // TODO: Add correct type for event
+  async deleteEvent(id: number): Promise<Types.DeleteEventResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.delete(`/events/${id}`)
 
@@ -394,9 +375,9 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const resultEvent: Types.Event = response.data
+      const data: Types.EventResponse = response.data
 
-      return { kind: "ok", event: resultEvent.id.toString() }
+      return { kind: "ok", data }
     } catch {
       return { kind: "bad-data" }
     }

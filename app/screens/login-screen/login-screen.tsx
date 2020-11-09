@@ -1,7 +1,7 @@
 import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
-import { Subheading, Headline, useTheme } from 'react-native-paper'
-import { View } from 'react-native'
+import { Subheading, Headline, useTheme } from "react-native-paper"
+import { View } from "react-native"
 
 import { LoginForm } from "components"
 import { useStores } from "models"
@@ -27,7 +27,7 @@ export const LoginScreen: Component = observer(function LoginScreen() {
       setError(translate(`login.errors.${response?.kind}`))
       setIsLoading(false)
     } catch (err) {
-      console.tron.error('login error', err)
+      console.tron.error("login error", err)
       setIsLoading(false)
     }
   }
