@@ -9,6 +9,7 @@ import { useStores } from "models"
 import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { styles } from "./event-screen.styles"
 import { MaterialHeaderButtons, Item } from "components"
+import { formatDateYear } from 'utils/date'
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
@@ -122,6 +123,8 @@ export const EventScreen: Component = observer(function EventScreen() {
         <Text>{event.title}</Text>
         <Subheading>Description</Subheading>
         <Text>{event.description}</Text>
+        <Subheading>Date</Subheading>
+        <Text>{formatDateYear(event.date)}</Text>
         <Headline>References</Headline>
         {renderUrlList()}
       </View>
