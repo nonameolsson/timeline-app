@@ -10,6 +10,7 @@ import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
 import { useStores } from "models"
 import { editEventScreenStyles as styles } from "./add-event-screen.styles"
 
+// #den här koden vet jag inte vad den gör, det är @nonameolsson som har koll
 export const EditEventScreen: Component = observer(function EditEventScreen() {
   const navigation = useNavigation<TimelineStackNavigationProp<"editEvent">>() // NOTE: Should this be a props instead?
   const { timelineStore } = useStores()

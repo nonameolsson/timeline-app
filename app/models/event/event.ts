@@ -17,7 +17,7 @@ export const EventModel = types
     url: types.maybeNull(types.string),
     created_at: types.string,
     updated_at: types.string,
-    date: types.Date
+    date: types.string
   })
   .extend(withEnvironment)
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -31,7 +31,7 @@ export const EventModel = types
       self.timeline = timeline ? timeline.id : null
       self.updated_at = updated_at
       self.created_at = created_at
-      self.date = new Date(date)
+      self.date = date
     }
 
     const updateEvent = flow(function * (event: Types.EventRequest, id: number) {
@@ -71,6 +71,6 @@ export const EventModelFromData = (event: Types.EventResponse | Types.EventRespo
     timeline: event.timeline ? event.timeline.id : null,
     created_at: event.created_at,
     updated_at: event.updated_at,
-    date: new Date(event.date)
+    date: event.date.toString()
   })
 }
