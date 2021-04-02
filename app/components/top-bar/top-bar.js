@@ -1,27 +1,36 @@
-import React from "react";
-import { Appbar, useTheme } from "react-native-paper";
-import { observer } from "mobx-react-lite";
+import React from "react"
+import { Appbar, useTheme } from "react-native-paper"
+import { observer } from "mobx-react-lite"
 /**
  * This is a React functional component, ready to
  *
  * Component description here for TypeScript tips.
  */
 export const TopBar = observer(function TopBar({ scene, previous, navigation }) {
-    const { options } = scene.descriptor;
-    const title = options.headerTitle !== undefined
-        ? options.headerTitle
-        : options.title !== undefined
-            ? options.title
-            : scene.route.name;
-    const { colors } = useTheme();
-    return (<Appbar.Header theme={{ colors: { primary: colors.surface } }}>
+  const { options } = scene.descriptor
+  const title =
+    options.headerTitle !== undefined
+      ? options.headerTitle
+      : options.title !== undefined
+      ? options.title
+      : scene.route.name
+  const { colors } = useTheme()
+  return (
+    <Appbar.Header theme={{ colors: { primary: colors.surface } }}>
       {options.headerLeft && options.headerLeft({})}
-      {previous ? (<Appbar.BackAction onPress={navigation.goBack}/>) : (<Appbar.Action icon="menu" onPress={() => {
-        ;
-        navigation.openDrawer();
-    }}/>)}
-      <Appbar.Content title={title}/>
+      {previous ? (
+        <Appbar.BackAction onPress={navigation.goBack} />
+      ) : (
+        <Appbar.Action
+          icon="menu"
+          onPress={() => {
+            navigation.openDrawer()
+          }}
+        />
+      )}
+      <Appbar.Content title={title} />
       {options.headerRight && options.headerRight({})}
-    </Appbar.Header>);
-});
+    </Appbar.Header>
+  )
+})
 //# sourceMappingURL=top-bar.js.map

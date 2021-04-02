@@ -1,22 +1,22 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native"
 export const loginScreenStyles = StyleSheet.create({
-    alignCenter: {
-        alignItems: "center",
-    },
-    container: {
-        flex: 1,
-        padding: 16,
-        paddingTop: 64,
-    },
-    headline: {
-        fontSize: 32,
-        textAlign: "center",
-    },
-    screen: {
-        flex: 1,
-    },
-    subheading: {
-        textAlign: "center",
-    },
-});
+  alignCenter: {
+    alignItems: "center",
+  },
+  container: {
+    flex: 1,
+    padding: 16,
+    paddingTop: 64,
+  },
+  headline: {
+    fontSize: 32,
+    textAlign: "center",
+  },
+  screen: {
+    flex: 1,
+  },
+  subheading: {
+    textAlign: "center",
+  },
+})
 //# sourceMappingURL=login-screen.styles.js.map

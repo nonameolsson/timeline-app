@@ -1,6 +1,6 @@
-import { useEffect, useRef, useLayoutEffect } from "react";
-import { reaction } from "mobx";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useEffect, useRef, useLayoutEffect } from "react"
+import { reaction } from "mobx"
+import { useNavigation, useFocusEffect } from "@react-navigation/native"
 /**
  * useEffect combined with mobx stores. When the effect executes, the latest value from
  * the store will be sent as argument to the effect function
@@ -13,47 +13,49 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
  *                     will be executed.
  */
 export function useEffectWithStore(expression, effectCallback, effectDeps) {
-    const paramsRef = useRef();
-    const effectCallbackRef = useRef();
-    // Update collect and update values from the store every time they change
+  const paramsRef = useRef()
+  const effectCallbackRef = useRef()
+  // Update collect and update values from the store every time they change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(
+    () => reaction(expression, (params) => (paramsRef.current = params), { fireImmediately: true }),
+    [],
+  )
+  // Update the callback function if it changes (will occure every update)
+  useEffect(() => {
+    effectCallbackRef.current = effectCallback
+  }, [effectCallback])
+  // the "normal" effect
+  useEffect(() => {
+    if (effectCallbackRef.current && paramsRef.current) {
+      return effectCallbackRef.current(paramsRef.current)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => reaction(expression, (params) => (paramsRef.current = params), { fireImmediately: true }), []);
-    // Update the callback function if it changes (will occure every update)
-    useEffect(() => {
-        effectCallbackRef.current = effectCallback;
-    }, [effectCallback]);
-    // the "normal" effect
-    useEffect(() => {
-        if (effectCallbackRef.current && paramsRef.current) {
-            return effectCallbackRef.current(paramsRef.current);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, effectDeps);
+  }, effectDeps)
 }
 /**
  * When a screen gets focused the title makes sure always the latest title is used
  * @param title - Text to be used as the title
  */
 export function useTitle(title) {
-    const navigation = useNavigation();
-    useFocusEffect(() => {
-        if (!title)
-            return;
-        navigation.setOptions({
-            title,
-        });
-    });
+  const navigation = useNavigation()
+  useFocusEffect(() => {
+    if (!title) return
+    navigation.setOptions({
+      title,
+    })
+  })
 }
 export const useHeaderButtons = ({ left, right }) => {
-    const navigation = useNavigation();
-    useLayoutEffect(() => {
-        if (!left && !right) {
-            return;
-        }
-        navigation.setOptions({
-            headerLeft: left,
-            headerRight: right,
-        });
-    }, [left, right, navigation]);
-};
+  const navigation = useNavigation()
+  useLayoutEffect(() => {
+    if (!left && !right) {
+      return
+    }
+    navigation.setOptions({
+      headerLeft: left,
+      headerRight: right,
+    })
+  }, [left, right, navigation])
+}
 //# sourceMappingURL=hooks.js.map

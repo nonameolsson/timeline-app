@@ -4,18 +4,23 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { LoginScreen } from "../screens";
+import React from "react"
+import { createStackNavigator } from "@react-navigation/stack"
+import { LoginScreen } from "../screens"
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 export function AuthNavigator() {
-    return (<Stack.Navigator initialRouteName="login" screenOptions={{
+  return (
+    <Stack.Navigator
+      initialRouteName="login"
+      screenOptions={{
         headerShown: false,
         gestureEnabled: true,
-    }}>
-      <Stack.Screen name="login" component={LoginScreen}/>
-    </Stack.Navigator>);
+      }}
+    >
+      <Stack.Screen name="login" component={LoginScreen} />
+    </Stack.Navigator>
+  )
 }
 /**
  * A list of routes from which we're allowed to leave the app when
@@ -26,6 +31,6 @@ export function AuthNavigator() {
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["login"];
-export const canExit = (routeName) => exitRoutes.includes(routeName);
+const exitRoutes = ["login"]
+export const canExit = (routeName) => exitRoutes.includes(routeName)
 //# sourceMappingURL=auth-navigator.js.map

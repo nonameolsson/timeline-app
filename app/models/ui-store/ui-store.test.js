@@ -1,6 +1,6 @@
-import { UiStoreModel } from "./ui-store";
+import { UiStoreModel } from "./ui-store"
 test("can be created", () => {
-    const instance = UiStoreModel.create({});
-    expect(instance).toBeTruthy();
-});
+  const instance = UiStoreModel.create({})
+  expect(instance).toBeTruthy()
+})
 //# sourceMappingURL=ui-store.test.js.map

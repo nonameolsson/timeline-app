@@ -1,8 +1,9 @@
-import { format } from "date-fns";
+import { format } from "date-fns"
 // export const formatShortISO = (date: Date): string => format(date, { representation: 'date' })
-export const formatDateYear = (date, empty = "") => date ? format(date, "yyyy-MM-dd") : empty;
-export const formatShortTime = (date, empty = "") => date ? format(date, "HH:mm") : empty;
-export const formatDateTime = (date, empty = "") => date ? format(date, `yyyy-MM-dd'T'HH:mm`) : empty;
+export const formatDateYear = (date, empty = "") => (date ? format(date, "yyyy-MM-dd") : empty)
+export const formatShortTime = (date, empty = "") => (date ? format(date, "HH:mm") : empty)
+export const formatDateTime = (date, empty = "") =>
+  date ? format(date, `yyyy-MM-dd'T'HH:mm`) : empty
 // sista dagarna
 // const date1: dateObject = {
 //   negative: false,
@@ -45,20 +46,24 @@ export const formatDateTime = (date, empty = "") => date ? format(date, `yyyy-MM
 //   day: 25,
 // };
 export const getTimelineDate = (date) => {
-    return new Date(date.negative ? parseInt(`-${date.year}`) : date.year, date.month || 0, date.day || 1);
-};
+  return new Date(
+    date.negative ? parseInt(`-${date.year}`) : date.year,
+    date.month || 0,
+    date.day || 1,
+  )
+}
 // const formattedDate = date(date8);
-export const getTimelineDataString = ({ year, day, month, negative = false, }) => {
-    let readableData;
-    if (year) {
-        readableData = `${year}`;
-        if (month) {
-            readableData += `-${month}`;
-            if (day) {
-                readableData += `-${day}`;
-            }
-        }
-        return negative ? `${readableData} BC` : readableData;
+export const getTimelineDataString = ({ year, day, month, negative = false }) => {
+  let readableData
+  if (year) {
+    readableData = `${year}`
+    if (month) {
+      readableData += `-${month}`
+      if (day) {
+        readableData += `-${day}`
+      }
     }
-};
+    return negative ? `${readableData} BC` : readableData
+  }
+}
 //# sourceMappingURL=date.js.map

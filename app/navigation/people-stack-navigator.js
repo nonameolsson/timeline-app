@@ -4,20 +4,32 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { PeopleScreen } from "screens";
-import { TopBar } from "components";
-const PeopleStack = createStackNavigator();
+import React from "react"
+import { createStackNavigator } from "@react-navigation/stack"
+import { PeopleScreen } from "screens"
+import { TopBar } from "components"
+const PeopleStack = createStackNavigator()
 export const PeopleStackNavigator = () => {
-    return (<PeopleStack.Navigator initialRouteName="people" headerMode="screen" screenOptions={{
+  return (
+    <PeopleStack.Navigator
+      initialRouteName="people"
+      headerMode="screen"
+      screenOptions={{
         headerShown: true,
         gestureEnabled: true,
-        header: ({ scene, previous, navigation, ...props }) => (<TopBar scene={scene} previous={previous} navigation={navigation} {...props}/>),
-    }}>
-      <PeopleStack.Screen name="people" component={PeopleScreen} options={() => ({ headerShown: true, headerTitle: "People" })}/>
-    </PeopleStack.Navigator>);
-};
+        header: ({ scene, previous, navigation, ...props }) => (
+          <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+        ),
+      }}
+    >
+      <PeopleStack.Screen
+        name="people"
+        component={PeopleScreen}
+        options={() => ({ headerShown: true, headerTitle: "People" })}
+      />
+    </PeopleStack.Navigator>
+  )
+}
 /**
  * A list of routes from which we're allowed to leave the app when
  * the user presses the back button on Android.

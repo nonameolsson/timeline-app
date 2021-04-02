@@ -1,12 +1,14 @@
-import * as React from "react";
-import { storiesOf } from "@storybook/react-native";
-import { StoryScreen, Story, UseCase } from "../../../storybook/views";
-import { TopBar } from "./top-bar";
+import * as React from "react"
+import { storiesOf } from "@storybook/react-native"
+import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+import { TopBar } from "./top-bar"
 storiesOf("TopBar", module)
-    .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
-    .add("Style Presets", () => (<Story>
+  .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
+  .add("Style Presets", () => (
+    <Story>
       <UseCase text="Primary" usage="The primary.">
-        <TopBar text="TopBar"/>
+        <TopBar text="TopBar" />
       </UseCase>
-    </Story>));
+    </Story>
+  ))
 //# sourceMappingURL=top-bar.story.js.map

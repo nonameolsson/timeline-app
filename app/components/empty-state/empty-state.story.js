@@ -1,12 +1,14 @@
-import * as React from "react";
-import { storiesOf } from "@storybook/react-native";
-import { StoryScreen, Story, UseCase } from "../../../storybook/views";
-import { EmptyState } from "./empty-state";
+import * as React from "react"
+import { storiesOf } from "@storybook/react-native"
+import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+import { EmptyState } from "./empty-state"
 storiesOf("EmptyState", module)
-    .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
-    .add("Style Presets", () => (<Story>
+  .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
+  .add("Style Presets", () => (
+    <Story>
       <UseCase text="Primary" usage="The primary.">
-        <EmptyState title="EmptyState" description="Description"/>
+        <EmptyState title="EmptyState" description="Description" />
       </UseCase>
-    </Story>));
+    </Story>
+  ))
 //# sourceMappingURL=empty-state.story.js.map

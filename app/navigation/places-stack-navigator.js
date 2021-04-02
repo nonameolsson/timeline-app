@@ -4,20 +4,32 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { PlacesScreen } from "screens";
-import { TopBar } from "components";
-const PlacesStack = createStackNavigator();
+import React from "react"
+import { createStackNavigator } from "@react-navigation/stack"
+import { PlacesScreen } from "screens"
+import { TopBar } from "components"
+const PlacesStack = createStackNavigator()
 export const PlacesStackNavigator = () => {
-    return (<PlacesStack.Navigator initialRouteName="places" headerMode="screen" screenOptions={{
+  return (
+    <PlacesStack.Navigator
+      initialRouteName="places"
+      headerMode="screen"
+      screenOptions={{
         headerShown: true,
         gestureEnabled: true,
-        header: ({ scene, previous, navigation, ...props }) => (<TopBar scene={scene} previous={previous} navigation={navigation} {...props}/>),
-    }}>
-      <PlacesStack.Screen name="places" component={PlacesScreen} options={() => ({ headerShown: true, headerTitle: "Places" })}/>
-    </PlacesStack.Navigator>);
-};
+        header: ({ scene, previous, navigation, ...props }) => (
+          <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+        ),
+      }}
+    >
+      <PlacesStack.Screen
+        name="places"
+        component={PlacesScreen}
+        options={() => ({ headerShown: true, headerTitle: "Places" })}
+      />
+    </PlacesStack.Navigator>
+  )
+}
 /**
  * A list of routes from which we're allowed to leave the app when
  * the user presses the back button on Android.

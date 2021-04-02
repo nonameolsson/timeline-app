@@ -4,29 +4,63 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { EventScreen, EditEventScreen, TimelinesScreen, TimelineScreen, EditTimelineScreen, } from "screens";
-import { TopBar } from "components";
-const TimelineStack = createStackNavigator();
+import React from "react"
+import { createStackNavigator } from "@react-navigation/stack"
+import {
+  EventScreen,
+  EditEventScreen,
+  TimelinesScreen,
+  TimelineScreen,
+  EditTimelineScreen,
+} from "screens"
+import { TopBar } from "components"
+const TimelineStack = createStackNavigator()
 export const TimelineStackScreen = () => {
-    return (<TimelineStack.Navigator initialRouteName="timelines" headerMode="screen" screenOptions={{
+  return (
+    <TimelineStack.Navigator
+      initialRouteName="timelines"
+      headerMode="screen"
+      screenOptions={{
         headerShown: true,
         gestureEnabled: true,
-        header: ({ scene, previous, navigation, ...props }) => (<TopBar scene={scene} previous={previous} navigation={navigation} {...props}/>),
-    }}>
-      <TimelineStack.Screen name="timelines" component={TimelinesScreen} options={() => ({ headerShown: true, headerTitle: "Timeline" })}/>
-      <TimelineStack.Screen name="timeline" component={TimelineScreen} options={({ route }) => ({
-        headerShown: true,
-        headerTitle: route.params.title || "Timeline",
-    })}/>
-      <TimelineStack.Screen name="editTimeline" component={EditTimelineScreen} options={{ headerTitle: "Edit" }}/>
-      <TimelineStack.Screen name="event" component={EventScreen} options={({ route }) => ({
-        headerTitle: route.params.title || "Event",
-    })}/>
-      <TimelineStack.Screen name="editEvent" component={EditEventScreen} options={{ headerTitle: "Edit" }}/>
-    </TimelineStack.Navigator>);
-};
+        header: ({ scene, previous, navigation, ...props }) => (
+          <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+        ),
+      }}
+    >
+      <TimelineStack.Screen
+        name="timelines"
+        component={TimelinesScreen}
+        options={() => ({ headerShown: true, headerTitle: "Timeline" })}
+      />
+      <TimelineStack.Screen
+        name="timeline"
+        component={TimelineScreen}
+        options={({ route }) => ({
+          headerShown: true,
+          headerTitle: route.params.title || "Timeline",
+        })}
+      />
+      <TimelineStack.Screen
+        name="editTimeline"
+        component={EditTimelineScreen}
+        options={{ headerTitle: "Edit" }}
+      />
+      <TimelineStack.Screen
+        name="event"
+        component={EventScreen}
+        options={({ route }) => ({
+          headerTitle: route.params.title || "Event",
+        })}
+      />
+      <TimelineStack.Screen
+        name="editEvent"
+        component={EditEventScreen}
+        options={{ headerTitle: "Edit" }}
+      />
+    </TimelineStack.Navigator>
+  )
+}
 /**
  * A list of routes from which we're allowed to leave the app when
  * the user presses the back button on Android.
