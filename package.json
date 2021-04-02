@@ -1,6 +1,8 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "cm": "git-cz",
+    "release": "standard-version",
     "start": "expo start",
     "start:no-dev": "expo start --no-dev --minify",
     "android": "expo start --android",
@@ -96,6 +98,7 @@
     "eslint-plugin-react-native": "^3.6.0",
     "eslint-plugin-standard": "^4.0.0",
     "ignite-bowser": "^5.4.1",
+    "git-cz": "^4.7.6",
     "jest": "25.5.4",
     "jest-expo": "^39.0.0",
     "jetifier": "^1.6.2",
@@ -107,6 +110,7 @@
     "react-powerplug": "1.0.0",
     "rimraf": "3.0.2",
     "solidarity": "3.0.0",
+    "standard-version": "^9.1.1",
     "typescript": "3.9.7"
   },
   "private": true,
