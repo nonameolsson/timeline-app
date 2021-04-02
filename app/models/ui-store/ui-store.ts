@@ -8,8 +8,8 @@ export const UiStoreModel = types
   .props({
     theme: types.enumeration("Theme", ["light", "dark"]),
   })
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({
+  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
     setDarkTheme: () => {
       self.theme = "dark"
     },

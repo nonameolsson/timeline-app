@@ -14,12 +14,12 @@ export const UserStoreModel = types
     user: types.maybeNull(UserModel),
   })
   .extend(withEnvironment)
-  .views(self => ({
+  .views((self) => ({
     isLoggedIn: () => {
       return !!self.jwt
     },
   }))
-  .actions(self => ({
+  .actions((self) => ({
     resetStore: () => {
       self.jwt = null
       self.user = null
@@ -34,7 +34,7 @@ export const UserStoreModel = types
       self.user = userModel // Replace the existing data with the new data
     },
   }))
-  .actions(self => ({
+  .actions((self) => ({
     logOut: () => {
       const root = getRoot<RootStore>(self)
 
@@ -45,7 +45,7 @@ export const UserStoreModel = types
       // Reset Apisauce
       self.environment.api.apisauce.deleteHeader("Authorization")
     },
-    login: flow(function * (identifier: string, password: string) {
+    login: flow(function* (identifier: string, password: string) {
       const result: Types.PostLoginResult = yield self.environment.api.login(identifier, password)
 
       if (result.kind === "ok") {
@@ -57,7 +57,7 @@ export const UserStoreModel = types
         return result
       }
     }),
-    getUser: flow(function * (user: number) {
+    getUser: flow(function* (user: number) {
       const result: Types.GetUserResult = yield self.environment.api.getUser(user)
 
       if (result.kind === "ok") {

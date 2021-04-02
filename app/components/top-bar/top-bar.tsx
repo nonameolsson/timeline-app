@@ -17,8 +17,8 @@ export const TopBar = observer(function TopBar({ scene, previous, navigation }: 
     options.headerTitle !== undefined
       ? options.headerTitle
       : options.title !== undefined
-        ? options.title
-        : scene.route.name
+      ? options.title
+      : scene.route.name
 
   const { colors } = useTheme()
 

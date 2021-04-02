@@ -93,14 +93,16 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   }
 
   const renderEventList = () => {
-    const events = timeline.events.sort((a, b) => a.date > b.date ? 1 : a.date < b.date ? -1 : 0).map(event => (
-      <List.Item
-        key={event.id}
-        onPress={() => openEvent(event.id)}
-        title={event.title}
-        description={formatDateYear(new Date(event.date))}
-      />
-    ))
+    const events = timeline.events
+      .sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0))
+      .map((event) => (
+        <List.Item
+          key={event.id}
+          onPress={() => openEvent(event.id)}
+          title={event.title}
+          description={formatDateYear(new Date(event.date))}
+        />
+      ))
 
     return <ScrollView>{events}</ScrollView>
   }

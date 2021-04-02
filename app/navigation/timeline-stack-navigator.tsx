@@ -49,9 +49,10 @@ export type TimelineParamList = {
   event: { title?: string; timelineId: number; eventId: number; action?: EditEventAction }
   editEvent: {
     /** ID of the timeline to wich the event corresponds */
-    timelineId: number;
+    timelineId: number
     /** ID of the event */
-    eventId: number }
+    eventId: number
+  }
 }
 
 /**

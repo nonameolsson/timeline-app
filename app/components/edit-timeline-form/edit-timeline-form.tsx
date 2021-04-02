@@ -26,8 +26,8 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
     resolver: yupResolver(EditTimelineFormSchema),
     mode: "onChange",
     defaultValues: {
-      title: timeline.title || '',
-      description: timeline.description || '',
+      title: timeline.title || "",
+      description: timeline.description || "",
     },
   })
 
@@ -64,7 +64,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
               error={!!errors.title}
               label="Title"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.title}>
@@ -84,7 +84,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
               error={!!errors.description}
               label="Description"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.description}>

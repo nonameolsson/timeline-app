@@ -1,0 +1,1 @@
+{"version":3,"file":"event-screen.styles.js","sourceRoot":"","sources":["event-screen.styles.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,MAAM,cAAc,CAAA;AAEzC,MAAM,CAAC,MAAM,MAAM,GAAG,UAAU,CAAC,MAAM,CAAC;IACtC,SAAS,EAAE;QACT,IAAI,EAAE,CAAC;QACP,OAAO,EAAE,EAAE;KACZ;IACD,MAAM,EAAE;QACN,IAAI,EAAE,CAAC;KACR;CACF,CAAC,CAAA"}

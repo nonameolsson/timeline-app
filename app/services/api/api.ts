@@ -222,12 +222,12 @@ export class Api {
    * @returns {Promise<Types.PutTimelineResult>}
    * @memberof Api
    */
-  async updateTimeline(data: Types.PutTimelineRequest, id: number): Promise<Types.PutTimelineResult> {
+  async updateTimeline(
+    data: Types.PutTimelineRequest,
+    id: number,
+  ): Promise<Types.PutTimelineResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.put(
-      `/timelines/${id}`,
-      data,
-    )
+    const response: ApiResponse<any> = await this.apisauce.put(`/timelines/${id}`, data)
 
     // the typical ways to die when calling an api
     if (!response.ok) {

@@ -24,7 +24,7 @@ export function useEffectWithStore<T>(
   // Update collect and update values from the store every time they change
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(
-    () => reaction(expression, params => (paramsRef.current = params), { fireImmediately: true }),
+    () => reaction(expression, (params) => (paramsRef.current = params), { fireImmediately: true }),
     [],
   )
 

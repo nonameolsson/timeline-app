@@ -29,8 +29,8 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     mode: "onChange",
     defaultValues: {
       title: event.title,
-      description: event.description || '',
-      url: event.url || '',
+      description: event.description || "",
+      url: event.url || "",
     },
   })
 
@@ -68,7 +68,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.title}
               label="Title"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.title}>
@@ -88,7 +88,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.description}
               label="Description"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.description}>
@@ -109,7 +109,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.url}
               label="Url"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
               textContentType="URL"
               keyboardType="url"

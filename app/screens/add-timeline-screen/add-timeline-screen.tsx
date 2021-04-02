@@ -23,7 +23,7 @@ export const AddTimelineScreen = observer(function AddTimelineScreen({
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <AddTimelineForm errorText="" onSubmit={data => handleSubmit(data)} />
+        <AddTimelineForm errorText="" onSubmit={(data) => handleSubmit(data)} />
       </View>
     </SafeAreaView>
   )

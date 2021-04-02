@@ -17,12 +17,12 @@ export const EventModel = types
     url: types.maybeNull(types.string),
     created_at: types.string,
     updated_at: types.string,
-    date: types.string
+    date: types.string,
   })
   .extend(withEnvironment)
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   // Following actions will send requests to the API, and call actions defined in the first action definition
-  .actions(self => {
+  .actions((self) => {
     const updateEventInStore = (eventSnapshot: Types.EventResponse) => {
       const { title, description, date, created_at, url, timeline, updated_at } = eventSnapshot
       self.title = title
@@ -34,7 +34,7 @@ export const EventModel = types
       self.date = date
     }
 
-    const updateEvent = flow(function * (event: Types.EventRequest, id: number) {
+    const updateEvent = flow(function* (event: Types.EventRequest, id: number) {
       const result: Types.PutEventResult = yield self.environment.api.updateEvent(event, id)
 
       if (result.kind === "ok") {
@@ -71,6 +71,6 @@ export const EventModelFromData = (event: Types.EventResponse | Types.EventRespo
     timeline: event.timeline ? event.timeline.id : null,
     created_at: event.created_at,
     updated_at: event.updated_at,
-    date: event.date.toString()
+    date: event.date.toString(),
   })
 }

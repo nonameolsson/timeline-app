@@ -1,11 +1,14 @@
-import { format } from 'date-fns'
+import { format } from "date-fns"
 
 // export const formatShortISO = (date: Date): string => format(date, { representation: 'date' })
 
-export const formatDateYear = (date?: Date | null, empty = ''): string => (date ? format(date, 'yyyy-MM-dd') : empty)
-export const formatShortTime = (date?: Date | null, empty = ''): string => (date ? format(date, 'HH:mm') : empty)
+export const formatDateYear = (date?: Date | null, empty = ""): string =>
+  date ? format(date, "yyyy-MM-dd") : empty
+export const formatShortTime = (date?: Date | null, empty = ""): string =>
+  date ? format(date, "HH:mm") : empty
 
-export const formatDateTime = (date?: Date, empty = ''): string => (date ? format(date, `yyyy-MM-dd'T'HH:mm`) : empty)
+export const formatDateTime = (date?: Date, empty = ""): string =>
+  date ? format(date, `yyyy-MM-dd'T'HH:mm`) : empty
 
 interface TimelineDate {
   /**
@@ -13,10 +16,10 @@ interface TimelineDate {
    *
    * negative false or undefined = AD
    */
-  negative?: boolean;
-  year: number;
-  month?: number;
-  day?: number;
+  negative?: boolean
+  year: number
+  month?: number
+  day?: number
 }
 
 // sista dagarna
@@ -72,13 +75,18 @@ export const getTimelineDate = (date: TimelineDate) => {
   return new Date(
     date.negative ? parseInt(`-${date.year}`) : date.year,
     date.month || 0,
-    date.day || 1
+    date.day || 1,
   )
 }
 
 // const formattedDate = date(date8);
 
-export const getTimelineDataString = ({ year, day, month, negative = false }: TimelineDate): string | undefined => {
+export const getTimelineDataString = ({
+  year,
+  day,
+  month,
+  negative = false,
+}: TimelineDate): string | undefined => {
   let readableData: string
 
   if (year) {

@@ -81,7 +81,7 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
               right={errors.title && <TextInput.Icon name="alert-circle" color={error} />}
               disabled={formState.isSubmitting}
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               error={!!errors.title}
               value={value}
             />
@@ -100,7 +100,7 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
             disabled={formState.isSubmitting}
             onBlur={onBlur}
             left={<TextInput.Icon name="script-text-outline" />}
-            onChangeText={text => onChange(text)}
+            onChangeText={(text) => onChange(text)}
             label="Description"
             spellCheck={true}
             error={!!errors.description}
@@ -117,7 +117,7 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
               disabled={formState.isSubmitting}
               onBlur={onBlur}
               left={<TextInput.Icon name="web" />}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               label="URL"
               autoCapitalize="none"
               autoCorrect={false}

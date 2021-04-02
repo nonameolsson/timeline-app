@@ -4,7 +4,7 @@ import { StoryScreen, Story, UseCase } from "../../../storybook/views"
 import { TopBar } from "./top-bar"
 
 storiesOf("TopBar", module)
-  .addDecorator(fn => <StoryScreen>{fn()}</StoryScreen>)
+  .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
   .add("Style Presets", () => (
     <Story>
       <UseCase text="Primary" usage="The primary.">

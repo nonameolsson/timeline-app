@@ -41,7 +41,7 @@ function iterate(obj, stack, array) {
  */
 
 describe("i18n", () => {
-  test("There are no missing keys", done => {
+  test("There are no missing keys", (done) => {
     // Actual command output:
     // grep "Tx=\"\S*\"\|tx=\"\S*\"\|translate(\"\S*\"" -ohr './app' | grep -o "\".*\""
     const command = `grep "Tx=\\"\\S*\\"\\|tx=\\"\\S*\\"\\|translate(\\"\\S*\\"" -ohr '../app' | grep -o "\\".*\\""`

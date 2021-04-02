@@ -32,7 +32,7 @@ export const AddEventScreen = observer(function AddEventScreen({
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <EventForm onSubmit={data => handleSubmit(data)} />
+        <EventForm onSubmit={(data) => handleSubmit(data)} />
       </View>
     </SafeAreaView>
   )

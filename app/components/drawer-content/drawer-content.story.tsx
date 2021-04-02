@@ -6,7 +6,7 @@ import { DrawerContent } from "./drawer-content"
 declare var module
 
 storiesOf("DrawerContent", module)
-  .addDecorator(fn => <StoryScreen>{fn()}</StoryScreen>)
+  .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
   .add("Style Presets", () => (
     <Story>
       <UseCase text="Primary" usage="The primary.">

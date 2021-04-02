@@ -62,7 +62,15 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
         </MaterialHeaderButtons>
       ),
     })
-  }, [event, event?.id, formState.isSubmitting, formState.isValid, handleSubmit, navigation, onSubmit])
+  }, [
+    event,
+    event?.id,
+    formState.isSubmitting,
+    formState.isValid,
+    handleSubmit,
+    navigation,
+    onSubmit,
+  ])
 
   return (
     <View>
@@ -79,7 +87,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
               right={errors.title && <TextInput.Icon name="alert-circle" color={error} />}
               disabled={formState.isSubmitting}
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               error={!!errors.title}
               value={value}
             />
@@ -98,7 +106,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
             disabled={formState.isSubmitting}
             onBlur={onBlur}
             left={<TextInput.Icon name="script-text-outline" />}
-            onChangeText={text => onChange(text)}
+            onChangeText={(text) => onChange(text)}
             label="Description"
             spellCheck={true}
             error={!!errors.description}
@@ -115,7 +123,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
               disabled={formState.isSubmitting}
               onBlur={onBlur}
               left={<TextInput.Icon name="web" />}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               label="URL"
               autoCapitalize="none"
               autoCorrect={false}

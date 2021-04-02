@@ -6,7 +6,7 @@ import { MaterialHeaderButtons } from "./material-header-button"
 declare let module
 
 storiesOf("HeaderButton", module)
-  .addDecorator(fn => <StoryScreen>{fn()}</StoryScreen>)
+  .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
   .add("Style Presets", () => (
     <Story>
       <UseCase text="Primary" usage="The primary.">

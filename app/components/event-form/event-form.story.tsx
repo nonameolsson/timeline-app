@@ -6,7 +6,7 @@ import { EventForm } from "./event-form"
 declare const module
 
 storiesOf("EventForm", module)
-  .addDecorator(fn => <StoryScreen>{fn()}</StoryScreen>)
+  .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
   .add("Style Presets", () => (
     <Story>
       <UseCase text="Primary" usage="The primary.">

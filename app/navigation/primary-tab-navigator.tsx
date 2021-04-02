@@ -67,10 +67,10 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({
     routeName === "timelines"
       ? "timeline-plus-outline"
       : routeName === "people"
-        ? "account-plus-outline"
-        : routeName === "places"
-          ? "map-plus"
-          : "plus"
+      ? "account-plus-outline"
+      : routeName === "places"
+      ? "map-plus"
+      : "plus"
 
   const onFabPress = () => {
     if (routeName === "timelines") {
@@ -101,10 +101,7 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({
         backBehavior="initialRoute"
         shifting={true}
         activeColor={theme.colors.primary}
-        inactiveColor={color(theme.colors.text)
-          .alpha(0.6)
-          .rgb()
-          .string()}
+        inactiveColor={color(theme.colors.text).alpha(0.6).rgb().string()}
         sceneAnimationEnabled={false}
       >
         <Tab.Screen

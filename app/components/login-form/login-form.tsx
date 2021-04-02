@@ -17,8 +17,8 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
     resolver: yupResolver(LoginSchema),
     defaultValues: {
-      email: '',
-      password: ''
+      email: "",
+      password: "",
     },
     mode: "onBlur",
   })
@@ -53,7 +53,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
               disabled={formState.isSubmitting}
               keyboardType="email-address"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               error={!!errors.email}
               textContentType="emailAddress"
               value={value}
@@ -78,7 +78,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
               keyboardType="visible-password"
               onBlur={onBlur}
               left={<TextInput.Icon name="key" />}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               label="Password"
               secureTextEntry={true}
               spellCheck={false}

@@ -71,7 +71,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
       key={id}
       onPress={() => openTimeline(id, title)}
       description={description}
-      left={props => <List.Icon {...props} icon="folder" />}
+      left={(props) => <List.Icon {...props} icon="folder" />}
     />
   )
 
@@ -84,7 +84,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
       <FlatList
         data={timelineStore.getTimelinesArray()}
         renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
       />
     )
   }
