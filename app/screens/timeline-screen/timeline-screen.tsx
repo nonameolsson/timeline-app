@@ -98,7 +98,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
         key={event.id}
         onPress={() => openEvent(event.id)}
         title={event.title}
-        description={formatDateYear(event.date)}
+        description={formatDateYear(new Date(event.date))}
       />
     ))
 
