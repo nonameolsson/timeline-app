@@ -3,7 +3,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component } from "react"
 import { SafeAreaView, View } from "react-native"
 
-import { TimelineRouteProp, TimelineStackNavigationProp } from "navigation"
+import { TimelineRouteProp, TimelineStackNavigationProp } from "navigators"
 import { useStores } from "models"
 import {
   EditTimelineForm,

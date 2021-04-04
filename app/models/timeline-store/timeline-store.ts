@@ -140,3 +140,5 @@ type TimelineStoreType = Instance<typeof TimelineStoreModel>
 export interface TimelineStore extends TimelineStoreType {}
 type TimelineStoreSnapshotType = SnapshotOut<typeof TimelineStoreModel>
 export interface TimelineStoreSnapshot extends TimelineStoreSnapshotType {}
+
+export const createTimelineStoreDefaultModel = () => types.optional(TimelineStoreModel, {})

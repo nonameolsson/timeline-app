@@ -1,12 +1,12 @@
 /**
  * Welcome to the main entry point of the app. In this file, we'll
- * be kicking off our app or storybook.
+ * be kicking off our app.
  *
  * Most of this file is boilerplate and you shouldn't need to modify
  * it very often. But take some time to look through and understand
  * what is going on here.
  *
- * The app navigation resides in ./app/navigation, so head over there
+ * The app navigation resides in ./app/navigators, so head over there
  * if you're interested in adding screens and navigators.
  */
 import "./i18n"
@@ -17,8 +17,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme,
 } from "@react-navigation/native"
-import { observer } from "mobx-react-lite"
-import { SafeAreaProvider, initialWindowSafeAreaInsets } from "react-native-safe-area-context"
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
 import {
   DefaultTheme as PaperDefaultTheme,
   DarkTheme as PaperDarkTheme,
@@ -26,7 +25,7 @@ import {
 } from "react-native-paper"
 import { OverflowMenuProvider } from "react-navigation-header-buttons"
 
-import { initFonts } from "./theme/fonts"
+import { initFonts } from "./theme/fonts" // expo
 import * as storage from "./utils/storage"
 import {
   useBackButtonHandler,
@@ -34,14 +33,14 @@ import {
   canExit,
   setRootNavigation,
   useNavigationPersistence,
-} from "./navigation"
+} from "./navigators"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
+import { ToggleStorybook } from "../storybook/toggle-storybook"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from "react-native-screens"
-
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
@@ -59,13 +58,12 @@ const CombinedDefaultTheme = {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors,
   },
-  mode: "adaptive",
 }
 
 /**
  * This is the root component of our app.
  */
-const App = observer(() => {
+function App() {
   const navigationRef = useRef<NavigationContainerRef>()
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
 
@@ -78,8 +76,9 @@ const App = observer(() => {
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ;(async () => {
-      await initFonts()
+      await initFonts() // expo
       setupRootStore().then(setRootStore)
     })()
   }, [])
@@ -94,21 +93,23 @@ const App = observer(() => {
 
   // otherwise, we're ready to render the app
   return (
-    <PaperProvider theme={theme}>
-      <RootStoreProvider value={rootStore}>
-        <SafeAreaProvider initialSafeAreaInsets={initialWindowSafeAreaInsets}>
-          <OverflowMenuProvider>
-            <RootNavigator
-              ref={navigationRef}
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-              theme={theme}
-            />
-          </OverflowMenuProvider>
-        </SafeAreaProvider>
-      </RootStoreProvider>
-    </PaperProvider>
+    <ToggleStorybook>
+      <PaperProvider theme={theme}>
+        <RootStoreProvider value={rootStore}>
+          <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+            <OverflowMenuProvider>
+              <RootNavigator
+                ref={navigationRef}
+                initialState={initialNavigationState}
+                onStateChange={onNavigationStateChange}
+                theme={theme}
+              />
+            </OverflowMenuProvider>
+          </SafeAreaProvider>
+        </RootStoreProvider>
+      </PaperProvider>
+    </ToggleStorybook>
   )
-})
+}
 
 export default App

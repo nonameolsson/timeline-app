@@ -1,1 +1,0 @@
-{"version":3,"file":"timeline-store.test.js","sourceRoot":"","sources":["timeline-store.test.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,kBAAkB,EAAiB,MAAM,kBAAkB,CAAA;AAEpE,IAAI,CAAC,gBAAgB,EAAE,GAAG,EAAE;IAC1B,MAAM,QAAQ,GAAkB,kBAAkB,CAAC,MAAM,CAAC,EAAE,CAAC,CAAA;IAE7D,MAAM,CAAC,QAAQ,CAAC,CAAC,UAAU,EAAE,CAAA;AAC/B,CAAC,CAAC,CAAA"}

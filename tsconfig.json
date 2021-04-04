@@ -16,18 +16,19 @@
     "noUnusedLocals": true,
     "sourceMap": true,
     "target": "esnext",
-    "lib": ["es6"],
+    "lib": ["esnext"],
     "skipLibCheck": true,
-    "strict": true,
-    "paths": {
-      "config/*": ["./config/*"],
-      "theme/*": ["./theme/*"],
-      "models/*": ["./models/*"],
-      "navigation/*": ["./navigation/*"],
-      "screens/*": ["./screens/*"],
-      "services/*": ["./services/*"],
-      "utils/*": ["./utils/*"]
-    }
+    "strict": true
+  },
+  "paths": {
+    "config/*": ["./config/*"],
+    "components/*": ["./components/*"],
+    "theme/*": ["./theme/*"],
+    "models/*": ["./models/*"],
+    "navigators/*": ["./navigators/*"],
+    "screens/*": ["./screens/*"],
+    "services/*": ["./services/*"],
+    "utils/*": ["./utils/*"]
   },
   "exclude": ["node_modules"],
   "include": ["App.js", "app", "test", "storybook"]

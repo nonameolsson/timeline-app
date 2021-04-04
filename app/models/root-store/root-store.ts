@@ -1,7 +1,7 @@
-import { UiStoreModel } from "../ui-store/ui-store"
+import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { TimelineStoreModel } from "../timeline-store/timeline-store"
 import { UserStoreModel } from "../user-store/user-store"
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { UiStoreModel } from "../ui-store/ui-store"
 
 /**
  * A RootStore model.

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { destroy, Instance, SnapshotOut, types, flow } from "mobx-state-tree"
-import { Event, EventModel, EventModelFromData } from "models/event/event"
-import { withEnvironment } from "models/extensions/with-environment"
+import { Event, EventModel, EventModelFromData } from "../event/event"
+import { withEnvironment } from "../extensions/with-environment"
 import * as Types from "services/api/api.types"
 
 /**

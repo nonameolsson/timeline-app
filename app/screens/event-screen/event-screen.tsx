@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite"
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 
 import { useStores } from "models"
-import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
+import { TimelineStackNavigationProp, TimelineRouteProp } from "navigators"
 import { styles } from "./event-screen.styles"
 import { MaterialHeaderButtons, Item } from "components"
 import { formatDateYear, getTimelineDataString, getTimelineDate } from "utils/date"
