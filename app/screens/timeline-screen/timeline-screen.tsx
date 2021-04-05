@@ -50,15 +50,19 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   }, [deleteTimeline])
 
   React.useLayoutEffect(() => {
-    navigation.setOptions({
-      // in your app, extract the arrow function into a separate component
-      // to avoid creating a new one every time
-      headerRight: () => (
+    const headerRightComponent = () => {
+      return (
         <MaterialHeaderButtons>
           <Item title="Delete" iconName="delete" onPress={() => showDeleteAlert()} />
           <Item title="Edit" iconName="edit" onPress={() => goToEditTimelineScreen()} />
         </MaterialHeaderButtons>
-      ),
+      )
+    }
+
+    navigation.setOptions({
+      // in your app, extract the arrow function into a separate component
+      // to avoid creating a new one every time
+      headerRight: () => headerRightComponent(),
     })
   }, [goToEditTimelineScreen, navigation, showDeleteAlert])
 
@@ -94,6 +98,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
 
   const renderEventList = () => {
     const events = timeline.events
+      .slice()
       .sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0))
       .map((event) => (
         <List.Item
