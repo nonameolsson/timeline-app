@@ -1,13 +1,13 @@
-import React, { useState, useCallback } from "react"
-import { ActivityIndicator, SafeAreaView, View, FlatList } from "react-native"
-import { Text, List, Button } from "react-native-paper"
-import { observer } from "mobx-react-lite"
-import { useFocusEffect } from "@react-navigation/native"
+import React, { useState, useCallback } from 'react'
+import { ActivityIndicator, SafeAreaView, View, FlatList } from 'react-native'
+import { Text, List, Button } from 'react-native-paper'
+import { observer } from 'mobx-react-lite'
+import { useFocusEffect } from '@react-navigation/native'
 
-import { useStores } from "models"
-import { styles } from "./timelines-screen.styles"
+import { useStores } from 'models'
+import { styles } from './timelines-screen.styles'
 
-import { EmptyState } from "components"
+import { EmptyState } from 'components'
 
 // type TimelinesScreenProp = {
 //   navigation: CompositeNavigationProp<
@@ -21,10 +21,7 @@ import { EmptyState } from "components"
 //   route: TimelineRouteProp<"timelines">
 // };
 
-export const TimelinesScreen = observer(function TimelinesScreen({
-  navigation,
-  route: { params },
-}: any) {
+export const TimelinesScreen = observer(function TimelinesScreen({ navigation, route: { params } }: any) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   // Fix to get correct type
@@ -52,7 +49,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
         await timelineStore.deleteTimeline(timelineId)
       }
 
-      if (action.type === "DELETE_TIMELINE") {
+      if (action.type === 'DELETE_TIMELINE') {
         setIsLoading(true)
         deleteTimeline(action.meta.id)
         setIsLoading(false)
@@ -61,7 +58,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
   )
 
   const openTimeline = (id: string, title: string): void => {
-    navigation.navigate("timeline", { id, title })
+    navigation.navigate('timeline', { id, title })
   }
 
   const renderItem = ({ item: { title, id, description } }) => (
@@ -70,7 +67,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
       key={id}
       onPress={() => openTimeline(id, title)}
       description={description}
-      left={(props) => <List.Icon {...props} icon="folder" />}
+      left={props => <List.Icon {...props} icon="folder" />}
     />
   )
 
@@ -83,7 +80,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
       <FlatList
         data={timelineStore.getTimelinesArray()}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
       />
     )
   }
@@ -97,7 +94,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
           icon="timeline-plus-outline"
         />
         <View style={styles.emptyStateButtonWrapper}>
-          <Button onPress={() => navigation.navigate("addTimeline")} mode="contained">
+          <Button onPress={() => navigation.navigate('addTimeline')} mode="contained">
             Create timeline
           </Button>
         </View>
@@ -109,15 +106,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
     <SafeAreaView style={styles.screen}>
       <View style={styles.container}>
         {userStore.isLoggedIn() ? (
-          <>
-            {isLoading ? (
-              <ActivityIndicator />
-            ) : timelineStore.hasTimelines() ? (
-              renderList()
-            ) : (
-              emptyState()
-            )}
-          </>
+          <>{isLoading ? <ActivityIndicator /> : timelineStore.hasTimelines() ? renderList() : emptyState()}</>
         ) : (
           <Text>Logging in...</Text>
         )}

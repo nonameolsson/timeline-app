@@ -1,13 +1,13 @@
-import React from "react"
-import { TextInput, Text, HelperText, useTheme } from "react-native-paper"
-import { Controller, useForm } from "react-hook-form"
-import { View } from "react-native"
-import { yupResolver } from "@hookform/resolvers"
+import React from 'react'
+import { TextInput, Text, HelperText, useTheme } from 'react-native-paper'
+import { Controller, useForm } from 'react-hook-form'
+import { View } from 'react-native'
+import { yupResolver } from '@hookform/resolvers'
 
-import { FormData } from "./addTimelineForm.types"
-import { AddTimelineFormSchema } from "./addTimelineForm.validation"
-import { MaterialHeaderButtons, Item } from "components"
-import { useNavigation } from "@react-navigation/native"
+import { FormData } from './addTimelineForm.types'
+import { AddTimelineFormSchema } from './addTimelineForm.validation'
+import { MaterialHeaderButtons, Item } from 'components'
+import { useNavigation } from '@react-navigation/native'
 
 interface AddTimelineFormProps {
   onSubmit: (data: { title: string; description: string }) => void
@@ -27,10 +27,10 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
 
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
     resolver: yupResolver(AddTimelineFormSchema),
-    mode: "onBlur",
+    mode: 'onBlur',
     defaultValues: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
     },
   })
 
@@ -79,7 +79,7 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
               right={errors.title && <TextInput.Icon name="alert-circle" color={error} />}
               disabled={formState.isSubmitting}
               onBlur={onBlur}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               error={!!errors.title}
               value={value}
             />
@@ -97,7 +97,7 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
             disabled={formState.isSubmitting}
             onBlur={onBlur}
             left={<TextInput.Icon name="script-text-outline" />}
-            onChangeText={(text) => onChange(text)}
+            onChangeText={text => onChange(text)}
             label="Description"
             spellCheck={true}
             error={!!errors.description}
@@ -106,7 +106,7 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
         )}
       />
 
-      <Text>{errorText || ""}</Text>
+      <Text>{errorText || ''}</Text>
     </View>
   )
 }

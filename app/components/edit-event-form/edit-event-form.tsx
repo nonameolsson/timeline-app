@@ -1,11 +1,11 @@
-import { Controller, useForm } from "react-hook-form"
-import { TextInput, HelperText, Appbar } from "react-native-paper"
-import { yupResolver } from "@hookform/resolvers"
-import React, { FunctionComponent as Component } from "react"
+import { Controller, useForm } from 'react-hook-form'
+import { TextInput, HelperText, Appbar } from 'react-native-paper'
+import { yupResolver } from '@hookform/resolvers'
+import React, { FunctionComponent as Component } from 'react'
 
-import { EditEventFormSchema } from "./edit-event-form.validation"
-import { Event } from "models"
-import { useHeaderButtons } from "utils/hooks"
+import { EditEventFormSchema } from './edit-event-form.validation'
+import { Event } from 'models'
+import { useHeaderButtons } from 'utils/hooks'
 
 export type EditEventFormData = {
   title: string
@@ -26,11 +26,11 @@ export interface EditEventFormProps {
 export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }) => {
   const { control, errors, formState, handleSubmit } = useForm<EditEventFormData>({
     resolver: yupResolver(EditEventFormSchema),
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
       title: event.title,
-      description: event.description || "",
-      url: event.url || "",
+      description: event.description || '',
+      url: event.url || '',
     },
   })
 
@@ -68,7 +68,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.title}
               label="Title"
               onBlur={onBlur}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.title}>
@@ -88,7 +88,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.description}
               label="Description"
               onBlur={onBlur}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.description}>
@@ -109,7 +109,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.url}
               label="Url"
               onBlur={onBlur}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               value={value}
               textContentType="URL"
               keyboardType="url"

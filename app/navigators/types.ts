@@ -2,10 +2,10 @@
  * Inspired by https://redux.js.org/recipes/usage-with-typescript/
  */
 
-export const DELETE_TIMELINE = "DELETE_TIMELINE"
-export const EDIT_TIMELINE = "EDIT_TIMELINE"
-export const EDIT_EVENT = "EDIT_EVENT"
-export const DELETE_EVENT = "DELETE_EVENT"
+export const DELETE_TIMELINE = 'DELETE_TIMELINE'
+export const EDIT_TIMELINE = 'EDIT_TIMELINE'
+export const EDIT_EVENT = 'EDIT_EVENT'
+export const DELETE_EVENT = 'DELETE_EVENT'
 
 export interface Timeline {
   id: number

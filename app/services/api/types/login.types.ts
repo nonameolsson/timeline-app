@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { GeneralApiProblem } from "../api-problem"
+import { GeneralApiProblem } from '../api-problem'
 
 interface UserClassRole {
   id: number
@@ -40,4 +40,4 @@ interface UserClass {
   timelines: UserClassTimeline[]
 }
 
-export type PostLoginResult = { kind: "ok"; data: PostLoginResponse } | GeneralApiProblem
+export type PostLoginResult = { kind: 'ok'; data: PostLoginResponse } | GeneralApiProblem

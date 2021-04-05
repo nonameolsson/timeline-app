@@ -1,6 +1,6 @@
-import { EventModel, Event } from "./event"
+import { EventModel, Event } from './event'
 
-test("can be created", () => {
+test('can be created', () => {
   const instance: Event = EventModel.create({})
 
   expect(instance).toBeTruthy()

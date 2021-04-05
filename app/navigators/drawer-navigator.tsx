@@ -1,11 +1,11 @@
-import React from "react"
+import React from 'react'
 
-import { createDrawerNavigator, DrawerNavigationProp } from "@react-navigation/drawer"
-import { DrawerContent } from "components"
+import { createDrawerNavigator, DrawerNavigationProp } from '@react-navigation/drawer'
+import { DrawerContent } from 'components'
 
-import { PrimaryTabNavigator } from "./primary-tab-navigator"
-import { ProfileScreen } from "screens"
-import { RouteProp } from "@react-navigation/native"
+import { PrimaryTabNavigator } from './primary-tab-navigator'
+import { ProfileScreen } from 'screens'
+import { RouteProp } from '@react-navigation/native'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -29,10 +29,7 @@ export type AppDrawerParamList = {
  * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
  * ```
  */
-export type AppDrawerNavigationProp<T extends keyof AppDrawerParamList> = DrawerNavigationProp<
-  AppDrawerParamList,
-  T
->
+export type AppDrawerNavigationProp<T extends keyof AppDrawerParamList> = DrawerNavigationProp<AppDrawerParamList, T>
 /**
  * Utility type to make it easier to use with `useRoute()`
  *
@@ -41,19 +38,13 @@ export type AppDrawerNavigationProp<T extends keyof AppDrawerParamList> = Drawer
  * const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
  * ```
  */
-export type AppDrawerRouteProp<T extends keyof AppDrawerParamList> = RouteProp<
-  AppDrawerParamList,
-  T
->
+export type AppDrawerRouteProp<T extends keyof AppDrawerParamList> = RouteProp<AppDrawerParamList, T>
 
 const DrawerNav = createDrawerNavigator<AppDrawerParamList>()
 
 export const DrawerNavigator = () => {
   return (
-    <DrawerNav.Navigator
-      hideStatusBar={true}
-      drawerContent={(props) => <DrawerContent {...props} />}
-    >
+    <DrawerNav.Navigator hideStatusBar={true} drawerContent={props => <DrawerContent {...props} />}>
       <DrawerNav.Screen
         name="app"
         component={PrimaryTabNavigator}

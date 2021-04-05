@@ -1,8 +1,8 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet } from 'react-native'
 
 export const drawerContentStyles = StyleSheet.create({
   avatar: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 15,
   },
   bottomDrawerSection: {
@@ -20,32 +20,32 @@ export const drawerContentStyles = StyleSheet.create({
     marginTop: 15,
   },
   paragraph: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginRight: 3,
   },
   preference: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
   row: {
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    flexDirection: 'row',
     marginTop: 20,
   },
   section: {
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    flexDirection: 'row',
     marginRight: 15,
   },
   title: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 3,
   },
   userInfo: {
-    flexDirection: "column",
+    flexDirection: 'column',
     marginLeft: 15,
   },
   userInfoSection: {

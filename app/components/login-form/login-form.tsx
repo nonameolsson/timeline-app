@@ -1,12 +1,12 @@
-import { Controller, useForm } from "react-hook-form"
-import { Button, TextInput, Text, useTheme, HelperText } from "react-native-paper"
-import React, { FunctionComponent } from "react"
-import { yupResolver } from "@hookform/resolvers"
+import { Controller, useForm } from 'react-hook-form'
+import { Button, TextInput, Text, useTheme, HelperText } from 'react-native-paper'
+import React, { FunctionComponent } from 'react'
+import { yupResolver } from '@hookform/resolvers'
 
 /** Import types here */
-import { FormData } from "./login-form.types"
+import { FormData } from './login-form.types'
 
-import { LoginSchema } from "./login-form.validation"
+import { LoginSchema } from './login-form.validation'
 
 interface LoginFormProps {
   handleLogin: (email: string, password: string) => void
@@ -17,10 +17,10 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
   const { control, formState, handleSubmit, errors } = useForm<FormData>({
     resolver: yupResolver(LoginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
-    mode: "onBlur",
+    mode: 'onBlur',
   })
 
   const onSubmit = ({ email, password }): void => {
@@ -53,7 +53,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
               disabled={formState.isSubmitting}
               keyboardType="email-address"
               onBlur={onBlur}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               error={!!errors.email}
               textContentType="emailAddress"
               value={value}
@@ -78,7 +78,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
               keyboardType="visible-password"
               onBlur={onBlur}
               left={<TextInput.Icon name="key" />}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               label="Password"
               secureTextEntry={true}
               spellCheck={false}
@@ -100,7 +100,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
         </TouchableOpacity>
       </View> */}
 
-      <Text style={{ textAlign: "center", marginBottom: 16, color: error }}>{errorText || ""}</Text>
+      <Text style={{ textAlign: 'center', marginBottom: 16, color: error }}>{errorText || ''}</Text>
       <Button
         disabled={formState.isSubmitting}
         onPress={handleSubmit(onSubmit)}

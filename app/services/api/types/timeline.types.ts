@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import { GeneralApiProblem } from "../api-problem"
+import { GeneralApiProblem } from '../api-problem'
 
 export interface TimelineEvent {
   id: number
@@ -57,9 +57,9 @@ export interface DeleteTimelineResponse {
   events: TimelineEvent[]
 }
 
-export type GetTimelinesResult = { kind: "ok"; data: TimelineResponse[] } | GeneralApiProblem
-export type GetTimelineResult = { kind: "ok"; data: TimelineResponse } | GeneralApiProblem
+export type GetTimelinesResult = { kind: 'ok'; data: TimelineResponse[] } | GeneralApiProblem
+export type GetTimelineResult = { kind: 'ok'; data: TimelineResponse } | GeneralApiProblem
 
-export type PutTimelineResult = { kind: "ok"; data: TimelineResponse } | GeneralApiProblem
-export type PostTimelineResult = { kind: "ok"; data: TimelineResponse } | GeneralApiProblem
-export type DeleteTimelineResult = { kind: "ok"; data: DeleteTimelineResponse } | GeneralApiProblem
+export type PutTimelineResult = { kind: 'ok'; data: TimelineResponse } | GeneralApiProblem
+export type PostTimelineResult = { kind: 'ok'; data: TimelineResponse } | GeneralApiProblem
+export type DeleteTimelineResult = { kind: 'ok'; data: DeleteTimelineResponse } | GeneralApiProblem

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { GeneralApiProblem } from "../api-problem"
+import { GeneralApiProblem } from '../api-problem'
 
 interface EventTimeline {
   id: number
@@ -28,8 +28,8 @@ export interface EventRequest {
   url: string | null
 }
 
-export type GetEventsResult = { kind: "ok"; data: EventResponse[] } | GeneralApiProblem
-export type GetEventResult = { kind: "ok"; data: EventResponse } | GeneralApiProblem
-export type PostEventResult = { kind: "ok"; data: EventResponse } | GeneralApiProblem
-export type PutEventResult = { kind: "ok"; data: EventResponse } | GeneralApiProblem
-export type DeleteEventResult = { kind: "ok"; data: EventResponse } | GeneralApiProblem
+export type GetEventsResult = { kind: 'ok'; data: EventResponse[] } | GeneralApiProblem
+export type GetEventResult = { kind: 'ok'; data: EventResponse } | GeneralApiProblem
+export type PostEventResult = { kind: 'ok'; data: EventResponse } | GeneralApiProblem
+export type PutEventResult = { kind: 'ok'; data: EventResponse } | GeneralApiProblem
+export type DeleteEventResult = { kind: 'ok'; data: EventResponse } | GeneralApiProblem

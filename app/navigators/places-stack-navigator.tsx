@@ -4,12 +4,12 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react"
-import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack"
-import { RouteProp } from "@react-navigation/native"
+import React from 'react'
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
 
-import { PlacesScreen } from "screens"
-import { TopBar } from "components"
+import { PlacesScreen } from 'screens'
+import { TopBar } from 'components'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -35,10 +35,7 @@ export type PlacesParamList = {
  * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
  * ```
  */
-export type PeopleStackNavigationProp<T extends keyof PlacesParamList> = StackNavigationProp<
-  PlacesParamList,
-  T
->
+export type PeopleStackNavigationProp<T extends keyof PlacesParamList> = StackNavigationProp<PlacesParamList, T>
 /**
  * Utility type to make it easier to use with `useRoute()`
  *
@@ -67,7 +64,7 @@ export const PlacesStackNavigator = () => {
       <PlacesStack.Screen
         name="places"
         component={PlacesScreen}
-        options={() => ({ headerShown: true, headerTitle: "Places" })}
+        options={() => ({ headerShown: true, headerTitle: 'Places' })}
       />
     </PlacesStack.Navigator>
   )

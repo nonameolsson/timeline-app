@@ -1,4 +1,4 @@
-import { StyleSheet, ViewStyle } from "react-native"
+import { StyleSheet, ViewStyle } from 'react-native'
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   emptyStateButtonWrapper: {
     flex: 1,
     width: 256,
-    alignSelf: "center",
+    alignSelf: 'center',
   } as ViewStyle,
   emptyStateWrapper: {
     flex: 1,

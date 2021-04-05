@@ -1,10 +1,10 @@
-import React from "react"
-import { MaterialIcons } from "@expo/vector-icons"
-import { HeaderButtons, HeaderButton } from "react-navigation-header-buttons"
-import { useTheme } from "react-native-paper"
+import React from 'react'
+import { MaterialIcons } from '@expo/vector-icons'
+import { HeaderButtons, HeaderButton } from 'react-navigation-header-buttons'
+import { useTheme } from 'react-native-paper'
 
 // define IconComponent, color, sizes and OverflowIcon in one place
-const MaterialHeaderButton = (props) => {
+const MaterialHeaderButton = props => {
   const {
     colors: { text },
   } = useTheme()
@@ -21,4 +21,4 @@ export const MaterialHeaderButtons = ({
 }) => {
   return <HeaderButtons left={left} HeaderButtonComponent={MaterialHeaderButton} {...props} />
 }
-export { Item } from "react-navigation-header-buttons"
+export { Item } from 'react-navigation-header-buttons'

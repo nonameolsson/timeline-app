@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react"
-import { BackHandler } from "react-native"
-import { PartialState, NavigationState, NavigationContainerRef } from "@react-navigation/native"
+import React, { useState, useEffect, useRef } from 'react'
+import { BackHandler } from 'react-native'
+import { PartialState, NavigationState, NavigationContainerRef } from '@react-navigation/native'
 
 export const RootNavigation = {
   navigate(name: string) {
@@ -79,10 +79,10 @@ export function useBackButtonHandler(
     }
 
     // Subscribe when we come to life
-    BackHandler.addEventListener("hardwareBackPress", onBackPress)
+    BackHandler.addEventListener('hardwareBackPress', onBackPress)
 
     // Unsubscribe when we're done
-    return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress)
+    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress)
   }, [ref])
 }
 
@@ -94,7 +94,7 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
   const [isRestoringNavigationState, setIsRestoringNavigationState] = useState(true)
 
   const routeNameRef = useRef()
-  const onNavigationStateChange = (state) => {
+  const onNavigationStateChange = state => {
     const previousRouteName = routeNameRef.current
     const currentRouteName = getActiveRouteName(state)
 

@@ -1,13 +1,14 @@
-import React from "react"
-import { View } from "react-native"
-import { Text, useTheme, HelperText, TextInput } from "react-native-paper"
-import { useNavigation } from "@react-navigation/native"
-import { useForm, Controller } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers"
+import React from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { View } from 'react-native'
+import { HelperText, Text, TextInput, useTheme } from 'react-native-paper'
+import { yupResolver } from '@hookform/resolvers'
+import { useNavigation } from '@react-navigation/native'
 
-import { MaterialHeaderButtons, Item } from "components"
-import { AddEventFormSchema } from "./add-event-form.validation"
-import { AddEventFormData } from "./add-event-form.types"
+import { Item, MaterialHeaderButtons } from 'components'
+
+import { AddEventFormData } from './add-event-form.types'
+import { AddEventFormSchema } from './add-event-form.validation'
 
 export interface AddEventFormProps {
   onSubmit: (data: AddEventFormData) => void
@@ -27,11 +28,11 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
 
   const { control, formState, handleSubmit, errors } = useForm<AddEventFormData>({
     resolver: yupResolver(AddEventFormSchema),
-    mode: "onBlur",
+    mode: 'onBlur',
     defaultValues: {
-      description: "",
-      title: "",
-      url: "https://",
+      description: '',
+      title: '',
+      url: 'https://',
     },
   })
 
@@ -81,7 +82,7 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
               right={errors.title && <TextInput.Icon name="alert-circle" color={error} />}
               disabled={formState.isSubmitting}
               onBlur={onBlur}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               error={!!errors.title}
               value={value}
             />
@@ -100,7 +101,7 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
             disabled={formState.isSubmitting}
             onBlur={onBlur}
             left={<TextInput.Icon name="script-text-outline" />}
-            onChangeText={(text) => onChange(text)}
+            onChangeText={text => onChange(text)}
             label="Description"
             spellCheck={true}
             error={!!errors.description}
@@ -117,7 +118,7 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
               disabled={formState.isSubmitting}
               onBlur={onBlur}
               left={<TextInput.Icon name="web" />}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               label="URL"
               autoCapitalize="none"
               autoCorrect={false}
@@ -131,7 +132,7 @@ export const AddEventForm = ({ errorText, onSubmit }: AddEventFormProps) => {
         )}
       />
 
-      <Text>{errorText || ""}</Text>
+      <Text>{errorText || ''}</Text>
     </View>
   )
 }

@@ -1,6 +1,6 @@
-import { useEffect, useRef, EffectCallback, useLayoutEffect } from "react"
-import { reaction } from "mobx"
-import { useNavigation, useFocusEffect } from "@react-navigation/native"
+import { useEffect, useRef, EffectCallback, useLayoutEffect } from 'react'
+import { reaction } from 'mobx'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 /**
  * useEffect combined with mobx stores. When the effect executes, the latest value from
@@ -23,10 +23,7 @@ export function useEffectWithStore<T>(
 
   // Update collect and update values from the store every time they change
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(
-    () => reaction(expression, (params) => (paramsRef.current = params), { fireImmediately: true }),
-    [],
-  )
+  useEffect(() => reaction(expression, params => (paramsRef.current = params), { fireImmediately: true }), [])
 
   // Update the callback function if it changes (will occure every update)
   useEffect(() => {

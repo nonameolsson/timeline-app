@@ -1,12 +1,12 @@
-import React, { FunctionComponent as Component } from "react"
-import { Controller, useForm } from "react-hook-form"
-import { TextInput, HelperText, Appbar } from "react-native-paper"
-import { yupResolver } from "@hookform/resolvers"
+import React, { FunctionComponent as Component } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { TextInput, HelperText, Appbar } from 'react-native-paper'
+import { yupResolver } from '@hookform/resolvers'
 
-import { Timeline } from "models"
-import { EditTimelineFormSchema } from "./edit-timeline-form.validation"
+import { Timeline } from 'models'
+import { EditTimelineFormSchema } from './edit-timeline-form.validation'
 
-import { useHeaderButtons } from "utils/hooks"
+import { useHeaderButtons } from 'utils/hooks'
 
 export interface EditTimelineFormProps {
   timeline: Timeline
@@ -24,10 +24,10 @@ export type EditTimelineFormData = {
 export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, onSubmit }) => {
   const { control, errors, formState, handleSubmit } = useForm<EditTimelineFormData>({
     resolver: yupResolver(EditTimelineFormSchema),
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
-      title: timeline.title || "",
-      description: timeline.description || "",
+      title: timeline.title || '',
+      description: timeline.description || '',
     },
   })
 
@@ -64,7 +64,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
               error={!!errors.title}
               label="Title"
               onBlur={onBlur}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.title}>
@@ -84,7 +84,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
               error={!!errors.description}
               label="Description"
               onBlur={onBlur}
-              onChangeText={(text) => onChange(text)}
+              onChangeText={text => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.description}>

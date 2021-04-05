@@ -1,6 +1,6 @@
-import { observable, IObservableValue } from "mobx"
+import { observable, IObservableValue } from 'mobx'
 
-export type StatusType = "idle" | "pending" | "done" | "error"
+export type StatusType = 'idle' | 'pending' | 'done' | 'error'
 
 /**
  * Adds a status field to the model often for tracking api access.
@@ -27,7 +27,7 @@ export const withStatus = () => {
   /**
    * The observable backing store for the status field.
    */
-  const status: IObservableValue<string> = observable.box("idle")
+  const status: IObservableValue<string> = observable.box('idle')
 
   return {
     views: {

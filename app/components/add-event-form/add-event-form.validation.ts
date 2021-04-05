@@ -1,4 +1,4 @@
-import * as yup from "yup"
+import * as yup from 'yup'
 
 export const AddEventFormSchema = yup.object().shape({
   title: yup.string().required(),

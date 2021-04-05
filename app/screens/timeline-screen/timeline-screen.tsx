@@ -1,21 +1,21 @@
-import { SafeAreaView, Alert, ScrollView, View } from "react-native"
-import { Card, Text, List, useTheme, Headline } from "react-native-paper"
-import { observer } from "mobx-react-lite"
-import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
-import React, { FunctionComponent as Component, useCallback } from "react"
+import { SafeAreaView, Alert, ScrollView, View } from 'react-native'
+import { Card, Text, List, useTheme, Headline } from 'react-native-paper'
+import { observer } from 'mobx-react-lite'
+import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native'
+import React, { FunctionComponent as Component, useCallback } from 'react'
 
-import { TimelineStackNavigationProp, TimelineRouteProp } from "navigators"
-import { Timeline } from "navigators/types"
-import { MaterialHeaderButtons, Item } from "components"
-import { formatDateYear } from "utils/date"
+import { TimelineStackNavigationProp, TimelineRouteProp } from 'navigators'
+import { Timeline } from 'navigators/types'
+import { MaterialHeaderButtons, Item } from 'components'
+import { formatDateYear } from 'utils/date'
 
-import { useStores } from "models"
-import { styles } from "./timeline-screen.styles"
+import { useStores } from 'models'
+import { styles } from './timeline-screen.styles'
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
   const { timelineStore } = useStores()
-  const navigation = useNavigation<TimelineStackNavigationProp<"timeline">>()
-  const { params } = useRoute<TimelineRouteProp<"timeline">>()
+  const navigation = useNavigation<TimelineStackNavigationProp<'timeline'>>()
+  const { params } = useRoute<TimelineRouteProp<'timeline'>>()
 
   const {
     colors: { background },
@@ -24,26 +24,26 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   const timeline = timelineStore.getTimeline(params.id)
 
   const goToEditTimelineScreen = useCallback(() => {
-    navigation.navigate("editTimeline", { id: params.id })
+    navigation.navigate('editTimeline', { id: params.id })
   }, [navigation, params.id])
 
   const deleteTimeline = useCallback(() => {
-    navigation.navigate("timelines", {
-      action: { type: "DELETE_TIMELINE", meta: { id: params.id } },
+    navigation.navigate('timelines', {
+      action: { type: 'DELETE_TIMELINE', meta: { id: params.id } },
     })
   }, [navigation, params.id])
 
   const showDeleteAlert = useCallback(() => {
     Alert.alert(
-      "Delete timeline",
-      "Do you really want to delete the timeline and all of the events?",
+      'Delete timeline',
+      'Do you really want to delete the timeline and all of the events?',
       [
         {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
         },
-        { text: "OK", onPress: () => deleteTimeline() },
+        { text: 'OK', onPress: () => deleteTimeline() },
       ],
       { cancelable: false },
     )
@@ -79,9 +79,9 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
         await timeline.editTimeline(payload, payload.id)
       }
 
-      if (action.type === "DELETE_EVENT") {
+      if (action.type === 'DELETE_EVENT') {
         deleteEvent(action.meta.id)
-      } else if (action.type === "EDIT_TIMELINE") {
+      } else if (action.type === 'EDIT_TIMELINE') {
         editTimeline(action.payload)
       }
     }, [params, timeline]),
@@ -93,14 +93,14 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   const openEvent = (eventId: number) => {
     const event = timeline.getEvent(eventId)
 
-    navigation.navigate("event", { title: event?.title, timelineId: params.id, eventId })
+    navigation.navigate('event', { title: event?.title, timelineId: params.id, eventId })
   }
 
   const renderEventList = () => {
     const events = timeline.events
       .slice()
       .sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0))
-      .map((event) => (
+      .map(event => (
         <List.Item
           key={event.id}
           onPress={() => openEvent(event.id)}

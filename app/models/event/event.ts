@@ -1,14 +1,14 @@
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/camelcase */
-import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
-import { withEnvironment } from "models/extensions/with-environment"
-import * as Types from "services/api/api.types"
+import { Instance, SnapshotOut, types, flow } from 'mobx-state-tree'
+import { withEnvironment } from 'models/extensions/with-environment'
+import * as Types from 'services/api/api.types'
 
 /**
  * Model description here for TypeScript hints.
  */
 export const EventModel = types
-  .model("Event")
+  .model('Event')
   .props({
     id: types.identifierNumber,
     title: types.string,
@@ -20,9 +20,9 @@ export const EventModel = types
     date: types.string,
   })
   .extend(withEnvironment)
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   // Following actions will send requests to the API, and call actions defined in the first action definition
-  .actions((self) => {
+  .actions(self => {
     const updateEventInStore = (eventSnapshot: Types.EventResponse) => {
       const { title, description, date, created_at, url, timeline, updated_at } = eventSnapshot
       self.title = title
@@ -37,7 +37,7 @@ export const EventModel = types
     const updateEvent = flow(function* (event: Types.EventRequest, id: number) {
       const result: Types.PutEventResult = yield self.environment.api.updateEvent(event, id)
 
-      if (result.kind === "ok") {
+      if (result.kind === 'ok') {
         updateEventInStore(result.data)
       } else {
         __DEV__ && console.tron.log(result.kind)

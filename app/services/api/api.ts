@@ -1,7 +1,7 @@
-import { ApisauceInstance, create, ApiResponse } from "apisauce"
-import { getGeneralApiProblem } from "./api-problem"
-import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
-import * as Types from "./api.types"
+import { ApisauceInstance, create, ApiResponse } from 'apisauce'
+import { getGeneralApiProblem } from './api-problem'
+import { ApiConfig, DEFAULT_API_CONFIG } from './api-config'
+import * as Types from './api.types'
 
 /**
  * Manages all requests to the API.
@@ -40,7 +40,7 @@ export class Api {
 
       timeout: this.config.timeout,
       headers: {
-        Accept: "application/json",
+        Accept: 'application/json',
       },
     })
   }
@@ -65,9 +65,9 @@ export class Api {
     try {
       const data: Types.GetUserResponse[] = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -93,9 +93,9 @@ export class Api {
     try {
       const data: Types.GetUserResponse = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -125,9 +125,9 @@ export class Api {
     try {
       const data: Types.PostLoginResponse = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -151,9 +151,9 @@ export class Api {
     try {
       const data: Types.TimelineResponse[] = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -179,9 +179,9 @@ export class Api {
     try {
       const data: Types.TimelineResponse[] = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -207,9 +207,9 @@ export class Api {
     try {
       const data: Types.TimelineResponse = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -222,10 +222,7 @@ export class Api {
    * @returns {Promise<Types.PutTimelineResult>}
    * @memberof Api
    */
-  async updateTimeline(
-    data: Types.PutTimelineRequest,
-    id: number,
-  ): Promise<Types.PutTimelineResult> {
+  async updateTimeline(data: Types.PutTimelineRequest, id: number): Promise<Types.PutTimelineResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.put(`/timelines/${id}`, data)
 
@@ -239,9 +236,9 @@ export class Api {
     try {
       const data: Types.TimelineResponse = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -267,9 +264,9 @@ export class Api {
     try {
       const data: Types.DeleteTimelineResponse = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -293,9 +290,9 @@ export class Api {
     try {
       const data: Types.EventResponse[] = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -321,9 +318,9 @@ export class Api {
     try {
       const data: Types.EventResponse = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -350,9 +347,9 @@ export class Api {
     try {
       const data: Types.EventResponse = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 
@@ -377,9 +374,9 @@ export class Api {
     try {
       const data: Types.EventResponse = response.data
 
-      return { kind: "ok", data }
+      return { kind: 'ok', data }
     } catch {
-      return { kind: "bad-data" }
+      return { kind: 'bad-data' }
     }
   }
 }

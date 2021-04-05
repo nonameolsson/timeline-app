@@ -1,14 +1,15 @@
-/* eslint-disable @typescript-eslint/camelcase */
-import { destroy, Instance, SnapshotOut, types, flow } from "mobx-state-tree"
-import { Event, EventModel, EventModelFromData } from "../event/event"
-import { withEnvironment } from "../extensions/with-environment"
-import * as Types from "services/api/api.types"
+import { destroy, flow, Instance, SnapshotOut, types } from 'mobx-state-tree'
+
+import * as Types from 'services/api/api.types'
+
+import { Event, EventModel, EventModelFromData } from '../event/event'
+import { withEnvironment } from '../extensions/with-environment'
 
 /**
  * Model description here for TypeScript hints.
  */
 export const TimelineModel = types
-  .model("Timeline")
+  .model('Timeline')
   .props({
     id: types.identifierNumber,
     title: types.string,
@@ -18,12 +19,12 @@ export const TimelineModel = types
     updated_at: types.string,
   })
   .extend(withEnvironment)
-  .views((self) => ({
+  .views(self => ({
     /**
      * Get a specific event from a timeline
      */
     getEvent: (id: number): Event | undefined => {
-      return self.events.find((event) => event.id === id)
+      return self.events.find(event => event.id === id)
       // if (!event) throw new Error('No event found. Fix this error.')
     },
 
@@ -37,7 +38,7 @@ export const TimelineModel = types
   /**
    * Following actions will be called with data received from the API and modify the store.
    */
-  .actions((self) => ({
+  .actions(self => ({
     updateTimelineInStore: (timelineSnapshot: Types.TimelineResponse) => {
       // eslint-disable-next-line
       const { created_at, description, title, updated_at } = timelineSnapshot
@@ -66,11 +67,11 @@ export const TimelineModel = types
   /**
    * Following actions will send requests to the API, and call actions defined in the first action definition
    */
-  .actions((self) => ({
+  .actions(self => ({
     createEvent: flow(function* (event: Types.EventRequest) {
       const result: Types.PostEventResult = yield self.environment.api.createEvent(event)
 
-      if (result.kind === "ok") {
+      if (result.kind === 'ok') {
         self.addNewEventToTimeline(result.data)
       } else {
         __DEV__ && console.tron.log(result.kind)
@@ -85,7 +86,7 @@ export const TimelineModel = types
     ) {
       const result: Types.PutTimelineResult = yield self.environment.api.updateTimeline(data, id)
 
-      if (result.kind === "ok") {
+      if (result.kind === 'ok') {
         self.updateTimelineInStore(result.data)
       } else {
         __DEV__ && console.tron.log(result.kind)
@@ -95,7 +96,7 @@ export const TimelineModel = types
     deleteEvent: flow(function* (id: number) {
       const result: Types.DeleteEventResult = yield self.environment.api.deleteEvent(id)
 
-      if (result.kind === "ok") {
+      if (result.kind === 'ok') {
         self.deleteEventFromStore(result.data.id)
       } else {
         __DEV__ && console.tron.log(result.kind)
@@ -106,10 +107,10 @@ export const TimelineModel = types
       const eventsToDelete: number[] = []
 
       yield Promise.all(
-        self.events.map(async (event) => {
+        self.events.map(async event => {
           const result: Types.DeleteEventResult = await self.environment.api.deleteEvent(event.id)
 
-          if (result.kind === "ok") {
+          if (result.kind === 'ok') {
             eventsToDelete.push(event.id)
           } else {
             __DEV__ && console.tron.log(result.kind)
@@ -117,7 +118,7 @@ export const TimelineModel = types
         }),
       )
 
-      eventsToDelete.forEach((id) => {
+      eventsToDelete.forEach(id => {
         self.deleteEventFromStore(id)
       })
     }),

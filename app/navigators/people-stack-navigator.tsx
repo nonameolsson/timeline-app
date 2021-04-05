@@ -4,12 +4,12 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react"
-import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack"
-import { RouteProp } from "@react-navigation/native"
+import React from 'react'
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
 
-import { PeopleScreen } from "screens"
-import { TopBar } from "components"
+import { PeopleScreen } from 'screens'
+import { TopBar } from 'components'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -35,10 +35,7 @@ export type PeopleParamList = {
  * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
  * ```
  */
-export type PeopleStackNavigationProp<T extends keyof PeopleParamList> = StackNavigationProp<
-  PeopleParamList,
-  T
->
+export type PeopleStackNavigationProp<T extends keyof PeopleParamList> = StackNavigationProp<PeopleParamList, T>
 /**
  * Utility type to make it easier to use with `useRoute()`
  *
@@ -67,7 +64,7 @@ export const PeopleStackNavigator = () => {
       <PeopleStack.Screen
         name="people"
         component={PeopleScreen}
-        options={() => ({ headerShown: true, headerTitle: "People" })}
+        options={() => ({ headerShown: true, headerTitle: 'People' })}
       />
     </PeopleStack.Navigator>
   )

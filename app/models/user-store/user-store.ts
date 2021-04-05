@@ -1,32 +1,32 @@
-import { Instance, SnapshotOut, types, flow, getRoot } from "mobx-state-tree"
-import { User, UserModel, UserSnapshot } from "../user/user"
-import { withEnvironment } from "../extensions/with-environment"
-import * as Types from "../../services/api"
-import { RootStore } from ".."
+import { Instance, SnapshotOut, types, flow, getRoot } from 'mobx-state-tree'
+import { User, UserModel, UserSnapshot } from '../user/user'
+import { withEnvironment } from '../extensions/with-environment'
+import * as Types from '../../services/api'
+import { RootStore } from '..'
 
 /**
  * Model description here for TypeScript hints.
  */
 export const UserStoreModel = types
-  .model("UserStore")
+  .model('UserStore')
   .props({
     jwt: types.maybeNull(types.string),
     user: types.maybeNull(UserModel),
   })
   .extend(withEnvironment)
-  .views((self) => ({
+  .views(self => ({
     isLoggedIn: () => {
       return !!self.jwt
     },
   }))
-  .actions((self) => ({
+  .actions(self => ({
     resetStore: () => {
       self.jwt = null
       self.user = null
     },
     saveJwt: (jwt: string) => {
       self.jwt = jwt
-      self.environment.api.apisauce.setHeader("Authorization", `Bearer ${jwt}`)
+      self.environment.api.apisauce.setHeader('Authorization', `Bearer ${jwt}`)
     },
     saveUser: (userSnapshot: UserSnapshot) => {
       const userModel: User = UserModel.create(userSnapshot) // create model instances from the plain objects
@@ -34,7 +34,7 @@ export const UserStoreModel = types
       self.user = userModel // Replace the existing data with the new data
     },
   }))
-  .actions((self) => ({
+  .actions(self => ({
     logOut: () => {
       const root = getRoot<RootStore>(self)
 
@@ -43,15 +43,15 @@ export const UserStoreModel = types
       root.timelineStore.resetStore()
 
       // Reset Apisauce
-      self.environment.api.apisauce.deleteHeader("Authorization")
+      self.environment.api.apisauce.deleteHeader('Authorization')
     },
     login: flow(function* (identifier: string, password: string) {
       const result: Types.PostLoginResult = yield self.environment.api.login(identifier, password)
 
-      if (result.kind === "ok") {
+      if (result.kind === 'ok') {
         self.saveUser(result.data.user)
         self.saveJwt(result.data.jwt)
-        self.environment.api.apisauce.setHeader("Authorization", `Bearer ${result.data.jwt}`)
+        self.environment.api.apisauce.setHeader('Authorization', `Bearer ${result.data.jwt}`)
       } else {
         __DEV__ && console.tron.log(result.kind)
         return result
@@ -60,7 +60,7 @@ export const UserStoreModel = types
     getUser: flow(function* (user: number) {
       const result: Types.GetUserResult = yield self.environment.api.getUser(user)
 
-      if (result.kind === "ok") {
+      if (result.kind === 'ok') {
         self.saveUser(result.data.user)
       } else {
         __DEV__ && console.tron.log(result.kind)

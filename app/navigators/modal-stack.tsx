@@ -1,15 +1,11 @@
-import React from "react"
-import { Platform } from "react-native"
-import { RouteProp } from "@react-navigation/native"
-import {
-  createStackNavigator,
-  TransitionPresets,
-  StackNavigationProp,
-} from "@react-navigation/stack"
+import React from 'react'
+import { Platform } from 'react-native'
+import { RouteProp } from '@react-navigation/native'
+import { createStackNavigator, TransitionPresets, StackNavigationProp } from '@react-navigation/stack'
 
-import { AddEventScreen } from "screens"
-import { AddTimelineScreen } from "screens/add-timeline-screen/add-timeline-screen"
-import { DrawerNavigator } from "./drawer-navigator"
+import { AddEventScreen } from 'screens'
+import { AddTimelineScreen } from 'screens/add-timeline-screen/add-timeline-screen'
+import { DrawerNavigator } from './drawer-navigator'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -34,10 +30,7 @@ export type ModalStackParamList = {
  * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
  * ```
  */
-export type ModalStackNavigationProp<T extends keyof ModalStackParamList> = StackNavigationProp<
-  ModalStackParamList,
-  T
->
+export type ModalStackNavigationProp<T extends keyof ModalStackParamList> = StackNavigationProp<ModalStackParamList, T>
 /**
  * Utility type to make it easier to use with `useRoute()`
  *
@@ -46,14 +39,10 @@ export type ModalStackNavigationProp<T extends keyof ModalStackParamList> = Stac
  * const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
  * ```
  */
-export type ModalStackRouteProp<T extends keyof ModalStackParamList> = RouteProp<
-  ModalStackParamList,
-  T
->
+export type ModalStackRouteProp<T extends keyof ModalStackParamList> = RouteProp<ModalStackParamList, T>
 
 const ModalStack = createStackNavigator<ModalStackParamList>()
-const transition = () =>
-  Platform.OS === "ios" ? TransitionPresets.ModalPresentationIOS : undefined
+const transition = () => (Platform.OS === 'ios' ? TransitionPresets.ModalPresentationIOS : undefined)
 
 export const ModalStackScreen = () => (
   <ModalStack.Navigator
@@ -62,7 +51,7 @@ export const ModalStackScreen = () => (
     screenOptions={() => {
       return {
         headerShown: false,
-        gestureEnabled: Platform.OS === "ios",
+        gestureEnabled: Platform.OS === 'ios',
         cardOverlayEnabled: true,
         ...transition(),
       }
@@ -74,7 +63,7 @@ export const ModalStackScreen = () => (
       options={() => {
         return {
           headerShown: true,
-          title: "New Timeline",
+          title: 'New Timeline',
         }
       }}
       component={AddTimelineScreen}
@@ -84,7 +73,7 @@ export const ModalStackScreen = () => (
       options={() => {
         return {
           headerShown: true,
-          title: "New Event",
+          title: 'New Event',
         }
       }}
       component={AddEventScreen}

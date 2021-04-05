@@ -1,6 +1,6 @@
-import { TimelineStoreModel, TimelineStore } from "./timeline-store"
+import { TimelineStoreModel, TimelineStore } from './timeline-store'
 
-test("can be created", () => {
+test('can be created', () => {
   const instance: TimelineStore = TimelineStoreModel.create({})
 
   expect(instance).toBeTruthy()

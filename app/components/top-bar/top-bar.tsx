@@ -1,8 +1,8 @@
-import React from "react"
-import { Appbar, useTheme } from "react-native-paper"
-import { DrawerNavigationProp } from "@react-navigation/drawer"
-import { observer } from "mobx-react-lite"
-import { StackHeaderProps } from "@react-navigation/stack"
+import React from 'react'
+import { Appbar, useTheme } from 'react-native-paper'
+import { DrawerNavigationProp } from '@react-navigation/drawer'
+import { observer } from 'mobx-react-lite'
+import { StackHeaderProps } from '@react-navigation/stack'
 
 export interface TopBarProps extends StackHeaderProps {}
 

@@ -1,20 +1,20 @@
-import React, { FunctionComponent as Component, useCallback } from "react"
-import { Alert, SafeAreaView, View } from "react-native"
-import * as WebBrowser from "expo-web-browser"
-import { Text, useTheme, Subheading, Headline, List } from "react-native-paper"
-import { observer } from "mobx-react-lite"
-import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
+import React, { FunctionComponent as Component, useCallback } from 'react'
+import { Alert, SafeAreaView, View } from 'react-native'
+import * as WebBrowser from 'expo-web-browser'
+import { Text, useTheme, Subheading, Headline, List } from 'react-native-paper'
+import { observer } from 'mobx-react-lite'
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native'
 
-import { useStores } from "models"
-import { TimelineStackNavigationProp, TimelineRouteProp } from "navigators"
-import { styles } from "./event-screen.styles"
-import { MaterialHeaderButtons, Item } from "components"
-import { formatDateYear, getTimelineDataString, getTimelineDate } from "utils/date"
+import { useStores } from 'models'
+import { TimelineStackNavigationProp, TimelineRouteProp } from 'navigators'
+import { styles } from './event-screen.styles'
+import { MaterialHeaderButtons, Item } from 'components'
+import { formatDateYear, getTimelineDataString, getTimelineDate } from 'utils/date'
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
-  const navigation = useNavigation<TimelineStackNavigationProp<"event">>()
-  const { params } = useRoute<TimelineRouteProp<"event">>()
+  const navigation = useNavigation<TimelineStackNavigationProp<'event'>>()
+  const { params } = useRoute<TimelineRouteProp<'event'>>()
 
   const {
     colors: { background },
@@ -25,7 +25,7 @@ export const EventScreen: Component = observer(function EventScreen() {
   useFocusEffect(
     useCallback(() => {
       if (!params.action || !event) return
-      if (params.action.type === "EDIT_EVENT") {
+      if (params.action.type === 'EDIT_EVENT') {
         event.updateEvent(params.action.payload, params.action.payload.id)
       }
     }, [event, params.action]),
@@ -35,10 +35,10 @@ export const EventScreen: Component = observer(function EventScreen() {
     const currentEvent = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
     if (!currentEvent) return
 
-    navigation.navigate("timeline", {
+    navigation.navigate('timeline', {
       id: params.timelineId,
       action: {
-        type: "DELETE_EVENT",
+        type: 'DELETE_EVENT',
         meta: {
           id: currentEvent.id,
         },
@@ -49,15 +49,15 @@ export const EventScreen: Component = observer(function EventScreen() {
   const showDeleteAlert = useCallback(
     function showDeleteAlert() {
       Alert.alert(
-        "Delete event",
-        "Do you really want to delete it?",
+        'Delete event',
+        'Do you really want to delete it?',
         [
           {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
           },
-          { text: "OK", onPress: () => deleteEvent() },
+          { text: 'OK', onPress: () => deleteEvent() },
         ],
         { cancelable: false },
       )
@@ -78,7 +78,7 @@ export const EventScreen: Component = observer(function EventScreen() {
                 title="Edit"
                 iconName="edit"
                 onPress={() =>
-                  navigation.navigate("editEvent", {
+                  navigation.navigate('editEvent', {
                     eventId: event.id,
                     timelineId: params.timelineId,
                   })
@@ -101,7 +101,7 @@ export const EventScreen: Component = observer(function EventScreen() {
           enableBarCollapsing: true,
           enableDefaultShareMenuItem: true,
         })
-        console.log("res", res)
+        console.log('res', res)
       } catch (error) {
         console.error(error)
       }
@@ -124,9 +124,7 @@ export const EventScreen: Component = observer(function EventScreen() {
         <Subheading>Description</Subheading>
         <Text>{event.description}</Text>
         <Subheading>Date</Subheading>
-        <Text>
-          {formatDateYear(getTimelineDate({ negative: true, year: 1914, month: 10, day: 22 }))}
-        </Text>
+        <Text>{formatDateYear(getTimelineDate({ negative: true, year: 1914, month: 10, day: 22 }))}</Text>
         <Text>{getTimelineDataString({ negative: true, year: 1914, month: 10, day: 22 })}</Text>
         <Text>{formatDateYear(getTimelineDate({ negative: true, year: 1914 }))}</Text>
         <Headline>References</Headline>
