@@ -1,7 +1,8 @@
-import AsyncStorage from "@react-native-community/async-storage"
+import { AsyncStorage } from "./async-storage"
 
 import { load, loadString, save, saveString, clear, remove } from "./storage"
 
+// expo
 jest.mock("react-native", () => ({
   AsyncStorage: {
     getItem: jest.fn(),
@@ -17,11 +18,7 @@ jest.mock("react-native", () => ({
 const VALUE_OBJECT = { x: 1 }
 const VALUE_STRING = JSON.stringify(VALUE_OBJECT)
 
-beforeEach(() => {
-  // @ts-ignore
-  AsyncStorage.getItem.mockReturnValue(Promise.resolve(VALUE_STRING))
-})
-
+beforeEach(() => (AsyncStorage.getItem as jest.Mock).mockReturnValue(Promise.resolve(VALUE_STRING)))
 afterEach(() => jest.clearAllMocks())
 
 test("load", async () => {

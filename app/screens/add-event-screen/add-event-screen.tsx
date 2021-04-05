@@ -7,7 +7,7 @@ import { EventForm } from "components"
 import { useStores } from "models"
 import { addEventScreenStyles as styles } from "./add-event-screen.styles"
 import { AddEventScreenProps } from "./add-event-screen.interfaces"
-import { ModalStackRouteProp } from "navigation/modal-stack"
+import { ModalStackRouteProp } from "navigators/modal-stack"
 import { EventFormData } from "components/event-form/event-form.types"
 
 export const AddEventScreen = observer(function AddEventScreen({

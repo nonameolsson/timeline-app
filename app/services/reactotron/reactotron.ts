@@ -1,11 +1,11 @@
 import Tron from "reactotron-react-native"
-import AsyncStorage from "@react-native-community/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { RootStore } from "../../models/root-store/root-store"
 import { onSnapshot } from "mobx-state-tree"
 import { ReactotronConfig, DEFAULT_REACTOTRON_CONFIG } from "./reactotron-config"
 import { mst } from "reactotron-mst"
 import { clear } from "../../utils/storage"
-import { RootNavigation } from "../../navigation"
+import { RootNavigation } from "../../navigators"
 
 // Teach TypeScript about the bad things we want to do.
 declare global {
@@ -101,7 +101,6 @@ export class Reactotron {
         })
       }
 
-      // @ts-ignore
       console.tron.trackMstNode(rootStore)
     }
   }
@@ -122,8 +121,6 @@ export class Reactotron {
       if (this.config.useAsyncStorage) {
         Tron.setAsyncStorageHandler(AsyncStorage)
       }
-
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       Tron.useReactNative({
         asyncStorage: this.config.useAsyncStorage ? undefined : false,
       })
@@ -172,6 +169,13 @@ export class Reactotron {
       })
 
       Tron.onCustomCommand({
+        title: "Toggle theme",
+        description: "Toggles between light and dark theme",
+        command: "toggleTheme",
+        handler: () => this.rootStore.uiStore.toggleTheme(),
+      })
+
+      Tron.onCustomCommand({
         title: "Reset Root Store",
         description: "Resets the MST store",
         command: "resetStore",
@@ -199,13 +203,6 @@ export class Reactotron {
           console.tron.log("Going back")
           RootNavigation.goBack()
         },
-      })
-
-      Tron.onCustomCommand({
-        title: "Toggle theme",
-        description: "Toggles between light and dark theme",
-        command: "toggleTheme",
-        handler: () => this.rootStore.uiStore.toggleTheme(),
       })
 
       // clear if we should

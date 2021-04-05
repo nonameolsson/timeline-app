@@ -16,14 +16,15 @@
     "noUnusedLocals": true,
     "sourceMap": true,
     "target": "esnext",
-    "lib": ["es6"],
+    "lib": ["esnext"],
     "skipLibCheck": true,
     "strict": true,
     "paths": {
       "config/*": ["./config/*"],
+      "components/*": ["./components/*"],
       "theme/*": ["./theme/*"],
       "models/*": ["./models/*"],
-      "navigation/*": ["./navigation/*"],
+      "navigators/*": ["./navigators/*"],
       "screens/*": ["./screens/*"],
       "services/*": ["./services/*"],
       "utils/*": ["./utils/*"]

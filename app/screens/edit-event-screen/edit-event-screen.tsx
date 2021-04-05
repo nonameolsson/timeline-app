@@ -6,7 +6,7 @@ import { useTheme } from "react-native-paper"
 
 import { EventForm } from "components"
 import { EventFormData } from "components/event-form/event-form.types"
-import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
+import { TimelineStackNavigationProp, TimelineRouteProp } from "navigators"
 import { useStores } from "models"
 import { editEventScreenStyles as styles } from "./add-event-screen.styles"
 

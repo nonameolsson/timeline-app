@@ -1,8 +1,7 @@
 {
   "expo": {
-    "name": "timeline",
-    "slug": "timeline",
-    "platforms": ["ios", "android", "web"],
+    "name": "Timeline",
+    "slug": "Timeline",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,7 +16,9 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     }
-  },
-  "name": "timeline"
+  }
 }

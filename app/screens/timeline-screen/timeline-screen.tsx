@@ -4,8 +4,8 @@ import { observer } from "mobx-react-lite"
 import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native"
 import React, { FunctionComponent as Component, useCallback } from "react"
 
-import { TimelineStackNavigationProp, TimelineRouteProp } from "navigation"
-import { Timeline } from "navigation/types"
+import { TimelineStackNavigationProp, TimelineRouteProp } from "navigators"
+import { Timeline } from "navigators/types"
 import { MaterialHeaderButtons, Item } from "components"
 import { formatDateYear } from "utils/date"
 
@@ -103,7 +103,6 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
           description={formatDateYear(new Date(event.date))}
         />
       ))
-
     return <ScrollView>{events}</ScrollView>
   }
 
