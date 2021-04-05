@@ -31,24 +31,6 @@ export type RootParamList = {
 
 const Stack = createStackNavigator<RootParamList>()
 
-// const RootStack = () => {
-//   return (
-//     <Stack.Navigator
-//       screenOptions={{
-//         headerShown: false,
-//       }}
-//     >
-//       <Stack.Screen
-//         name="mainStack"
-//         component={MainNavigator}
-//         options={{
-//           headerShown: false,
-//         }}
-//       />
-//     </Stack.Navigator>
-//   )
-// }
-
 const RootStack = observer(function RootStack() {
   const { userStore } = useStores()
 

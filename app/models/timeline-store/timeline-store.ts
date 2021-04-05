@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 
 import { Event, EventModel } from "../event/event"

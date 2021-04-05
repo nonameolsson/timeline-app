@@ -1,6 +1,6 @@
 import React from "react"
 import { SafeAreaView, View } from "react-native"
-import { useObserver } from "mobx-react-lite"
+import { observer } from "mobx-react-lite"
 import {
   Drawer,
   TouchableRipple,
@@ -25,12 +25,17 @@ export interface DrawerContentProps {}
  *
  * Component description here for TypeScript tips.
  */
-export const DrawerContent = (props: DrawerContentProps) => {
+
+export const DrawerContent = observer((props: DrawerContentProps) => {
   const { userStore, uiStore } = useStores()
 
   const logOut = () => userStore.logOut()
 
-  return useObserver(() => (
+  return (
+    /**
+     * // FIXME: Fix this warning
+     * useObserver is deprecated. use
+     **/
     <SafeAreaView style={styles.wrapper}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
@@ -106,5 +111,5 @@ export const DrawerContent = (props: DrawerContentProps) => {
         />
       </Drawer.Section>
     </SafeAreaView>
-  ))
-}
+  )
+})

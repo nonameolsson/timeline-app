@@ -35,7 +35,7 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({
   const { timelineStore } = useStores()
   const theme = useTheme()
   const isFocused = useIsFocused()
-  const safeArea = useSafeArea()
+  const safeArea = useSafeArea() // FIXME: This is deprecated
 
   const routeName = route.state ? getActiveRouteName(route.state) : "timelines"
 
@@ -76,7 +76,7 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({
     if (routeName === "timelines") {
       navigation.navigate("addTimeline")
     } else if (routeName === "timeline") {
-      const timelineId = route.state.routes[0].state.routes[1].params.id
+      const timelineId = route.state.routes[0].state.routes[1].params.id // FIXME: Throws a warning: Accessing the 'state' property of the 'route' object is not supported. If you want to get the focused route name, use the 'getFocusedRouteNameFromRoute' helper instead: https://reactnavigation.org/docs/screen-options-resolution/#setting-parent-screen-options-based-on-child-navigators-state
 
       navigation.navigate("addEvent", {
         timelineId: timelineId,

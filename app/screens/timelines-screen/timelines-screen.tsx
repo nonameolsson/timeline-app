@@ -57,8 +57,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
         deleteTimeline(action.meta.id)
         setIsLoading(false)
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params]),
+    }, [params, timelineStore]),
   )
 
   const openTimeline = (id: string, title: string): void => {
