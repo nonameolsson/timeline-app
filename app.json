@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Timeline",
-    "slug": "Timeline",
+    "name": "YourTimeline",
+    "slug": "your-timeline",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,10 +15,17 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "app.yourtimeline.timeline",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "app.yourtimeline.timeline",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "sdkVersion": "41.0.0"
   }
 }

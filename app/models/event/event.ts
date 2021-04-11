@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
-/* eslint-disable @typescript-eslint/camelcase */
-import { Instance, SnapshotOut, types, flow } from 'mobx-state-tree'
+import { flow, Instance, SnapshotOut, types } from 'mobx-state-tree'
+
 import { withEnvironment } from 'models/extensions/with-environment'
 import * as Types from 'services/api/api.types'
 
@@ -72,6 +72,6 @@ export const EventModelFromData = (event: Types.EventResponse | Types.EventRespo
     timeline: event.timeline ? event.timeline.id : null,
     created_at: event.created_at,
     updated_at: event.updated_at,
-    date: event.date.toString(),
+    date: event.date,
   })
 }

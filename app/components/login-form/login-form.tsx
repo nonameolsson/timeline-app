@@ -1,11 +1,10 @@
-import { Controller, useForm } from 'react-hook-form'
-import { Button, TextInput, Text, useTheme, HelperText } from 'react-native-paper'
 import React, { FunctionComponent } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { Button, HelperText, Text, TextInput, useTheme } from 'react-native-paper'
 import { yupResolver } from '@hookform/resolvers'
 
 /** Import types here */
 import { FormData } from './login-form.types'
-
 import { LoginSchema } from './login-form.validation'
 
 interface LoginFormProps {

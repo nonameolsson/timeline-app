@@ -1,7 +1,8 @@
-import { Instance, SnapshotOut, types, flow, getRoot } from 'mobx-state-tree'
-import { User, UserModel, UserSnapshot } from '../user/user'
-import { withEnvironment } from '../extensions/with-environment'
+import { flow, getRoot, Instance, SnapshotOut, types } from 'mobx-state-tree'
+
 import * as Types from '../../services/api'
+import { withEnvironment } from '../extensions/with-environment'
+import { User, UserModel, UserSnapshot } from '../user/user'
 import { RootStore } from '..'
 
 /**

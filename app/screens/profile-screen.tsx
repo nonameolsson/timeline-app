@@ -1,7 +1,7 @@
 import React, { FunctionComponent as Component } from 'react'
-import { observer } from 'mobx-react-lite'
 import { View } from 'react-native'
 import { Button, Headline } from 'react-native-paper'
+import { observer } from 'mobx-react-lite'
 
 export const ProfileScreen: Component = observer(function ProfileScreen(props) {
   // Pull in one of our MST stores

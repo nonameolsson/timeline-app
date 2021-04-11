@@ -1,8 +1,7 @@
 import React, { FunctionComponent as Component } from 'react'
-import { observer } from 'mobx-react-lite'
-import { Subheading, Headline, useTheme } from 'react-native-paper'
-
 import { StyleSheet, View } from 'react-native'
+import { Headline, Subheading, useTheme } from 'react-native-paper'
+import { observer } from 'mobx-react-lite'
 
 const styles = StyleSheet.create({
   alignCenter: {

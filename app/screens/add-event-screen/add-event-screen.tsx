@@ -1,14 +1,15 @@
 import React from 'react'
-import { observer } from 'mobx-react-lite'
-import { View, SafeAreaView } from 'react-native'
+import { SafeAreaView, Text, View } from 'react-native'
 import { useRoute } from '@react-navigation/native'
+import { observer } from 'mobx-react-lite'
+import { ModalStackRouteProp } from 'navigators/modal-stack'
 
 import { EventForm } from 'components'
-import { useStores } from 'models'
-import { addEventScreenStyles as styles } from './add-event-screen.styles'
-import { AddEventScreenProps } from './add-event-screen.interfaces'
-import { ModalStackRouteProp } from 'navigators/modal-stack'
 import { EventFormData } from 'components/event-form/event-form.types'
+import { useStores } from 'models'
+
+import { AddEventScreenProps } from './add-event-screen.interfaces'
+import { addEventScreenStyles as styles } from './add-event-screen.styles'
 
 export const AddEventScreen = observer(function AddEventScreen({ navigation }: AddEventScreenProps) {
   const { userStore, timelineStore } = useStores()
@@ -19,11 +20,11 @@ export const AddEventScreen = observer(function AddEventScreen({ navigation }: A
 
   if (!timeline) return null
 
-  const handleSubmit = async ({ title, description, url }: EventFormData) => {
+  const handleSubmit = async ({ title, description, url, date }: EventFormData) => {
     const user = userStore?.user?.id.toString()
     if (!user) return
 
-    await timeline.createEvent({ timeline: params.timelineId, title, description, url })
+    await timeline.createEvent({ timeline: params.timelineId, title, description, url, date })
     navigation.goBack()
   }
 
@@ -31,6 +32,7 @@ export const AddEventScreen = observer(function AddEventScreen({ navigation }: A
     <SafeAreaView>
       <View style={styles.container}>
         <EventForm onSubmit={data => handleSubmit(data)} />
+        <Text style={{ color: 'red' }}>hasdf</Text>
       </View>
     </SafeAreaView>
   )

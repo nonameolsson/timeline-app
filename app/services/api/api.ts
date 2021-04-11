@@ -1,7 +1,8 @@
-import { ApisauceInstance, create, ApiResponse } from 'apisauce'
-import { getGeneralApiProblem } from './api-problem'
-import { ApiConfig, DEFAULT_API_CONFIG } from './api-config'
+import { ApiResponse, ApisauceInstance, create } from 'apisauce'
+
 import * as Types from './api.types'
+import { ApiConfig, DEFAULT_API_CONFIG } from './api-config'
+import { getGeneralApiProblem } from './api-problem'
 
 /**
  * Manages all requests to the API.
@@ -63,7 +64,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.GetUserResponse[] = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -91,7 +92,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.GetUserResponse = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -123,7 +124,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.PostLoginResponse = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -149,7 +150,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.TimelineResponse[] = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -177,7 +178,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.TimelineResponse[] = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -205,7 +206,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.TimelineResponse = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -234,7 +235,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.TimelineResponse = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -262,7 +263,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.DeleteTimelineResponse = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -288,7 +289,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.EventResponse[] = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -316,7 +317,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.EventResponse = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -345,7 +346,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.EventResponse = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {
@@ -372,7 +373,7 @@ export class Api {
 
     // transform the data into the format we are expecting
     try {
-      const data: Types.EventResponse = response.data
+      const { data } = response
 
       return { kind: 'ok', data }
     } catch {

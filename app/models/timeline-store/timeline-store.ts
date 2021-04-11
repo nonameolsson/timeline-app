@@ -1,9 +1,10 @@
-import { Instance, SnapshotOut, types, flow } from 'mobx-state-tree'
+import { flow, Instance, SnapshotOut, types } from 'mobx-state-tree'
+
+import * as Types from 'services/api/api.types'
 
 import { Event, EventModel } from '../event/event'
-import { Timeline, TimelineModel } from '../timeline/timeline'
 import { withEnvironment } from '../extensions/with-environment'
-import * as Types from 'services/api/api.types'
+import { Timeline, TimelineModel } from '../timeline/timeline'
 
 /**
  * Model description here for TypeScript hints.
@@ -27,7 +28,7 @@ export const TimelineStoreModel = types
       return timeline.events.find(event => event.id === eventId)
     },
 
-    getTimeline: (id: number): Timeline | undefined => {
+    getTimeline: (id: number): Timeline => {
       const timeline = self.timelines.get(id.toString())
 
       // if (!timeline) throw new Error(`No timeline with id ${id} was found`)

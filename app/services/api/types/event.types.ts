@@ -6,6 +6,7 @@ interface EventTimeline {
   title: string
   description: string | null
   user: number
+  date: string
   created_at: string
   updated_at: string
 }
@@ -25,6 +26,7 @@ export interface EventRequest {
   title: string
   description: string | null
   timeline: number
+  date: string
   url: string | null
 }
 

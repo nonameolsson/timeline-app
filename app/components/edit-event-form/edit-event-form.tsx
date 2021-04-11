@@ -1,15 +1,17 @@
-import { Controller, useForm } from 'react-hook-form'
-import { TextInput, HelperText, Appbar } from 'react-native-paper'
-import { yupResolver } from '@hookform/resolvers'
 import React, { FunctionComponent as Component } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { Appbar, HelperText, TextInput } from 'react-native-paper'
+import { yupResolver } from '@hookform/resolvers'
+
+import { Event } from 'models/event'
+import { useHeaderButtons } from 'utils/hooks'
 
 import { EditEventFormSchema } from './edit-event-form.validation'
-import { Event } from 'models'
-import { useHeaderButtons } from 'utils/hooks'
 
 export type EditEventFormData = {
   title: string
   description: string
+  date: string
   url?: string
 }
 
@@ -30,6 +32,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     defaultValues: {
       title: event.title,
       description: event.description || '',
+      date: event.date,
       url: event.url || '',
     },
   })
@@ -39,6 +42,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       id: event.id,
       title: data.title,
       url: data.url,
+      date: data.date,
       description: data.description,
     }
 
@@ -93,6 +97,26 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
             />
             <HelperText type="error" visible={!!errors.description}>
               {errors.description?.message}
+            </HelperText>
+          </>
+        )}
+      />
+      <Controller
+        control={control}
+        name="date"
+        label="Date"
+        render={({ onChange, onBlur, value }) => (
+          <>
+            <TextInput
+              autoCapitalize="none"
+              error={!!errors.date}
+              label="Date"
+              onBlur={onBlur}
+              onChangeText={text => onChange(text)}
+              value={value}
+            />
+            <HelperText type="error" visible={!!errors.date}>
+              {errors.date?.message}
             </HelperText>
           </>
         )}

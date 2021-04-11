@@ -5,10 +5,10 @@
  * You'll likely spend most of your time in this file.
  */
 import React from 'react'
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
-
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
 import { PlacesScreen } from 'screens'
+
 import { TopBar } from 'components'
 
 /**

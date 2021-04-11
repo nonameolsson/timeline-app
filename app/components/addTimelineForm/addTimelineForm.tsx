@@ -1,13 +1,14 @@
-import React from 'react'
-import { TextInput, Text, HelperText, useTheme } from 'react-native-paper'
+import React, { useLayoutEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { View } from 'react-native'
+import { HelperText, Text, TextInput, useTheme } from 'react-native-paper'
 import { yupResolver } from '@hookform/resolvers'
+import { useNavigation } from '@react-navigation/native'
+
+import { Item, MaterialHeaderButtons } from 'components'
 
 import { FormData } from './addTimelineForm.types'
 import { AddTimelineFormSchema } from './addTimelineForm.validation'
-import { MaterialHeaderButtons, Item } from 'components'
-import { useNavigation } from '@react-navigation/native'
 
 interface AddTimelineFormProps {
   onSubmit: (data: { title: string; description: string }) => void

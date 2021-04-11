@@ -1,8 +1,8 @@
 import React from 'react'
 import { Appbar, useTheme } from 'react-native-paper'
 import { DrawerNavigationProp } from '@react-navigation/drawer'
-import { observer } from 'mobx-react-lite'
 import { StackHeaderProps } from '@react-navigation/stack'
+import { observer } from 'mobx-react-lite'
 
 export interface TopBarProps extends StackHeaderProps {}
 
@@ -31,7 +31,7 @@ export const TopBar = observer(function TopBar({ scene, previous, navigation }: 
         <Appbar.Action
           icon="menu"
           onPress={() => {
-            ;((navigation as any) as DrawerNavigationProp<{}>).openDrawer()
+            ;((navigation as any) as DrawerNavigationProp<Record<string, any>>).openDrawer()
           }}
         />
       )}

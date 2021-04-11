@@ -1,6 +1,5 @@
 import { AsyncStorage } from './async-storage'
-
-import { load, loadString, save, saveString, clear, remove } from './storage'
+import { clear, load, loadString, remove, save, saveString } from './storage'
 
 // expo
 jest.mock('react-native', () => ({

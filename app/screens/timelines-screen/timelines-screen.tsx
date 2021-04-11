@@ -1,13 +1,13 @@
-import React, { useState, useCallback } from 'react'
-import { ActivityIndicator, SafeAreaView, View, FlatList } from 'react-native'
-import { Text, List, Button } from 'react-native-paper'
-import { observer } from 'mobx-react-lite'
+import React, { useCallback, useState } from 'react'
+import { ActivityIndicator, FlatList, SafeAreaView, View } from 'react-native'
+import { Button, List, Text } from 'react-native-paper'
 import { useFocusEffect } from '@react-navigation/native'
-
-import { useStores } from 'models'
-import { styles } from './timelines-screen.styles'
+import { observer } from 'mobx-react-lite'
 
 import { EmptyState } from 'components'
+import { useStores } from 'models'
+
+import { styles } from './timelines-screen.styles'
 
 // type TimelinesScreenProp = {
 //   navigation: CompositeNavigationProp<

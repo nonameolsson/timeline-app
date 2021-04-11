@@ -1,14 +1,15 @@
-import React from 'react'
-import { View } from 'react-native'
-import { useTheme, HelperText, TextInput } from 'react-native-paper'
-import { useNavigation } from '@react-navigation/native'
-import { useForm, Controller } from 'react-hook-form'
+import React, { useLayoutEffect } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { Text, View } from 'react-native'
+import { HelperText, TextInput, useTheme } from 'react-native-paper'
 import { yupResolver } from '@hookform/resolvers'
+import { useNavigation } from '@react-navigation/native'
 
-import { MaterialHeaderButtons, Item } from 'components'
-import { EventFormSchema } from './event-form.validation'
+import { Item, MaterialHeaderButtons } from 'components'
+import { Event } from 'models/event/event'
+
 import { EventFormData } from './event-form.types'
-import { Event } from 'models'
+import { EventFormSchema } from './event-form.validation'
 
 export interface EventFormProps {
   event?: Event
@@ -33,16 +34,18 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
       id: event?.id || null,
       title: event?.title || '',
       description: event?.description || '',
+      date: event?.date,
       url: event?.url || '',
     },
   })
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const localSubmit = (data: EventFormData) => {
       const updatedData: EventFormData = {
         id: event ? event.id : null,
         title: data.title,
         description: data.description,
+        date: data.date.toString(),
         url: data.url,
       }
 
@@ -102,6 +105,22 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
             label="Description"
             spellCheck={true}
             error={!!errors.description}
+            value={value}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="date"
+        render={({ onChange, onBlur, value }) => (
+          <TextInput
+            style={{ marginBottom: 24 }}
+            disabled={formState.isSubmitting}
+            onBlur={onBlur}
+            left={<TextInput.Icon name="calendar" />}
+            onChangeText={text => onChange(text)}
+            label="Date"
+            error={!!errors.date}
             value={value}
           />
         )}

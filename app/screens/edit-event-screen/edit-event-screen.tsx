@@ -1,13 +1,14 @@
 import React, { FunctionComponent as Component } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useNavigation, useRoute } from '@react-navigation/native'
 import { SafeAreaView, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { observer } from 'mobx-react-lite'
+import { TimelineRouteProp, TimelineStackNavigationProp } from 'navigators'
 
 import { EventForm } from 'components'
 import { EventFormData } from 'components/event-form/event-form.types'
-import { TimelineStackNavigationProp, TimelineRouteProp } from 'navigators'
 import { useStores } from 'models'
+
 import { editEventScreenStyles as styles } from './add-event-screen.styles'
 
 // #den här koden vet jag inte vad den gör, det är @nonameolsson som har koll
@@ -35,9 +36,7 @@ export const EditEventScreen: Component = observer(function EditEventScreen() {
         type: 'EDIT_EVENT',
         payload: {
           id: event.id,
-          // eslint-disable-next-line @typescript-eslint/camelcase
           created_at: event.created_at,
-          // eslint-disable-next-line @typescript-eslint/camelcase
           updated_at: event.updated_at,
           timeline: params.timelineId,
           title,

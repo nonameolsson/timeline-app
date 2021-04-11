@@ -1,11 +1,11 @@
 import React from 'react'
-
 import { createDrawerNavigator, DrawerNavigationProp } from '@react-navigation/drawer'
+import { RouteProp } from '@react-navigation/native'
+import { ProfileScreen } from 'screens'
+
 import { DrawerContent } from 'components'
 
 import { PrimaryTabNavigator } from './primary-tab-navigator'
-import { ProfileScreen } from 'screens'
-import { RouteProp } from '@react-navigation/native'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator

@@ -1,15 +1,15 @@
-import { SafeAreaView, Alert, ScrollView, View } from 'react-native'
-import { Card, Text, List, useTheme, Headline } from 'react-native-paper'
+import React, { FunctionComponent as Component, useCallback, useLayoutEffect } from 'react'
+import { Alert, SafeAreaView, ScrollView, View } from 'react-native'
+import { Card, Headline, List, Subheading, Text, useTheme } from 'react-native-paper'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import { observer } from 'mobx-react-lite'
-import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native'
-import React, { FunctionComponent as Component, useCallback } from 'react'
-
-import { TimelineStackNavigationProp, TimelineRouteProp } from 'navigators'
+import { TimelineRouteProp, TimelineStackNavigationProp } from 'navigators'
 import { Timeline } from 'navigators/types'
-import { MaterialHeaderButtons, Item } from 'components'
+
+import { Item, MaterialHeaderButtons } from 'components'
+import { useStores } from 'models'
 import { formatDateYear } from 'utils/date'
 
-import { useStores } from 'models'
 import { styles } from './timeline-screen.styles'
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
@@ -22,6 +22,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   } = useTheme()
 
   const timeline = timelineStore.getTimeline(params.id)
+  const events = timeline.getEvents()
 
   const goToEditTimelineScreen = useCallback(() => {
     navigation.navigate('editTimeline', { id: params.id })
@@ -49,7 +50,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     )
   }, [deleteTimeline])
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const headerRightComponent = () => {
       return (
         <MaterialHeaderButtons>
@@ -88,7 +89,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   )
 
   // Make sure all data exists before using it
-  if (!timeline) return null
+  // if (!timeline) return null
 
   const openEvent = (eventId: number) => {
     const event = timeline.getEvent(eventId)
@@ -97,30 +98,27 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   }
 
   const renderEventList = () => {
-    const events = timeline.events
-      .slice()
-      .sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0))
-      .map(event => (
-        <List.Item
-          key={event.id}
-          onPress={() => openEvent(event.id)}
-          title={event.title}
-          description={formatDateYear(new Date(event.date))}
-        />
-      ))
-    return <ScrollView>{events}</ScrollView>
+    const eventList = events.map(event => (
+      <List.Item key={event.id} onPress={() => openEvent(event.id)} title={event.title} description={event.date} />
+    ))
+    return <ScrollView>{eventList}</ScrollView>
   }
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={[styles.container, { backgroundColor: background }]}>
-        <Card style={{ padding: 16 }}>
-          <Text>{timeline.description}</Text>
-        </Card>
-
-        <Headline>Events - {timeline.events.length}</Headline>
-
-        {renderEventList()}
+        {events.length > 0 ? (
+          <>
+            <Card style={{ padding: 16 }}>
+              <Card.Title title={timeline.description} subtitle={`${events[0].date} - ${events.pop()?.date}`} />
+            </Card>
+            {renderEventList()}
+          </>
+        ) : (
+          <Card style={{ padding: 16 }}>
+            <Card.Title title="No events" subtitle="Start by adding an event" />
+          </Card>
+        )}
       </View>
     </SafeAreaView>
   )

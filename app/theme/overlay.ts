@@ -1,6 +1,6 @@
-import color from 'color'
 import { Animated } from 'react-native'
 import { DarkTheme } from 'react-native-paper'
+import color from 'color'
 
 const elevationOverlayTransparency: { [id: number]: number } = {
   1: 5,

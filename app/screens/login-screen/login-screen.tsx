@@ -1,4 +1,4 @@
-import React, { FunctionComponent as Component } from 'react'
+import React, { FunctionComponent as Component, useState } from 'react'
 import { View } from 'react-native'
 import { Headline, Subheading, useTheme } from 'react-native-paper'
 import { observer } from 'mobx-react-lite'
@@ -11,8 +11,8 @@ import { loginScreenStyles as styles } from './login-screen.styles'
 
 export const LoginScreen: Component = observer(function LoginScreen() {
   const { userStore } = useStores()
-  const [isLoading, setIsLoading] = React.useState(false) // TODO: Add loading to render
-  const [error, setError] = React.useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false) // TODO: Add loading to render
+  const [error, setError] = useState<string | null>(null)
 
   const {
     colors: { background },

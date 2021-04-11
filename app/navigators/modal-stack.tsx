@@ -1,10 +1,10 @@
 import React from 'react'
 import { Platform } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
-import { createStackNavigator, TransitionPresets, StackNavigationProp } from '@react-navigation/stack'
-
+import { createStackNavigator, StackNavigationProp, TransitionPresets } from '@react-navigation/stack'
 import { AddEventScreen } from 'screens'
 import { AddTimelineScreen } from 'screens/add-timeline-screen/add-timeline-screen'
+
 import { DrawerNavigator } from './drawer-navigator'
 
 /**

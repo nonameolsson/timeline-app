@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { Instance, SnapshotOut, types } from 'mobx-state-tree'
 
 import { RoleModel } from '../role/role'

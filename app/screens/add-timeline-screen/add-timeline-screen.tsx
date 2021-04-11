@@ -1,11 +1,12 @@
 import React from 'react'
-import { observer } from 'mobx-react-lite'
 import { SafeAreaView, View } from 'react-native'
+import { observer } from 'mobx-react-lite'
 
 import { AddTimelineForm } from 'components'
 import { useStores } from 'models'
-import { addTimelineScreenStyles as styles } from './add-timeline-screen.styles'
+
 import { AddTimelineScreenProps } from './add-timeline-screen.interfaces'
+import { addTimelineScreenStyles as styles } from './add-timeline-screen.styles'
 
 export const AddTimelineScreen = observer(function AddTimelineScreen({ navigation }: AddTimelineScreenProps) {
   const { userStore, timelineStore } = useStores()

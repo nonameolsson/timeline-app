@@ -1,15 +1,16 @@
-import React, { FunctionComponent as Component, useCallback } from 'react'
+import React, { FunctionComponent as Component, useCallback, useLayoutEffect } from 'react'
 import { Alert, SafeAreaView, View } from 'react-native'
+import { Headline, List, Subheading, Text, useTheme } from 'react-native-paper'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import * as WebBrowser from 'expo-web-browser'
-import { Text, useTheme, Subheading, Headline, List } from 'react-native-paper'
 import { observer } from 'mobx-react-lite'
-import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native'
+import { TimelineRouteProp, TimelineStackNavigationProp } from 'navigators'
 
+import { Item, MaterialHeaderButtons } from 'components'
 import { useStores } from 'models'
-import { TimelineStackNavigationProp, TimelineRouteProp } from 'navigators'
-import { styles } from './event-screen.styles'
-import { MaterialHeaderButtons, Item } from 'components'
 import { formatDateYear, getTimelineDataString, getTimelineDate } from 'utils/date'
+
+import { styles } from './event-screen.styles'
 
 export const EventScreen: Component = observer(function EventScreen() {
   const { timelineStore } = useStores()
@@ -65,7 +66,7 @@ export const EventScreen: Component = observer(function EventScreen() {
     [deleteEvent],
   )
 
-  React.useLayoutEffect(
+  useLayoutEffect(
     function HeaderButtons() {
       if (event) {
         navigation.setOptions({

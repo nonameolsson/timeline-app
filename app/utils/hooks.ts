@@ -1,6 +1,6 @@
-import { useEffect, useRef, EffectCallback, useLayoutEffect } from 'react'
+import { EffectCallback, useEffect, useLayoutEffect, useRef } from 'react'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { reaction } from 'mobx'
-import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 /**
  * useEffect combined with mobx stores. When the effect executes, the latest value from

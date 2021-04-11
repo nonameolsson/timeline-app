@@ -1,13 +1,13 @@
 import React from 'react'
 import { SafeAreaView, View } from 'react-native'
-import { observer } from 'mobx-react-lite'
-import { Drawer, TouchableRipple, Switch, Avatar, Title, Caption, Text, Divider } from 'react-native-paper'
+import { Avatar, Caption, Divider, Drawer, Switch, Text, Title, TouchableRipple } from 'react-native-paper'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-
-import { drawerContentStyles as styles } from './drawer-content.styles'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
+import { observer } from 'mobx-react-lite'
 
 import { useStores } from 'models'
+
+import { drawerContentStyles as styles } from './drawer-content.styles'
 
 export interface DrawerContentProps {}
 

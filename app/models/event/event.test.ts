@@ -1,4 +1,4 @@
-import { EventModel, Event } from './event'
+import { Event, EventModel } from './event'
 
 test('can be created', () => {
   const instance: Event = EventModel.create({})

@@ -10,31 +10,34 @@
  * if you're interested in adding screens and navigators.
  */
 
+import React, { useEffect, useRef, useState } from 'react'
 import {
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper'
-
-import { enableScreens } from 'react-native-screens'
 import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context'
-// This puts screens in a native ViewController or Activity. If you want fully native
-// stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
-// https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
+import { enableScreens } from 'react-native-screens'
 import { OverflowMenuProvider } from 'react-navigation-header-buttons'
-import { ToggleStorybook } from '../storybook/toggle-storybook'
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
   NavigationContainerRef,
 } from '@react-navigation/native'
+
 import './i18n'
 import './utils/ignore-warnings'
+
+import { ToggleStorybook } from '../storybook/toggle-storybook'
+
 import { initFonts } from './theme/fonts' // expo
 import * as storage from './utils/storage'
 import { RootStore, RootStoreProvider, setupRootStore } from './models'
 import { canExit, RootNavigator, setRootNavigation, useBackButtonHandler, useNavigationPersistence } from './navigators'
-import React, { useEffect, useRef, useState } from 'react'
+
+// This puts screens in a native ViewController or Activity. If you want fully native
+// stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
+// https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = 'NAVIGATION_STATE'

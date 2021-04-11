@@ -5,12 +5,13 @@
  * You'll likely spend most of your time in this file.
  */
 import React from 'react'
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
+import { EditEventScreen, EditTimelineScreen, EventScreen, TimelineScreen, TimelinesScreen } from 'screens'
 
-import { EventScreen, EditEventScreen, TimelinesScreen, TimelineScreen, EditTimelineScreen } from 'screens'
 import { TopBar } from 'components'
-import { DeleteTimelineAction, DeleteEventAction, EditTimelineAction, EditEventAction } from './types'
+
+import { DeleteEventAction, DeleteTimelineAction, EditEventAction, EditTimelineAction } from './types'
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator

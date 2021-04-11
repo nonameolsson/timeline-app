@@ -5,20 +5,21 @@
  * You'll likely spend most of your time in this file.
  */
 import React from 'react'
-import color from 'color'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { FAB, useTheme } from 'react-native-paper'
+import { useSafeArea } from 'react-native-safe-area-context'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { useIsFocused } from '@react-navigation/native'
-import { useSafeArea } from 'react-native-safe-area-context'
+import color from 'color'
+import { observer } from 'mobx-react-lite'
 
-import { TimelineStackScreen } from './timeline-stack-navigator'
+import { useStores } from 'models'
+import { overlay } from 'theme/overlay'
+
+import { getActiveRouteName } from './navigation-utilities'
 import { PeopleStackNavigator } from './people-stack-navigator'
 import { PlacesStackNavigator } from './places-stack-navigator'
-import { overlay } from 'theme/overlay'
-import { getActiveRouteName } from './navigation-utilities'
-import { useStores } from 'models'
-import { observer } from 'mobx-react-lite'
+import { TimelineStackScreen } from './timeline-stack-navigator'
 
 export type BottomTabParamList = {
   timelines: undefined

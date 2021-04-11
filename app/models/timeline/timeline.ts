@@ -30,9 +30,15 @@ export const TimelineModel = types
 
     /**
      * Get all events from a timeline
+     *
+     * @param sortedByDate Decides if the array of events should be sorted by date. Defaults to `true`
      */
-    getEvents: () => {
-      return self.events
+    getEvents: (sortedByDate = true): Event[] => {
+      if (!sortedByDate) {
+        return self.events
+      }
+
+      return self.events.slice().sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0))
     },
   }))
   /**

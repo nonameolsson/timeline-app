@@ -1,12 +1,12 @@
 import React, { FunctionComponent as Component } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { TextInput, HelperText, Appbar } from 'react-native-paper'
+import { Appbar, HelperText, TextInput } from 'react-native-paper'
 import { yupResolver } from '@hookform/resolvers'
 
 import { Timeline } from 'models'
-import { EditTimelineFormSchema } from './edit-timeline-form.validation'
-
 import { useHeaderButtons } from 'utils/hooks'
+
+import { EditTimelineFormSchema } from './edit-timeline-form.validation'
 
 export interface EditTimelineFormProps {
   timeline: Timeline

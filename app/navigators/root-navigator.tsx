@@ -4,7 +4,7 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { observer } from 'mobx-react-lite'
@@ -50,7 +50,7 @@ const RootStack = observer(function RootStack() {
   )
 })
 
-export const RootNavigator = React.forwardRef<
+export const RootNavigator = forwardRef<
   NavigationContainerRef,
   Partial<React.ComponentProps<typeof NavigationContainer>>
 >((props, ref) => {

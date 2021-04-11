@@ -1,4 +1,4 @@
-import { RoleModel, Role } from './role'
+import { Role, RoleModel } from './role'
 
 test('can be created', () => {
   const instance: Role = RoleModel.create({})
