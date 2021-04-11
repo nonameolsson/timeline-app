@@ -23,7 +23,6 @@
     "lib": ["esnext"],
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true,
     "paths": {
       "config/*": ["./config/*"],
       "components/*": ["./components/*"],
