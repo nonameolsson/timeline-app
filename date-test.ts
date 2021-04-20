@@ -1,51 +1,59 @@
 interface IEvent {
   id: number
   name: string
-  date: string
+  startDate: string
+  endDate: string | null
 }
 
 const events: IEvent[] = [
   {
     id: 10001,
     name: 'Today event',
-    date: '2021-04-08',
+    startDate: '2021-04-08',
+    endDate: null,
   },
   {
     id: 10002,
     name: 'Andreas',
-    date: '1988-08-25',
+    startDate: '1988-08-25',
+    endDate: null,
   },
   {
     id: 10010,
     name: 'Testar med endast år',
-    date: '1975-05',
+    startDate: '1975-05',
+    endDate: null,
   },
   {
     id: 10003,
     name: 'Jasmin',
-    date: '1986-02-15',
+    startDate: '1986-02-15',
+    endDate: null,
   },
   {
     id: 10004,
     name: 'Joakim',
-    date: '1991-04-15',
+    startDate: '1991-04-15',
+    endDate: null,
   },
   {
     id: 10013,
     name: 'Farfar',
-    date: '1975',
+    startDate: '1975',
+    endDate: null,
   },
   {
     id: 10005,
     name: 'Last days',
-    date: '1914-10-91',
+    startDate: '1914-10-91',
+    endDate: null,
   },
 ]
 
 const newArr = events
-  .map(({ name, date, id }) => {
-    return { name, id, date }
+  .map(({ name, startDate, id }) => {
+    return { name, id, startDate }
   })
-  .sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0))
+  .sort((a, b) => (a.startDate > b.startDate ? 1 : a.startDate < b.startDate ? -1 : 0))
   .map(event => event.name)
 console.log(newArr)

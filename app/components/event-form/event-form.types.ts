@@ -2,6 +2,7 @@ export type EventFormData = {
   id: number | null
   title: string
   description: string | null
-  date: string
+  startDate: string
+  endDate: string | null
   url: string | null
 }

@@ -34,7 +34,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
       id: event?.id || null,
       title: event?.title || '',
       description: event?.description || '',
-      date: event?.date,
+      startDate: event?.startDate,
       url: event?.url || '',
     },
   })
@@ -45,7 +45,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
         id: event ? event.id : null,
         title: data.title,
         description: data.description,
-        date: data.date.toString(),
+        startDate: data.startDate.toString(),
         url: data.url,
       }
 
@@ -120,7 +120,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
             left={<TextInput.Icon name="calendar" />}
             onChangeText={text => onChange(text)}
             label="Date"
-            error={!!errors.date}
+            error={!!errors.startDate}
             value={value}
           />
         )}

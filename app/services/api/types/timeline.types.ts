@@ -10,7 +10,8 @@ export interface TimelineEvent {
   url: null | string
   created_at: string
   updated_at: string
-  date: string
+  startDate: string
+  endDate: string | null
 }
 
 interface TimelineUser {

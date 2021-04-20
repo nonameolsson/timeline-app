@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { Appbar, HelperText, TextInput } from 'react-native-paper'
 import { yupResolver } from '@hookform/resolvers'
 
-import { Event } from 'models/event'
+import { Event } from 'models/event/event'
 import { useHeaderButtons } from 'utils/hooks'
 
 import { EditEventFormSchema } from './edit-event-form.validation'
@@ -11,7 +11,8 @@ import { EditEventFormSchema } from './edit-event-form.validation'
 export type EditEventFormData = {
   title: string
   description: string
-  date: string
+  startDate: string
+  endDate?: string
   url?: string
 }
 
@@ -32,7 +33,8 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     defaultValues: {
       title: event.title,
       description: event.description || '',
-      date: event.date,
+      startDate: event.startDate,
+      endDate: event.endDate || '',
       url: event.url || '',
     },
   })
@@ -42,7 +44,8 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       id: event.id,
       title: data.title,
       url: data.url,
-      date: data.date,
+      startDate: data.startDate,
+      endDate: data.endDate,
       description: data.description,
     }
 
@@ -103,20 +106,40 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       />
       <Controller
         control={control}
-        name="date"
-        label="Date"
+        name="startDate"
+        label="Start Date"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
               autoCapitalize="none"
-              error={!!errors.date}
-              label="Date"
+              error={!!errors.startDate}
+              label="Start Date"
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
               value={value}
             />
-            <HelperText type="error" visible={!!errors.date}>
-              {errors.date?.message}
+            <HelperText type="error" visible={!!errors.startDate}>
+              {errors.startDate?.message}
+            </HelperText>
+          </>
+        )}
+      />
+      <Controller
+        control={control}
+        name="endDate"
+        label="End Date"
+        render={({ onChange, onBlur, value }) => (
+          <>
+            <TextInput
+              autoCapitalize="none"
+              error={!!errors.endDate}
+              label="End Date"
+              onBlur={onBlur}
+              onChangeText={text => onChange(text)}
+              value={value}
+            />
+            <HelperText type="error" visible={!!errors.endDate}>
+              {errors.endDate?.message}
             </HelperText>
           </>
         )}

@@ -60,7 +60,8 @@ export const TimelineStoreModel = types
           timeline: event.timeline,
           created_at: event.created_at,
           updated_at: event.updated_at,
-          date: event.date.toString(),
+          startDate: event.startDate.toString(),
+          endDate: event.endDate?.toString() || '',
         })
       }
 

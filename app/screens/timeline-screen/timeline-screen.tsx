@@ -98,9 +98,15 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   }
 
   const renderEventList = () => {
-    const eventList = events.map(event => (
-      <List.Item key={event.id} onPress={() => openEvent(event.id)} title={event.title} description={event.date} />
-    ))
+    const eventList: JSX.Element[] = []
+
+    events.forEach(event => {
+      const description = event.endDate ? `${event.startDate} - ${event.endDate}` : event.startDate
+      eventList.push(
+        <List.Item key={event.id} onPress={() => openEvent(event.id)} title={event.title} description={description} />,
+      )
+    })
+
     return <ScrollView>{eventList}</ScrollView>
   }
 
@@ -110,7 +116,10 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
         {events.length > 0 ? (
           <>
             <Card style={{ padding: 16 }}>
-              <Card.Title title={timeline.description} subtitle={`${events[0].date} - ${events.pop()?.date}`} />
+              <Card.Title
+                title={timeline.description}
+                subtitle={`${timeline.events[0].startDate} - ${timeline.events.pop()?.startDate}`}
+              />
             </Card>
             {renderEventList()}
           </>

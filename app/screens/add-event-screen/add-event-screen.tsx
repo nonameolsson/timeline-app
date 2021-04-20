@@ -20,11 +20,11 @@ export const AddEventScreen = observer(function AddEventScreen({ navigation }: A
 
   if (!timeline) return null
 
-  const handleSubmit = async ({ title, description, url, date }: EventFormData) => {
+  const handleSubmit = async ({ title, description, url, startDate, endDate }: EventFormData) => {
     const user = userStore?.user?.id.toString()
     if (!user) return
 
-    await timeline.createEvent({ timeline: params.timelineId, title, description, url, date })
+    await timeline.createEvent({ timeline: params.timelineId, title, description, url, startDate, endDate })
     navigation.goBack()
   }
 

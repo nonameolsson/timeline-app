@@ -38,7 +38,9 @@ export const TimelineModel = types
         return self.events
       }
 
-      return self.events.slice().sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : 0))
+      const events = [...self.events]
+      events.slice().sort((a, b) => (a.startDate > b.startDate ? 1 : a.startDate < b.startDate ? -1 : 0))
+      return events
     },
   }))
   /**

@@ -124,7 +124,11 @@ export const EventScreen: Component = observer(function EventScreen() {
         <Text>{event.title}</Text>
         <Subheading>Description</Subheading>
         <Text>{event.description}</Text>
-        <Subheading>Date</Subheading>
+        <Subheading>Start Date</Subheading>
+        <Text>{event.startDate}</Text>
+        <Subheading>End Date</Subheading>
+        <Text>{event.endDate}</Text>
+        <Subheading>Test</Subheading>
         <Text>{formatDateYear(getTimelineDate({ negative: true, year: 1914, month: 10, day: 22 }))}</Text>
         <Text>{getTimelineDataString({ negative: true, year: 1914, month: 10, day: 22 })}</Text>
         <Text>{formatDateYear(getTimelineDate({ negative: true, year: 1914 }))}</Text>

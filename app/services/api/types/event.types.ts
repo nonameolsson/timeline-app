@@ -19,7 +19,8 @@ export interface EventResponse {
   url: string | null
   created_at: string
   updated_at: string
-  date: string
+  startDate: string
+  endDate: string | null
 }
 
 export interface EventRequest {
