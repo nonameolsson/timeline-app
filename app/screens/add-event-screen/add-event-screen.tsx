@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { SafeAreaView, View } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { observer } from 'mobx-react-lite'
 import { ModalStackRouteProp } from 'navigators/modal-stack'
@@ -24,7 +24,14 @@ export const AddEventScreen = observer(function AddEventScreen({ navigation }: A
     const user = userStore?.user?.id.toString()
     if (!user) return
 
-    await timeline.createEvent({ timeline: params.timelineId, title, description, url, startDate, endDate })
+    await timeline.createEvent({
+      timeline: params.timelineId,
+      title,
+      description,
+      url,
+      startDate,
+      endDate,
+    })
     navigation.goBack()
   }
 
@@ -32,7 +39,6 @@ export const AddEventScreen = observer(function AddEventScreen({ navigation }: A
     <SafeAreaView>
       <View style={styles.container}>
         <EventForm onSubmit={data => handleSubmit(data)} />
-        <Text style={{ color: 'red' }}>hasdf</Text>
       </View>
     </SafeAreaView>
   )

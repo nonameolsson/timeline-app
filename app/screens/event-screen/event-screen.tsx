@@ -74,10 +74,10 @@ export const EventScreen: Component = observer(function EventScreen() {
           // to avoid creating a new one every time
           headerRight: () => (
             <MaterialHeaderButtons>
-              <Item title="Delete" iconName="delete" onPress={showDeleteAlert} />
+              <Item iconName="delete" title="Delete" onPress={showDeleteAlert} />
               <Item
-                title="Edit"
                 iconName="edit"
+                title="Edit"
                 onPress={() =>
                   navigation.navigate('editEvent', {
                     eventId: event.id,

@@ -51,19 +51,19 @@ const PlacesStack = createStackNavigator<PlacesParamList>()
 export const PlacesStackNavigator = () => {
   return (
     <PlacesStack.Navigator
-      initialRouteName="places"
       headerMode="screen"
+      initialRouteName="places"
       screenOptions={{
         headerShown: true,
         gestureEnabled: true,
         header: ({ scene, previous, navigation, ...props }) => (
-          <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+          <TopBar navigation={navigation} previous={previous} scene={scene} {...props} />
         ),
       }}
     >
       <PlacesStack.Screen
-        name="places"
         component={PlacesScreen}
+        name="places"
         options={() => ({ headerShown: true, headerTitle: 'Places' })}
       />
     </PlacesStack.Navigator>

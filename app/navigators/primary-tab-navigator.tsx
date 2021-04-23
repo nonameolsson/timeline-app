@@ -93,56 +93,55 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route
   return (
     <React.Fragment>
       <Tab.Navigator
-        initialRouteName="timelines"
-        backBehavior="initialRoute"
-        shifting={true}
         activeColor={theme.colors.primary}
+        backBehavior="initialRoute"
         inactiveColor={color(theme.colors.text).alpha(0.6).rgb().string()}
+        initialRouteName="timelines"
         sceneAnimationEnabled={false}
+        shifting={true}
       >
         <Tab.Screen
-          name="timelines"
           component={TimelineStackScreen}
+          name="timelines"
           options={{
             tabBarColor,
             tabBarLabel: 'Timelines',
             tabBarIcon: ({ focused, color }) => {
               const iconName = focused ? 'timeline-outline' : 'timeline'
 
-              return <MaterialCommunityIcons name={iconName} size={26} color={color} />
+              return <MaterialCommunityIcons color={color} name={iconName} size={26} />
             },
           }}
         />
         <Tab.Screen
-          name="people"
           component={PeopleStackNavigator}
+          name="people"
           options={{
             tabBarLabel: 'People',
             tabBarColor,
             tabBarIcon: ({ focused, color }) => {
               const iconName = focused ? 'account-group-outline' : 'account-group'
 
-              return <MaterialCommunityIcons name={iconName} size={26} color={color} />
+              return <MaterialCommunityIcons color={color} name={iconName} size={26} />
             },
           }}
         />
         <Tab.Screen
-          name="places"
           component={PlacesStackNavigator}
+          name="places"
           options={{
             tabBarLabel: 'Places',
             tabBarColor,
             tabBarIcon: ({ focused, color }) => {
               const iconName = focused ? 'map-outline' : 'map'
 
-              return <MaterialCommunityIcons name={iconName} size={26} color={color} />
+              return <MaterialCommunityIcons color={color} name={iconName} size={26} />
             },
           }}
         />
       </Tab.Navigator>
       <FAB
-        visible={showFab()} // show FAB only when this screen is focused
-        icon={fabIcon}
+        icon={fabIcon} // show FAB only when this screen is focused
         style={{
           position: 'absolute',
           bottom: safeArea.bottom + 65,
@@ -153,6 +152,7 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({ route
             accent: theme.colors.primary,
           },
         }}
+        visible={showFab()}
         onPress={() => onFabPress()}
       />
     </React.Fragment>

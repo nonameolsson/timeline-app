@@ -46,17 +46,17 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
               autoCapitalize="none"
               autoCompleteType="email"
               autoCorrect={false}
+              disabled={formState.isSubmitting}
+              error={!!errors.email}
+              // label={errors.email && errors.email.message}
+              keyboardType="email-address"
               label="E-mail"
               left={<TextInput.Icon name="email" />}
-              // label={errors.email && errors.email.message}
-              disabled={formState.isSubmitting}
-              keyboardType="email-address"
-              onBlur={onBlur}
-              onChangeText={text => onChange(text)}
-              error={!!errors.email}
+              style={{ marginTop: 64 }}
               textContentType="emailAddress"
               value={value}
-              style={{ marginTop: 64 }}
+              onBlur={onBlur}
+              onChangeText={text => onChange(text)}
             />
             <HelperText type="error" visible={!!errors.email}>
               {errors.email?.message}
@@ -73,18 +73,18 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
               autoCapitalize="none"
               // label={errors.password && errors.password.message}
               disabled={formState.isSubmitting}
+              error={!!errors.password}
               keyboardAppearance="dark"
               keyboardType="visible-password"
-              onBlur={onBlur}
-              left={<TextInput.Icon name="key" />}
-              onChangeText={text => onChange(text)}
               label="Password"
+              left={<TextInput.Icon name="key" />}
               secureTextEntry={true}
               spellCheck={false}
-              error={!!errors.password}
+              style={{ marginTop: 16 }}
               textContentType="password"
               value={value}
-              style={{ marginTop: 16 }}
+              onBlur={onBlur}
+              onChangeText={text => onChange(text)}
             />
             <HelperText type="error" visible={!!errors.password}>
               {errors.password?.message}
@@ -102,9 +102,9 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, erro
       <Text style={{ textAlign: 'center', marginBottom: 16, color: error }}>{errorText || ''}</Text>
       <Button
         disabled={formState.isSubmitting}
-        onPress={handleSubmit(onSubmit)}
-        mode="contained"
         loading={formState.isSubmitting}
+        mode="contained"
+        onPress={handleSubmit(onSubmit)}
       >
         SIGN IN
       </Button>

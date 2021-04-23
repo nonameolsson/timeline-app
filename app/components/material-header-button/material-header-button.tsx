@@ -9,7 +9,7 @@ const MaterialHeaderButton = props => {
     colors: { text },
   } = useTheme()
 
-  return <HeaderButton IconComponent={MaterialIcons} iconSize={23} color={text} {...props} />
+  return <HeaderButton color={text} IconComponent={MaterialIcons} iconSize={23} {...props} />
 }
 
 export const MaterialHeaderButtons = ({
@@ -19,6 +19,6 @@ export const MaterialHeaderButtons = ({
   children: JSX.Element | JSX.Element[]
   left?: boolean
 }) => {
-  return <HeaderButtons left={left} HeaderButtonComponent={MaterialHeaderButton} {...props} />
+  return <HeaderButtons HeaderButtonComponent={MaterialHeaderButton} left={left} {...props} />
 }
 export { Item } from 'react-navigation-header-buttons'

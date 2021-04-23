@@ -66,17 +66,17 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
     <>
       <Controller
         control={control}
-        name="title"
         label="Title"
+        name="title"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
               autoCapitalize="none"
               error={!!errors.title}
               label="Title"
+              value={value}
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
-              value={value}
             />
             <HelperText type="error" visible={!!errors.title}>
               {errors.title?.message}
@@ -86,17 +86,17 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       />
       <Controller
         control={control}
-        name="description"
         label="Description"
+        name="description"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
               autoCapitalize="none"
               error={!!errors.description}
               label="Description"
+              value={value}
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
-              value={value}
             />
             <HelperText type="error" visible={!!errors.description}>
               {errors.description?.message}
@@ -106,17 +106,17 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       />
       <Controller
         control={control}
-        name="startDate"
         label="Start Date"
+        name="startDate"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
               autoCapitalize="none"
               error={!!errors.startDate}
               label="Start Date"
+              value={value}
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
-              value={value}
             />
             <HelperText type="error" visible={!!errors.startDate}>
               {errors.startDate?.message}
@@ -126,17 +126,17 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       />
       <Controller
         control={control}
-        name="endDate"
         label="End Date"
+        name="endDate"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
               autoCapitalize="none"
               error={!!errors.endDate}
               label="End Date"
+              value={value}
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
-              value={value}
             />
             <HelperText type="error" visible={!!errors.endDate}>
               {errors.endDate?.message}
@@ -146,20 +146,20 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       />
       <Controller
         control={control}
-        name="url"
         label="URL"
+        name="url"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
               autoCapitalize="none"
               autoCorrect={false}
               error={!!errors.url}
+              keyboardType="url"
               label="Url"
+              textContentType="URL"
+              value={value}
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
-              value={value}
-              textContentType="URL"
-              keyboardType="url"
             />
           </>
         )}

@@ -37,7 +37,7 @@ export function AuthNavigator() {
         gestureEnabled: true,
       }}
     >
-      <Stack.Screen name="login" component={LoginScreen} />
+      <Stack.Screen component={LoginScreen} name="login" />
     </Stack.Navigator>
   )
 }

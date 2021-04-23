@@ -63,11 +63,11 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
 
   const renderItem = ({ item: { title, id, description } }) => (
     <List.Item
-      title={title}
       key={id}
-      onPress={() => openTimeline(id, title)}
       description={description}
       left={props => <List.Icon {...props} icon="folder" />}
+      title={title}
+      onPress={() => openTimeline(id, title)}
     />
   )
 
@@ -79,8 +79,8 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
     return (
       <FlatList
         data={timelineStore.getTimelinesArray()}
-        renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
+        renderItem={renderItem}
       />
     )
   }
@@ -89,12 +89,12 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
     return (
       <View style={styles.emptyStateWrapper}>
         <EmptyState
-          title="Empty in timelines"
           description="Start by creating a timeline and it will show up here"
           icon="timeline-plus-outline"
+          title="Empty in timelines"
         />
         <View style={styles.emptyStateButtonWrapper}>
-          <Button onPress={() => navigation.navigate('addTimeline')} mode="contained">
+          <Button mode="contained" onPress={() => navigation.navigate('addTimeline')}>
             Create timeline
           </Button>
         </View>

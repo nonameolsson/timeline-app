@@ -9,7 +9,6 @@
  * The app navigation resides in ./app/navigators, so head over there
  * if you're interested in adding screens and navigators.
  */
-
 import React, { useEffect, useRef, useState } from 'react'
 import {
   DarkTheme as PaperDarkTheme,
@@ -17,6 +16,9 @@ import {
   Provider as PaperProvider,
 } from 'react-native-paper'
 import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context'
+// This puts screens in a native ViewController or Activity. If you want fully native
+// stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
+// https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from 'react-native-screens'
 import { OverflowMenuProvider } from 'react-navigation-header-buttons'
 import {
@@ -35,9 +37,6 @@ import * as storage from './utils/storage'
 import { RootStore, RootStoreProvider, setupRootStore } from './models'
 import { canExit, RootNavigator, setRootNavigation, useBackButtonHandler, useNavigationPersistence } from './navigators'
 
-// This puts screens in a native ViewController or Activity. If you want fully native
-// stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
-// https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = 'NAVIGATION_STATE'
@@ -73,7 +72,6 @@ function App() {
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ;(async () => {
       await initFonts() // expo
       setupRootStore().then(setRootStore)
@@ -91,20 +89,20 @@ function App() {
   // otherwise, we're ready to render the app
   return (
     <ToggleStorybook>
-      <PaperProvider theme={theme}>
-        <RootStoreProvider value={rootStore}>
-          <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <RootStoreProvider value={rootStore}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <PaperProvider theme={theme}>
             <OverflowMenuProvider>
               <RootNavigator
                 ref={navigationRef}
                 initialState={initialNavigationState}
-                onStateChange={onNavigationStateChange}
                 theme={theme}
+                onStateChange={onNavigationStateChange}
               />
             </OverflowMenuProvider>
-          </SafeAreaProvider>
-        </RootStoreProvider>
-      </PaperProvider>
+          </PaperProvider>
+        </SafeAreaProvider>
+      </RootStoreProvider>
     </ToggleStorybook>
   )
 }

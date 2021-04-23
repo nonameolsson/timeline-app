@@ -57,8 +57,9 @@ export const ModalStackScreen = () => (
       }
     }}
   >
-    <ModalStack.Screen name="main" component={DrawerNavigator} />
+    <ModalStack.Screen component={DrawerNavigator} name="main" />
     <ModalStack.Screen
+      component={AddTimelineScreen}
       name="addTimeline"
       options={() => {
         return {
@@ -66,9 +67,9 @@ export const ModalStackScreen = () => (
           title: 'New Timeline',
         }
       }}
-      component={AddTimelineScreen}
     />
     <ModalStack.Screen
+      component={AddEventScreen}
       name="addEvent"
       options={() => {
         return {
@@ -76,7 +77,6 @@ export const ModalStackScreen = () => (
           title: 'New Event',
         }
       }}
-      component={AddEventScreen}
     />
   </ModalStack.Navigator>
 )

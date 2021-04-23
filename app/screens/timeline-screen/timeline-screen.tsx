@@ -54,8 +54,8 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     const headerRightComponent = () => {
       return (
         <MaterialHeaderButtons>
-          <Item title="Delete" iconName="delete" onPress={() => showDeleteAlert()} />
-          <Item title="Edit" iconName="edit" onPress={() => goToEditTimelineScreen()} />
+          <Item iconName="delete" title="Delete" onPress={() => showDeleteAlert()} />
+          <Item iconName="edit" title="Edit" onPress={() => goToEditTimelineScreen()} />
         </MaterialHeaderButtons>
       )
     }
@@ -103,7 +103,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     events.forEach(event => {
       const description = event.endDate ? `${event.startDate} - ${event.endDate}` : event.startDate
       eventList.push(
-        <List.Item key={event.id} onPress={() => openEvent(event.id)} title={event.title} description={description} />,
+        <List.Item key={event.id} description={description} title={event.title} onPress={() => openEvent(event.id)} />,
       )
     })
 
@@ -117,15 +117,15 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
           <>
             <Card style={{ padding: 16 }}>
               <Card.Title
-                title={timeline.description}
                 subtitle={`${timeline.events[0].startDate} - ${timeline.events.pop()?.startDate}`}
+                title={timeline.description}
               />
             </Card>
             {renderEventList()}
           </>
         ) : (
           <Card style={{ padding: 16 }}>
-            <Card.Title title="No events" subtitle="Start by adding an event" />
+            <Card.Title subtitle="Start by adding an event" title="No events" />
           </Card>
         )}
       </View>

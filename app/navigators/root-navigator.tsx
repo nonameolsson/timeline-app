@@ -42,9 +42,9 @@ const RootStack = observer(function RootStack() {
       }}
     >
       {userStore.isLoggedIn() ? (
-        <Stack.Screen name="modalStack" component={ModalStackScreen} />
+        <Stack.Screen component={ModalStackScreen} name="modalStack" />
       ) : (
-        <Stack.Screen name="authStack" component={AuthNavigator} />
+        <Stack.Screen component={AuthNavigator} name="authStack" />
       )}
     </Stack.Navigator>
   )

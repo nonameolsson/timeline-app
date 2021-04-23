@@ -55,17 +55,17 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
     <>
       <Controller
         control={control}
-        name="title"
         label="Title"
+        name="title"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
               autoCapitalize="none"
               error={!!errors.title}
               label="Title"
+              value={value}
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
-              value={value}
             />
             <HelperText type="error" visible={!!errors.title}>
               {errors.title?.message}
@@ -75,17 +75,17 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
       />
       <Controller
         control={control}
-        name="description"
         label="Description"
+        name="description"
         render={({ onChange, onBlur, value }) => (
           <>
             <TextInput
               autoCapitalize="none"
               error={!!errors.description}
               label="Description"
+              value={value}
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
-              value={value}
             />
             <HelperText type="error" visible={!!errors.description}>
               {errors.description?.message}

@@ -44,10 +44,10 @@ const DrawerNav = createDrawerNavigator<AppDrawerParamList>()
 
 export const DrawerNavigator = () => {
   return (
-    <DrawerNav.Navigator hideStatusBar={true} drawerContent={props => <DrawerContent {...props} />}>
+    <DrawerNav.Navigator drawerContent={props => <DrawerContent {...props} />} hideStatusBar={true}>
       <DrawerNav.Screen
-        name="app"
         component={PrimaryTabNavigator}
+        name="app"
         options={({ route }) => {
           return {
             title: route.name,
@@ -55,8 +55,8 @@ export const DrawerNavigator = () => {
         }}
       />
       <DrawerNav.Screen
-        name="profile"
         component={ProfileScreen}
+        name="profile"
         options={({ route }) => {
           return {
             title: route.name,

@@ -39,7 +39,7 @@ export const LoginScreen: Component = observer(function LoginScreen() {
         <Headline style={styles.headline}>Hello</Headline>
         <Subheading style={styles.subheading}>Sign in to your account</Subheading>
 
-        <LoginForm handleLogin={onLogin} errorText={error} />
+        <LoginForm errorText={error} handleLogin={onLogin} />
       </View>
     </View>
   )

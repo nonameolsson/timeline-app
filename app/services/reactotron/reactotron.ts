@@ -177,6 +177,7 @@ export class Reactotron {
         handler: () => this.rootStore.uiStore.toggleTheme(),
       })
 
+      // Register Custom Commands
       Tron.onCustomCommand({
         title: 'Reset Root Store',
         description: 'Resets the MST store',

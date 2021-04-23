@@ -11,7 +11,7 @@ export class Api {
   /**
    * The underlying apisauce instance which performs the requests.
    */
-  apisauce!: ApisauceInstance
+  apisauce: ApisauceInstance
 
   /**
    * Configurable options.
@@ -38,7 +38,6 @@ export class Api {
     // construct the apisauce instance
     this.apisauce = create({
       baseURL: this.config.url,
-
       timeout: this.config.timeout,
       headers: {
         Accept: 'application/json',

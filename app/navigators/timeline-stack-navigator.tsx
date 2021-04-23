@@ -69,38 +69,38 @@ const TimelineStack = createStackNavigator<TimelineParamList>()
 export const TimelineStackScreen = () => {
   return (
     <TimelineStack.Navigator
-      initialRouteName="timelines"
       headerMode="screen"
+      initialRouteName="timelines"
       screenOptions={{
         headerShown: true,
         gestureEnabled: true,
         header: ({ scene, previous, navigation, ...props }) => (
-          <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+          <TopBar navigation={navigation} previous={previous} scene={scene} {...props} />
         ),
       }}
     >
       <TimelineStack.Screen
-        name="timelines"
         component={TimelinesScreen}
+        name="timelines"
         options={() => ({ headerShown: true, headerTitle: 'Timeline' })}
       />
       <TimelineStack.Screen
-        name="timeline"
         component={TimelineScreen}
+        name="timeline"
         options={({ route }) => ({
           headerShown: true,
           headerTitle: route.params.title || 'Timeline',
         })}
       />
-      <TimelineStack.Screen name="editTimeline" component={EditTimelineScreen} options={{ headerTitle: 'Edit' }} />
+      <TimelineStack.Screen component={EditTimelineScreen} name="editTimeline" options={{ headerTitle: 'Edit' }} />
       <TimelineStack.Screen
-        name="event"
         component={EventScreen}
+        name="event"
         options={({ route }) => ({
           headerTitle: route.params.title || 'Event',
         })}
       />
-      <TimelineStack.Screen name="editEvent" component={EditEventScreen} options={{ headerTitle: 'Edit' }} />
+      <TimelineStack.Screen component={EditEventScreen} name="editEvent" options={{ headerTitle: 'Edit' }} />
     </TimelineStack.Navigator>
   )
 }

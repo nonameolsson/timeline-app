@@ -51,19 +51,19 @@ const PeopleStack = createStackNavigator<PeopleParamList>()
 export const PeopleStackNavigator = () => {
   return (
     <PeopleStack.Navigator
-      initialRouteName="people"
       headerMode="screen"
+      initialRouteName="people"
       screenOptions={{
         headerShown: true,
         gestureEnabled: true,
         header: ({ scene, previous, navigation, ...props }) => (
-          <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+          <TopBar navigation={navigation} previous={previous} scene={scene} {...props} />
         ),
       }}
     >
       <PeopleStack.Screen
-        name="people"
         component={PeopleScreen}
+        name="people"
         options={() => ({ headerShown: true, headerTitle: 'People' })}
       />
     </PeopleStack.Navigator>

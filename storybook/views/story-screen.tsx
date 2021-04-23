@@ -7,9 +7,9 @@ export interface StoryScreenProps {
   children?: React.ReactNode
 }
 
-const behavior = Platform.OS === 'ios' ? 'padding' : null
+const behavior = Platform.OS === 'ios' ? 'padding' : undefined
 export const StoryScreen = props => (
-  <KeyboardAvoidingView style={ROOT} behavior={behavior} keyboardVerticalOffset={50}>
+  <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={50} style={ROOT}>
     {props.children}
   </KeyboardAvoidingView>
 )

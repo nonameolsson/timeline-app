@@ -12,7 +12,7 @@ storiesOf('EmptyState', module)
   .add('Style Presets', () => (
     <Story>
       <UseCase text="Primary" usage="The primary.">
-        <EmptyState title="EmptyState" description="Description" />
+        <EmptyState description="Description" title="EmptyState" />
       </UseCase>
     </Story>
   ))

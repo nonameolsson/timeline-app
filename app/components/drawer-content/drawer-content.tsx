@@ -33,10 +33,10 @@ export const DrawerContent = observer((props: DrawerContentProps) => {
           <View style={styles.userInfoSection}>
             <View style={styles.avatar}>
               <Avatar.Image
+                size={50}
                 source={{
                   uri: 'https://api.adorable.io/avatars/50/hey@adorable.io.png',
                 }}
-                size={50}
               />
               <View style={styles.userInfo}>
                 <Title style={styles.title}>{userStore.user?.username}</Title>
@@ -47,12 +47,12 @@ export const DrawerContent = observer((props: DrawerContentProps) => {
 
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
-              icon={({ color, size }) => <MaterialCommunityIcons name="home-outline" color={color} size={size} />}
+              icon={({ color, size }) => <MaterialCommunityIcons color={color} name="home-outline" size={size} />}
               label="Home"
               onPress={() => props.navigation.navigate('app')}
             />
             <DrawerItem
-              icon={({ color, size }) => <MaterialCommunityIcons name="account-outline" color={color} size={size} />}
+              icon={({ color, size }) => <MaterialCommunityIcons color={color} name="account-outline" size={size} />}
               label="Profile"
               onPress={() => props.navigation.navigate('profile')}
             />
@@ -83,12 +83,12 @@ export const DrawerContent = observer((props: DrawerContentProps) => {
       <Divider />
       <Drawer.Section>
         <DrawerItem
-          icon={({ color, size }) => <MaterialCommunityIcons name="help-circle" color={color} size={size} />}
+          icon={({ color, size }) => <MaterialCommunityIcons color={color} name="help-circle" size={size} />}
           label="Help"
           onPress={() => undefined}
         />
         <DrawerItem
-          icon={({ color, size }) => <MaterialCommunityIcons name="exit-to-app" color={color} size={size} />}
+          icon={({ color, size }) => <MaterialCommunityIcons color={color} name="exit-to-app" size={size} />}
           label="Sign Out"
           onPress={() => logOut()}
         />

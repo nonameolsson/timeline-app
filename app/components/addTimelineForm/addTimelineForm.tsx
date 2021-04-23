@@ -56,8 +56,8 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
       headerRight: () => (
         <MaterialHeaderButtons left={true}>
           <Item
-            title="Save"
             disabled={!formState.isValid || formState.isSubmitting}
+            title="Save"
             onPress={handleSubmit(localSubmit)}
           />
         </MaterialHeaderButtons>
@@ -75,14 +75,14 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
             <TextInput
               autoCapitalize="words" // TODO: Only on English, not Swedish
               autoCorrect={false}
+              disabled={formState.isSubmitting}
+              error={!!errors.title}
               label="Title"
               left={<TextInput.Icon name="format-title" />}
-              right={errors.title && <TextInput.Icon name="alert-circle" color={error} />}
-              disabled={formState.isSubmitting}
+              right={errors.title && <TextInput.Icon color={error} name="alert-circle" />}
+              value={value}
               onBlur={onBlur}
               onChangeText={text => onChange(text)}
-              error={!!errors.title}
-              value={value}
             />
             <HelperText type="error" visible={!!errors.title}>
               {errors.title?.message}
@@ -96,13 +96,13 @@ export const AddTimelineForm = ({ errorText, onSubmit }: AddTimelineFormProps) =
         render={({ onChange, onBlur, value }) => (
           <TextInput
             disabled={formState.isSubmitting}
-            onBlur={onBlur}
-            left={<TextInput.Icon name="script-text-outline" />}
-            onChangeText={text => onChange(text)}
-            label="Description"
-            spellCheck={true}
             error={!!errors.description}
+            label="Description"
+            left={<TextInput.Icon name="script-text-outline" />}
+            spellCheck={true}
             value={value}
+            onBlur={onBlur}
+            onChangeText={text => onChange(text)}
           />
         )}
       />
