@@ -1,12 +1,12 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { Instance, SnapshotOut, types } from "mobx-state-tree";
 
-import { RoleModel } from '../role/role'
+import { RoleModel } from "../role/role";
 
 /**
  * Model description here for TypeScript hints.
  */
 export const UserModel = types
-  .model('User')
+  .model("User")
   .props({
     id: types.identifierNumber,
     username: types.string,
@@ -18,8 +18,8 @@ export const UserModel = types
     created_at: types.string,
     updated_at: types.string,
   })
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({})); // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -29,7 +29,7 @@ export const UserModel = types
   *  .postProcessSnapshot(omit(["password", "socialSecurityNumber", "creditCardNumber"]))
   */
 
-type UserType = Instance<typeof UserModel>
+type UserType = Instance<typeof UserModel>;
 export interface User extends UserType {}
-type UserSnapshotType = SnapshotOut<typeof UserModel>
+type UserSnapshotType = SnapshotOut<typeof UserModel>;
 export interface UserSnapshot extends UserSnapshotType {}

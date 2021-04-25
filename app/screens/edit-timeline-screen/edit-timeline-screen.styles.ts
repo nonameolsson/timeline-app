@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from "react-native";
 
 export const editTimelineScreenStyles = StyleSheet.create({
   container: {
@@ -9,4 +9,4 @@ export const editTimelineScreenStyles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-})
+});

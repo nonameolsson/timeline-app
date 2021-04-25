@@ -4,14 +4,28 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from 'react'
-import { RouteProp } from '@react-navigation/native'
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
-import { EditEventScreen, EditTimelineScreen, EventScreen, TimelineScreen, TimelinesScreen } from 'screens'
+import React from "react";
+import { RouteProp } from "@react-navigation/native";
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from "@react-navigation/stack";
+import {
+  EditEventScreen,
+  EditTimelineScreen,
+  EventScreen,
+  TimelineScreen,
+  TimelinesScreen,
+} from "screens";
 
-import { TopBar } from 'components'
+import { TopBar } from "components";
 
-import { DeleteEventAction, DeleteTimelineAction, EditEventAction, EditTimelineAction } from './types'
+import {
+  DeleteEventAction,
+  DeleteTimelineAction,
+  EditEventAction,
+  EditTimelineAction,
+} from "./types";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -27,23 +41,28 @@ import { DeleteEventAction, DeleteTimelineAction, EditEventAction, EditTimelineA
  */
 export type TimelineParamList = {
   timelines: {
-    action?: DeleteTimelineAction
-  }
+    action?: DeleteTimelineAction;
+  };
   // NOTE: Timeline interfaces should only be optional when goint BACK to TimelineScreen from EventScreen. Fix this.
   timeline: {
-    id: number
-    title?: string
-    action?: DeleteEventAction | EditTimelineAction
-  }
-  editTimeline: { id: number }
-  event: { title?: string; timelineId: number; eventId: number; action?: EditEventAction }
+    id: number;
+    title?: string;
+    action?: DeleteEventAction | EditTimelineAction;
+  };
+  editTimeline: { id: number };
+  event: {
+    title?: string;
+    timelineId: number;
+    eventId: number;
+    action?: EditEventAction;
+  };
   editEvent: {
     /** ID of the timeline to wich the event corresponds */
-    timelineId: number
+    timelineId: number;
     /** ID of the event */
-    eventId: number
-  }
-}
+    eventId: number;
+  };
+};
 
 /**
  * Utility type to make it easier to use with `useNavigation()`
@@ -53,7 +72,9 @@ export type TimelineParamList = {
  * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
  * ```
  */
-export type TimelineStackNavigationProp<T extends keyof TimelineParamList> = StackNavigationProp<TimelineParamList, T>
+export type TimelineStackNavigationProp<
+  T extends keyof TimelineParamList
+> = StackNavigationProp<TimelineParamList, T>;
 /**
  * Utility type to make it easier to use with `useRoute()`
  *
@@ -62,9 +83,12 @@ export type TimelineStackNavigationProp<T extends keyof TimelineParamList> = Sta
  * const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
  * ```
  */
-export type TimelineRouteProp<T extends keyof TimelineParamList> = RouteProp<TimelineParamList, T>
+export type TimelineRouteProp<T extends keyof TimelineParamList> = RouteProp<
+  TimelineParamList,
+  T
+>;
 
-const TimelineStack = createStackNavigator<TimelineParamList>()
+const TimelineStack = createStackNavigator<TimelineParamList>();
 
 export const TimelineStackScreen = () => {
   return (
@@ -75,35 +99,48 @@ export const TimelineStackScreen = () => {
         headerShown: true,
         gestureEnabled: true,
         header: ({ scene, previous, navigation, ...props }) => (
-          <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+          <TopBar
+            scene={scene}
+            previous={previous}
+            navigation={navigation}
+            {...props}
+          />
         ),
       }}
     >
       <TimelineStack.Screen
         name="timelines"
         component={TimelinesScreen}
-        options={() => ({ headerShown: true, headerTitle: 'Timeline' })}
+        options={() => ({ headerShown: true, headerTitle: "Timeline" })}
       />
       <TimelineStack.Screen
         name="timeline"
         component={TimelineScreen}
         options={({ route }) => ({
           headerShown: true,
-          headerTitle: route.params.title || 'Timeline',
+          headerTitle: route.params.title || "Timeline",
         })}
       />
-      <TimelineStack.Screen name="editTimeline" component={EditTimelineScreen} options={{ headerTitle: 'Edit' }} />
+      <TimelineStack.Screen
+        name="editTimeline"
+        component={EditTimelineScreen}
+        options={{ headerTitle: "Edit" }}
+      />
       <TimelineStack.Screen
         name="event"
         component={EventScreen}
         options={({ route }) => ({
-          headerTitle: route.params.title || 'Event',
+          headerTitle: route.params.title || "Event",
         })}
       />
-      <TimelineStack.Screen name="editEvent" component={EditEventScreen} options={{ headerTitle: 'Edit' }} />
+      <TimelineStack.Screen
+        name="editEvent"
+        component={EditEventScreen}
+        options={{ headerTitle: "Edit" }}
+      />
     </TimelineStack.Navigator>
-  )
-}
+  );
+};
 
 /**
  * A list of routes from which we're allowed to leave the app when

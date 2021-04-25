@@ -1,24 +1,24 @@
-import React, { FunctionComponent as Component } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { Appbar, HelperText, TextInput } from 'react-native-paper'
-import { yupResolver } from '@hookform/resolvers'
+import React, { FunctionComponent as Component } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Appbar, HelperText, TextInput } from "react-native-paper";
+import { yupResolver } from "@hookform/resolvers";
 
-import { Event } from 'models/event/event'
-import { useHeaderButtons } from 'utils/hooks'
+import { Event } from "models/event/event";
+import { useHeaderButtons } from "utils/hooks";
 
-import { EditEventFormSchema } from './edit-event-form.validation'
+import { EditEventFormSchema } from "./edit-event-form.validation";
 
 export type EditEventFormData = {
-  title: string
-  description: string
-  startDate: string
-  endDate?: string
-  url?: string
-}
+  title: string;
+  description: string;
+  startDate: string;
+  endDate?: string;
+  url?: string;
+};
 
 export interface EditEventFormProps {
-  event: Event
-  onSubmit: (data: EditEventFormData) => void
+  event: Event;
+  onSubmit: (data: EditEventFormData) => void;
 }
 
 /**
@@ -26,18 +26,26 @@ export interface EditEventFormProps {
  *
  * Component description here for TypeScript tips.
  */
-export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }) => {
-  const { control, errors, formState, handleSubmit } = useForm<EditEventFormData>({
+export const EditEventForm: Component<EditEventFormProps> = ({
+  event,
+  onSubmit,
+}) => {
+  const {
+    control,
+    errors,
+    formState,
+    handleSubmit,
+  } = useForm<EditEventFormData>({
     resolver: yupResolver(EditEventFormSchema),
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
       title: event.title,
-      description: event.description || '',
+      description: event.description || "",
       startDate: event.startDate,
-      endDate: event.endDate || '',
-      url: event.url || '',
+      endDate: event.endDate || "",
+      url: event.url || "",
     },
-  })
+  });
 
   const localSubmit = (data: EditEventFormData) => {
     const updatedData = {
@@ -47,10 +55,10 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       startDate: data.startDate,
       endDate: data.endDate,
       description: data.description,
-    }
+    };
 
-    onSubmit(updatedData)
-  }
+    onSubmit(updatedData);
+  };
 
   const headerRight = () => (
     <Appbar.Action
@@ -58,9 +66,9 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       icon="check"
       onPress={handleSubmit(localSubmit)}
     />
-  )
+  );
 
-  useHeaderButtons({ right: headerRight })
+  useHeaderButtons({ right: headerRight });
 
   return (
     <>
@@ -75,7 +83,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.title}
               label="Title"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.title}>
@@ -95,7 +103,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.description}
               label="Description"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.description}>
@@ -115,7 +123,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.startDate}
               label="Start Date"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.startDate}>
@@ -135,7 +143,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.endDate}
               label="End Date"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
             />
             <HelperText type="error" visible={!!errors.endDate}>
@@ -156,7 +164,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
               error={!!errors.url}
               label="Url"
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               value={value}
               textContentType="URL"
               keyboardType="url"
@@ -165,5 +173,5 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
         )}
       />
     </>
-  )
-}
+  );
+};

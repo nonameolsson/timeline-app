@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from 'react'
-import { ActivityIndicator, FlatList, SafeAreaView, View } from 'react-native'
-import { Button, List, Text } from 'react-native-paper'
-import { useFocusEffect } from '@react-navigation/native'
-import { observer } from 'mobx-react-lite'
+import React, { useCallback, useState } from "react";
+import { ActivityIndicator, FlatList, SafeAreaView, View } from "react-native";
+import { Button, List, Text } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
+import { observer } from "mobx-react-lite";
 
-import { EmptyState } from 'components'
-import { useStores } from 'models'
+import { EmptyState } from "components";
+import { useStores } from "models";
 
-import { styles } from './timelines-screen.styles'
+import { styles } from "./timelines-screen.styles";
 
 // type TimelinesScreenProp = {
 //   navigation: CompositeNavigationProp<
@@ -21,45 +21,50 @@ import { styles } from './timelines-screen.styles'
 //   route: TimelineRouteProp<"timelines">
 // };
 
-export const TimelinesScreen = observer(function TimelinesScreen({ navigation, route: { params } }: any) {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+export const TimelinesScreen = observer(function TimelinesScreen({
+  navigation,
+  route: { params },
+}: any) {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Fix to get correct type
-  const { userStore, timelineStore } = useStores()
+  const { userStore, timelineStore } = useStores();
 
   // TODO: Adjust so new timelines are retrieved when navigating to this screen.
   useFocusEffect(
     useCallback(() => {
       if (userStore.user) {
-        timelineStore.getTimelines(userStore.user.id).then(() => setIsLoading(false))
+        timelineStore
+          .getTimelines(userStore.user.id)
+          .then(() => setIsLoading(false));
       }
-    }, [timelineStore, userStore.user]),
-  )
+    }, [timelineStore, userStore.user])
+  );
 
   useFocusEffect(
     useCallback(() => {
-      if (!params || !params.action) return
-      const { action } = params
+      if (!params || !params.action) return;
+      const { action } = params;
 
       const deleteTimeline = async (timelineId: number) => {
-        const timeline = timelineStore.getTimeline(timelineId)
-        if (!timeline) return
+        const timeline = timelineStore.getTimeline(timelineId);
+        if (!timeline) return;
 
-        await timeline.deleteAllEvents()
-        await timelineStore.deleteTimeline(timelineId)
-      }
+        await timeline.deleteAllEvents();
+        await timelineStore.deleteTimeline(timelineId);
+      };
 
-      if (action.type === 'DELETE_TIMELINE') {
-        setIsLoading(true)
-        deleteTimeline(action.meta.id)
-        setIsLoading(false)
+      if (action.type === "DELETE_TIMELINE") {
+        setIsLoading(true);
+        deleteTimeline(action.meta.id);
+        setIsLoading(false);
       }
-    }, [params, timelineStore]),
-  )
+    }, [params, timelineStore])
+  );
 
   const openTimeline = (id: string, title: string): void => {
-    navigation.navigate('timeline', { id, title })
-  }
+    navigation.navigate("timeline", { id, title });
+  };
 
   const renderItem = ({ item: { title, id, description } }) => (
     <List.Item
@@ -67,23 +72,23 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
       key={id}
       onPress={() => openTimeline(id, title)}
       description={description}
-      left={props => <List.Icon {...props} icon="folder" />}
+      left={(props) => <List.Icon {...props} icon="folder" />}
     />
-  )
+  );
 
   const renderList = () => {
-    const timelines = timelineStore.getTimelinesArray()
+    const timelines = timelineStore.getTimelinesArray();
 
-    if (!timelines) return null
+    if (!timelines) return null;
 
     return (
       <FlatList
         data={timelineStore.getTimelinesArray()}
         renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
       />
-    )
-  }
+    );
+  };
 
   const emptyState = () => {
     return (
@@ -94,23 +99,34 @@ export const TimelinesScreen = observer(function TimelinesScreen({ navigation, r
           icon="timeline-plus-outline"
         />
         <View style={styles.emptyStateButtonWrapper}>
-          <Button onPress={() => navigation.navigate('addTimeline')} mode="contained">
+          <Button
+            onPress={() => navigation.navigate("addTimeline")}
+            mode="contained"
+          >
             Create timeline
           </Button>
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.container}>
         {userStore.isLoggedIn() ? (
-          <>{isLoading ? <ActivityIndicator /> : timelineStore.hasTimelines() ? renderList() : emptyState()}</>
+          <>
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : timelineStore.hasTimelines() ? (
+              renderList()
+            ) : (
+              emptyState()
+            )}
+          </>
         ) : (
           <Text>Logging in...</Text>
         )}
       </View>
     </SafeAreaView>
-  )
-})
+  );
+});
