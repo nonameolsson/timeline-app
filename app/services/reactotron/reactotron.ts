@@ -1,13 +1,16 @@
-import { mst } from 'reactotron-mst'
-import Tron from 'reactotron-react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { onSnapshot } from 'mobx-state-tree'
+import { mst } from "reactotron-mst";
+import Tron from "reactotron-react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { onSnapshot } from "mobx-state-tree";
 
-import { RootStore } from '../../models/root-store/root-store'
-import { RootNavigation } from '../../navigators'
-import { clear } from '../../utils/storage'
+import { RootStore } from "../../models/root-store/root-store";
+import { RootNavigation } from "../../navigators";
+import { clear } from "../../utils/storage";
 
-import { DEFAULT_REACTOTRON_CONFIG, ReactotronConfig } from './reactotron-config'
+import {
+  DEFAULT_REACTOTRON_CONFIG,
+  ReactotronConfig,
+} from "./reactotron-config";
 
 // Teach TypeScript about the bad things we want to do.
 declare global {
@@ -15,16 +18,16 @@ declare global {
     /**
      * Hey, it's Reactotron if we're in dev, and no-ops if we're in prod.
      */
-    tron: typeof Tron
+    tron: typeof Tron;
   }
 }
 
 /** Do Nothing. */
-const noop = () => undefined
+const noop = () => undefined;
 
 // in dev, we attach Reactotron, in prod we attach a interface-compatible mock.
 if (__DEV__) {
-  console.tron = Tron // attach reactotron to `console.tron`
+  console.tron = Tron; // attach reactotron to `console.tron`
 } else {
   // attach a mock so if things sneaky by our __DEV__ guards, we won't crash.
   console.tron = {
@@ -47,7 +50,7 @@ if (__DEV__) {
     use: noop,
     useReactNative: noop,
     warn: noop,
-  }
+  };
 }
 
 /**
@@ -56,9 +59,9 @@ if (__DEV__) {
  * services.
  */
 export class Reactotron {
-  config: ReactotronConfig
+  config: ReactotronConfig;
 
-  rootStore: any
+  rootStore: any;
 
   /**
    * Create the Reactotron service.
@@ -68,7 +71,7 @@ export class Reactotron {
   constructor(config: ReactotronConfig = DEFAULT_REACTOTRON_CONFIG) {
     // merge the passed in config with some defaults
     this.config = {
-      host: 'localhost',
+      host: "localhost",
       useAsyncStorage: true,
       ...config,
       state: {
@@ -76,7 +79,7 @@ export class Reactotron {
         snapshots: false,
         ...(config && config.state),
       },
-    }
+    };
   }
 
   /**
@@ -86,24 +89,28 @@ export class Reactotron {
    */
   setRootStore(rootStore: any, initialData: any) {
     if (__DEV__) {
-      rootStore = rootStore as RootStore // typescript hack
-      this.rootStore = rootStore
+      rootStore = rootStore as RootStore; // typescript hack
+      this.rootStore = rootStore;
 
-      const { initial, snapshots } = this.config.state
-      const name = 'ROOT STORE'
+      const { initial, snapshots } = this.config.state;
+      const name = "ROOT STORE";
 
       // logging features
       if (initial) {
-        console.tron.display({ name, value: initialData, preview: 'Initial State' })
+        console.tron.display({
+          name,
+          value: initialData,
+          preview: "Initial State",
+        });
       }
       // log state changes?
       if (snapshots) {
-        onSnapshot(rootStore, snapshot => {
-          console.tron.display({ name, value: snapshot, preview: 'New State' })
-        })
+        onSnapshot(rootStore, (snapshot) => {
+          console.tron.display({ name, value: snapshot, preview: "New State" });
+        });
       }
 
-      console.tron.trackMstNode(rootStore)
+      console.tron.trackMstNode(rootStore);
     }
   }
 
@@ -115,101 +122,103 @@ export class Reactotron {
     if (__DEV__) {
       // configure reactotron
       Tron.configure({
-        name: this.config.name || require('../../../package.json').name,
+        name: this.config.name || require("../../../package.json").name,
         host: this.config.host,
-      })
+      });
 
       // hookup middleware
       if (this.config.useAsyncStorage) {
-        Tron.setAsyncStorageHandler(AsyncStorage)
+        Tron.setAsyncStorageHandler(AsyncStorage);
       }
       Tron.useReactNative({
         asyncStorage: this.config.useAsyncStorage ? undefined : false,
-      })
+      });
 
       // ignore some chatty `mobx-state-tree` actions
-      const RX = /postProcessSnapshot|@APPLY_SNAPSHOT/
+      const RX = /postProcessSnapshot|@APPLY_SNAPSHOT/;
 
       // hookup mobx-state-tree middleware
       Tron.use(
         mst({
-          filter: event => RX.test(event.name) === false,
-        }),
-      )
+          filter: (event) => RX.test(event.name) === false,
+        })
+      );
 
       // connect to the app
-      Tron.connect()
+      Tron.connect();
 
       // Register Custom Commands
       Tron.onCustomCommand({
-        title: 'Log out',
-        command: 'logOut',
+        title: "Log out",
+        command: "logOut",
         handler: () => this.rootStore.userStore.logOut(),
-      })
+      });
 
       Tron.onCustomCommand({
-        title: 'Log in as Kalle',
-        command: 'logInKalle',
-        handler: () => this.rootStore.userStore.login('kalle@timeline.app', 'password'),
-      })
+        title: "Log in as Kalle",
+        command: "logInKalle",
+        handler: () =>
+          this.rootStore.userStore.login("kalle@timeline.app", "password"),
+      });
 
       Tron.onCustomCommand({
-        title: 'Log in as Jasmin',
-        command: 'logInJasmin',
-        handler: () => this.rootStore.userStore.login('zetajaz@gmail.com', 'Abc123!'),
-      })
+        title: "Log in as Jasmin",
+        command: "logInJasmin",
+        handler: () =>
+          this.rootStore.userStore.login("zetajaz@gmail.com", "Abc123!"),
+      });
 
       Tron.onCustomCommand({
-        title: 'Delete event',
-        description: 'Deletes an event ',
-        command: 'deleteEvent',
+        title: "Delete event",
+        description: "Deletes an event ",
+        command: "deleteEvent",
         handler: () => {
-          console.tron.log('deletingEvent')
-          const timeline = this.rootStore.timelineStore.getTimeline(2)
-          timeline.deleteEvent(71)
+          console.tron.log("deletingEvent");
+          const timeline = this.rootStore.timelineStore.getTimeline(2);
+          timeline.deleteEvent(71);
         },
-      })
+      });
 
       Tron.onCustomCommand({
-        title: 'Toggle theme',
-        description: 'Toggles between light and dark theme',
-        command: 'toggleTheme',
+        title: "Toggle theme",
+        description: "Toggles between light and dark theme",
+        command: "toggleTheme",
         handler: () => this.rootStore.uiStore.toggleTheme(),
-      })
+      });
 
       Tron.onCustomCommand({
-        title: 'Reset Root Store',
-        description: 'Resets the MST store',
-        command: 'resetStore',
+        title: "Reset Root Store",
+        description: "Resets the MST store",
+        command: "resetStore",
         handler: () => {
-          console.tron.log('resetting store')
-          clear()
+          console.tron.log("resetting store");
+          clear();
         },
-      })
+      });
 
       Tron.onCustomCommand({
-        title: 'Reset Navigation State',
-        description: 'Resets the navigation state',
-        command: 'resetNavigation',
+        title: "Reset Navigation State",
+        description: "Resets the navigation state",
+        command: "resetNavigation",
         handler: () => {
-          console.tron.log('resetting navigation state')
-          RootNavigation.resetRoot({ routes: [] })
+          console.tron.log("resetting navigation state");
+          RootNavigation.resetRoot({ routes: [] });
         },
-      })
+      });
 
       Tron.onCustomCommand({
-        title: 'Go Back',
-        description: 'Goes back',
-        command: 'goBack',
+        title: "Go Back",
+        description: "Goes back",
+        command: "goBack",
         handler: () => {
-          console.tron.log('Going back')
-          RootNavigation.goBack()
+          console.tron.log("Going back");
+          RootNavigation.goBack();
         },
-      })
+      });
 
       // clear if we should
       if (this.config.clearOnLoad) {
-        Tron.clear()
+        Tron.clear();
       }
     }
   }

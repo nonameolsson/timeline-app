@@ -1,15 +1,15 @@
-import { destroy, flow, Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { destroy, flow, Instance, SnapshotOut, types } from "mobx-state-tree";
 
-import * as Types from 'services/api/api.types'
+import * as Types from "services/api/api.types";
 
-import { Event, EventModel, EventModelFromData } from '../event/event'
-import { withEnvironment } from '../extensions/with-environment'
+import { Event, EventModel, EventModelFromData } from "../event/event";
+import { withEnvironment } from "../extensions/with-environment";
 
 /**
  * Model description here for TypeScript hints.
  */
 export const TimelineModel = types
-  .model('Timeline')
+  .model("Timeline")
   .props({
     id: types.identifierNumber,
     title: types.string,
@@ -19,12 +19,12 @@ export const TimelineModel = types
     updated_at: types.string,
   })
   .extend(withEnvironment)
-  .views(self => ({
+  .views((self) => ({
     /**
      * Get a specific event from a timeline
      */
     getEvent: (id: number): Event | undefined => {
-      return self.events.find(event => event.id === id)
+      return self.events.find((event) => event.id === id);
       // if (!event) throw new Error('No event found. Fix this error.')
     },
 
@@ -35,54 +35,60 @@ export const TimelineModel = types
      */
     getEvents: (sortedByDate = true): Event[] => {
       if (!sortedByDate) {
-        return self.events
+        return self.events;
       }
 
-      const events = [...self.events]
-      events.slice().sort((a, b) => (a.startDate > b.startDate ? 1 : a.startDate < b.startDate ? -1 : 0))
-      return events
+      const events = [...self.events];
+      events
+        .slice()
+        .sort((a, b) =>
+          a.startDate > b.startDate ? 1 : a.startDate < b.startDate ? -1 : 0
+        );
+      return events;
     },
   }))
   /**
    * Following actions will be called with data received from the API and modify the store.
    */
-  .actions(self => ({
+  .actions((self) => ({
     updateTimelineInStore: (timelineSnapshot: Types.TimelineResponse) => {
       // eslint-disable-next-line
-      const { created_at, description, title, updated_at } = timelineSnapshot
+      const { created_at, description, title, updated_at } = timelineSnapshot;
 
       // eslint-disable-next-line
-      self.created_at = created_at
+      self.created_at = created_at;
       // eslint-disable-next-line
-      self.updated_at = updated_at
-      self.title = title
-      self.description = description
+      self.updated_at = updated_at;
+      self.title = title;
+      self.description = description;
     },
 
     addNewEventToTimeline: (event: Types.EventResponse) => {
-      const eventToCreate = EventModelFromData(event)
+      const eventToCreate = EventModelFromData(event);
 
-      self.events.push(eventToCreate)
+      self.events.push(eventToCreate);
     },
 
     deleteEventFromStore: (id: number) => {
-      const eventToDelete = self.getEvent(id)
+      const eventToDelete = self.getEvent(id);
       if (eventToDelete) {
-        destroy(eventToDelete)
+        destroy(eventToDelete);
       }
     },
   }))
   /**
    * Following actions will send requests to the API, and call actions defined in the first action definition
    */
-  .actions(self => ({
+  .actions((self) => ({
     createEvent: flow(function* (event: Types.EventRequest) {
-      const result: Types.PostEventResult = yield self.environment.api.createEvent(event)
+      const result: Types.PostEventResult = yield self.environment.api.createEvent(
+        event
+      );
 
-      if (result.kind === 'ok') {
-        self.addNewEventToTimeline(result.data)
+      if (result.kind === "ok") {
+        self.addNewEventToTimeline(result.data);
       } else {
-        __DEV__ && console.tron.log(result.kind)
+        __DEV__ && console.tron.log(result.kind);
       }
     }),
 
@@ -90,47 +96,54 @@ export const TimelineModel = types
       /** Data for updated timeline */
       data: Types.PutTimelineRequest,
       /** ID of timeline to update */
-      id: number,
+      id: number
     ) {
-      const result: Types.PutTimelineResult = yield self.environment.api.updateTimeline(data, id)
+      const result: Types.PutTimelineResult = yield self.environment.api.updateTimeline(
+        data,
+        id
+      );
 
-      if (result.kind === 'ok') {
-        self.updateTimelineInStore(result.data)
+      if (result.kind === "ok") {
+        self.updateTimelineInStore(result.data);
       } else {
-        __DEV__ && console.tron.log(result.kind)
+        __DEV__ && console.tron.log(result.kind);
       }
     }),
 
     deleteEvent: flow(function* (id: number) {
-      const result: Types.DeleteEventResult = yield self.environment.api.deleteEvent(id)
+      const result: Types.DeleteEventResult = yield self.environment.api.deleteEvent(
+        id
+      );
 
-      if (result.kind === 'ok') {
-        self.deleteEventFromStore(result.data.id)
+      if (result.kind === "ok") {
+        self.deleteEventFromStore(result.data.id);
       } else {
-        __DEV__ && console.tron.log(result.kind)
+        __DEV__ && console.tron.log(result.kind);
       }
     }),
 
     deleteAllEvents: flow(function* () {
-      const eventsToDelete: number[] = []
+      const eventsToDelete: number[] = [];
 
       yield Promise.all(
-        self.events.map(async event => {
-          const result: Types.DeleteEventResult = await self.environment.api.deleteEvent(event.id)
+        self.events.map(async (event) => {
+          const result: Types.DeleteEventResult = await self.environment.api.deleteEvent(
+            event.id
+          );
 
-          if (result.kind === 'ok') {
-            eventsToDelete.push(event.id)
+          if (result.kind === "ok") {
+            eventsToDelete.push(event.id);
           } else {
-            __DEV__ && console.tron.log(result.kind)
+            __DEV__ && console.tron.log(result.kind);
           }
-        }),
-      )
+        })
+      );
 
-      eventsToDelete.forEach(id => {
-        self.deleteEventFromStore(id)
-      })
+      eventsToDelete.forEach((id) => {
+        self.deleteEventFromStore(id);
+      });
     }),
-  }))
+  }));
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -140,7 +153,7 @@ export const TimelineModel = types
   *  .postProcessSnapshot(omit(["password", "socialSecurityNumber", "creditCardNumber"]))
   */
 
-type TimelineType = Instance<typeof TimelineModel>
+type TimelineType = Instance<typeof TimelineModel>;
 export interface Timeline extends TimelineType {}
-type TimelineSnapshotType = SnapshotOut<typeof TimelineModel>
+type TimelineSnapshotType = SnapshotOut<typeof TimelineModel>;
 export interface TimelineSnapshot extends TimelineSnapshotType {}

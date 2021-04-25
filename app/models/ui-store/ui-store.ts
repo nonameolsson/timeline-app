@@ -1,31 +1,31 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { Instance, SnapshotOut, types } from "mobx-state-tree";
 
 /**
  * Model description here for TypeScript hints.
  */
 export const UiStoreModel = types
-  .model('UiStore')
+  .model("UiStore")
   .props({
-    theme: types.enumeration('Theme', ['light', 'dark']),
+    theme: types.enumeration("Theme", ["light", "dark"]),
   })
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({
+  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
     setDarkTheme: () => {
-      self.theme = 'dark'
+      self.theme = "dark";
     },
 
     setLightTheme: () => {
-      self.theme = 'light'
+      self.theme = "light";
     },
 
     toggleTheme: () => {
-      if (self.theme === 'light') {
-        self.theme = 'dark'
+      if (self.theme === "light") {
+        self.theme = "dark";
       } else {
-        self.theme = 'light'
+        self.theme = "light";
       }
     },
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  })); // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -35,7 +35,7 @@ export const UiStoreModel = types
   *  .postProcessSnapshot(omit(["password", "socialSecurityNumber", "creditCardNumber"]))
   */
 
-type UiStoreType = Instance<typeof UiStoreModel>
+type UiStoreType = Instance<typeof UiStoreModel>;
 export interface UiStore extends UiStoreType {}
-type UiStoreSnapshotType = SnapshotOut<typeof UiStoreModel>
+type UiStoreSnapshotType = SnapshotOut<typeof UiStoreModel>;
 export interface UiStoreSnapshot extends UiStoreSnapshotType {}

@@ -1,8 +1,8 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree'
+import { Instance, SnapshotOut, types } from "mobx-state-tree";
 
-import { TimelineStoreModel } from '../timeline-store/timeline-store'
-import { UiStoreModel } from '../ui-store/ui-store'
-import { UserStoreModel } from '../user-store/user-store'
+import { TimelineStoreModel } from "../timeline-store/timeline-store";
+import { UiStoreModel } from "../ui-store/ui-store";
+import { UserStoreModel } from "../user-store/user-store";
 
 /**
  * A RootStore model.

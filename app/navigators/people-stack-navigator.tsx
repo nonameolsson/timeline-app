@@ -4,12 +4,15 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from 'react'
-import { RouteProp } from '@react-navigation/native'
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
-import { PeopleScreen } from 'screens'
+import React from "react";
+import { RouteProp } from "@react-navigation/native";
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from "@react-navigation/stack";
+import { PeopleScreen } from "screens";
 
-import { TopBar } from 'components'
+import { TopBar } from "components";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -24,8 +27,8 @@ import { TopBar } from 'components'
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PeopleParamList = {
-  people: undefined
-}
+  people: undefined;
+};
 
 /**
  * Utility type to make it easier to use with `useNavigation()`
@@ -35,7 +38,9 @@ export type PeopleParamList = {
  * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
  * ```
  */
-export type PeopleStackNavigationProp<T extends keyof PeopleParamList> = StackNavigationProp<PeopleParamList, T>
+export type PeopleStackNavigationProp<
+  T extends keyof PeopleParamList
+> = StackNavigationProp<PeopleParamList, T>;
 /**
  * Utility type to make it easier to use with `useRoute()`
  *
@@ -44,9 +49,12 @@ export type PeopleStackNavigationProp<T extends keyof PeopleParamList> = StackNa
  * const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
  * ```
  */
-export type PeopleRouteProp<T extends keyof PeopleParamList> = RouteProp<PeopleParamList, T>
+export type PeopleRouteProp<T extends keyof PeopleParamList> = RouteProp<
+  PeopleParamList,
+  T
+>;
 
-const PeopleStack = createStackNavigator<PeopleParamList>()
+const PeopleStack = createStackNavigator<PeopleParamList>();
 
 export const PeopleStackNavigator = () => {
   return (
@@ -57,18 +65,23 @@ export const PeopleStackNavigator = () => {
         headerShown: true,
         gestureEnabled: true,
         header: ({ scene, previous, navigation, ...props }) => (
-          <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+          <TopBar
+            scene={scene}
+            previous={previous}
+            navigation={navigation}
+            {...props}
+          />
         ),
       }}
     >
       <PeopleStack.Screen
         name="people"
         component={PeopleScreen}
-        options={() => ({ headerShown: true, headerTitle: 'People' })}
+        options={() => ({ headerShown: true, headerTitle: "People" })}
       />
     </PeopleStack.Navigator>
-  )
-}
+  );
+};
 
 /**
  * A list of routes from which we're allowed to leave the app when

@@ -45,8 +45,7 @@ Note that in order to pick up elements by ID, we've added the `testID` prop to t
 yarn start
 ```
 
-_(Expo-only note: for testing [production code](https://docs.expo.io/workflow/development-mode/#production-mode), start
-the packager with `yarn start --no-dev --minify`)_
+_(Expo-only note: for testing [production code](https://docs.expo.io/workflow/development-mode/#production-mode), start the packager with `yarn start --no-dev --minify`)_
 
 2. Run the app
 
@@ -64,5 +63,4 @@ _(Expo-only note: this is unnecessary for Expo apps)_
 yarn test:e2e
 ```
 
-For more information, make sure to check out the official
-[Detox Docs](https://github.com/wix/Detox/blob/master/docs/README.md)
+For more information, make sure to check out the official [Detox Docs](https://github.com/wix/Detox/blob/master/docs/README.md)

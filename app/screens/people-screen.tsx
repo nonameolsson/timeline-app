@@ -1,11 +1,11 @@
-import React, { FunctionComponent as Component } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Headline, Subheading, useTheme } from 'react-native-paper'
-import { observer } from 'mobx-react-lite'
+import React, { FunctionComponent as Component } from "react";
+import { StyleSheet, View } from "react-native";
+import { Headline, Subheading, useTheme } from "react-native-paper";
+import { observer } from "mobx-react-lite";
 
 const styles = StyleSheet.create({
   alignCenter: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   container: {
     flex: 1,
@@ -15,18 +15,22 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-})
+});
 export const PeopleScreen: Component = observer(function PeopleScreen() {
   const {
     colors: { background },
-  } = useTheme()
+  } = useTheme();
 
   return (
     <View style={styles.screen}>
       <View style={[styles.container, { backgroundColor: background }]}>
-        <Headline style={{ textAlign: 'center', fontSize: 32 }}>People</Headline>
-        <Subheading style={{ textAlign: 'center' }}>To be developed...</Subheading>
+        <Headline style={{ textAlign: "center", fontSize: 32 }}>
+          People
+        </Headline>
+        <Subheading style={{ textAlign: "center" }}>
+          To be developed...
+        </Subheading>
       </View>
     </View>
-  )
-})
+  );
+});

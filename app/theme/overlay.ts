@@ -1,6 +1,6 @@
-import { Animated } from 'react-native'
-import { DarkTheme } from 'react-native-paper'
-import color from 'color'
+import { Animated } from "react-native";
+import { DarkTheme } from "react-native-paper";
+import color from "color";
 
 const elevationOverlayTransparency: { [id: number]: number } = {
   1: 5,
@@ -27,33 +27,36 @@ const elevationOverlayTransparency: { [id: number]: number } = {
   22: 15.72,
   23: 15.84,
   24: 16,
-}
+};
 
 const calculateColor = (surfaceColor: string, elevation: number) => {
-  let overlayTransparency: number
+  let overlayTransparency: number;
   if (elevation >= 1 && elevation <= 24) {
-    overlayTransparency = elevationOverlayTransparency[elevation]
+    overlayTransparency = elevationOverlayTransparency[elevation];
   } else if (elevation > 24) {
-    overlayTransparency = elevationOverlayTransparency[24]
+    overlayTransparency = elevationOverlayTransparency[24];
   } else {
-    overlayTransparency = elevationOverlayTransparency[1]
+    overlayTransparency = elevationOverlayTransparency[1];
   }
   return color(surfaceColor)
-    .mix(color('white'), overlayTransparency * 0.01)
-    .hex()
-}
+    .mix(color("white"), overlayTransparency * 0.01)
+    .hex();
+};
 
-export const overlay = (elevation: number | Animated.Value = 1, surfaceColor: string = DarkTheme.colors.surface) => {
+export const overlay = (
+  elevation: number | Animated.Value = 1,
+  surfaceColor: string = DarkTheme.colors.surface
+) => {
   if (elevation instanceof Animated.Value) {
-    const inputRange = [0, 1, 2, 3, 8, 24]
+    const inputRange = [0, 1, 2, 3, 8, 24];
     return elevation.interpolate({
       inputRange,
-      outputRange: inputRange.map(elevation => {
-        return calculateColor(surfaceColor, elevation)
+      outputRange: inputRange.map((elevation) => {
+        return calculateColor(surfaceColor, elevation);
       }),
-    })
+    });
   }
-  return calculateColor(surfaceColor, elevation)
-}
+  return calculateColor(surfaceColor, elevation);
+};
 
-export default overlay
+export default overlay;

@@ -1,1 +1,5 @@
-export type FlowReturn<TNext, TReturn = void> = Generator<Promise<TNext>, TReturn, TNext>
+export type FlowReturn<TNext, TReturn = void> = Generator<
+  Promise<TNext>,
+  TReturn,
+  TNext
+>;

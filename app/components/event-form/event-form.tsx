@@ -1,19 +1,19 @@
-import React, { useLayoutEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { Text, View } from 'react-native'
-import { HelperText, TextInput, useTheme } from 'react-native-paper'
-import { yupResolver } from '@hookform/resolvers'
-import { useNavigation } from '@react-navigation/native'
+import React, { useLayoutEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Text, View } from "react-native";
+import { HelperText, TextInput, useTheme } from "react-native-paper";
+import { yupResolver } from "@hookform/resolvers";
+import { useNavigation } from "@react-navigation/native";
 
-import { Item, MaterialHeaderButtons } from 'components'
-import { Event } from 'models/event/event'
+import { Item, MaterialHeaderButtons } from "components";
+import { Event } from "models/event/event";
 
-import { EventFormData } from './event-form.types'
-import { EventFormSchema } from './event-form.validation'
+import { EventFormData } from "./event-form.types";
+import { EventFormSchema } from "./event-form.validation";
 
 export interface EventFormProps {
-  event?: Event
-  onSubmit: (data: EventFormData) => void
+  event?: Event;
+  onSubmit: (data: EventFormData) => void;
 }
 
 /**
@@ -22,22 +22,22 @@ export interface EventFormProps {
  * Component description here for TypeScript tips.
  */
 export const EventForm = ({ event, onSubmit }: EventFormProps) => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const {
     colors: { error },
-  } = useTheme()
+  } = useTheme();
 
   const { control, formState, handleSubmit, errors } = useForm<EventFormData>({
     resolver: yupResolver(EventFormSchema),
-    mode: 'onBlur',
+    mode: "onBlur",
     defaultValues: {
       id: event?.id || null,
-      title: event?.title || '',
-      description: event?.description || '',
+      title: event?.title || "",
+      description: event?.description || "",
       startDate: event?.startDate,
-      url: event?.url || '',
+      url: event?.url || "",
     },
-  })
+  });
 
   useLayoutEffect(() => {
     const localSubmit = (data: EventFormData) => {
@@ -47,10 +47,10 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
         description: data.description,
         startDate: data.startDate.toString(),
         url: data.url,
-      }
+      };
 
-      onSubmit(updatedData)
-    }
+      onSubmit(updatedData);
+    };
 
     navigation.setOptions({
       // in your app, extract the arrow function into a separate component
@@ -64,8 +64,16 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
           />
         </MaterialHeaderButtons>
       ),
-    })
-  }, [event, event?.id, formState.isSubmitting, formState.isValid, handleSubmit, navigation, onSubmit])
+    });
+  }, [
+    event,
+    event?.id,
+    formState.isSubmitting,
+    formState.isValid,
+    handleSubmit,
+    navigation,
+    onSubmit,
+  ]);
 
   return (
     <View>
@@ -79,10 +87,14 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
               autoCorrect={false}
               label="Title"
               left={<TextInput.Icon name="format-title" />}
-              right={errors.title && <TextInput.Icon name="alert-circle" color={error} />}
+              right={
+                errors.title && (
+                  <TextInput.Icon name="alert-circle" color={error} />
+                )
+              }
               disabled={formState.isSubmitting}
               onBlur={onBlur}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               error={!!errors.title}
               value={value}
             />
@@ -101,7 +113,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
             disabled={formState.isSubmitting}
             onBlur={onBlur}
             left={<TextInput.Icon name="script-text-outline" />}
-            onChangeText={text => onChange(text)}
+            onChangeText={(text) => onChange(text)}
             label="Description"
             spellCheck={true}
             error={!!errors.description}
@@ -118,7 +130,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
             disabled={formState.isSubmitting}
             onBlur={onBlur}
             left={<TextInput.Icon name="calendar" />}
-            onChangeText={text => onChange(text)}
+            onChangeText={(text) => onChange(text)}
             label="Date"
             error={!!errors.startDate}
             value={value}
@@ -134,7 +146,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
               disabled={formState.isSubmitting}
               onBlur={onBlur}
               left={<TextInput.Icon name="web" />}
-              onChangeText={text => onChange(text)}
+              onChangeText={(text) => onChange(text)}
               label="URL"
               autoCapitalize="none"
               autoCorrect={false}
@@ -148,5 +160,5 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
         )}
       />
     </View>
-  )
-}
+  );
+};

@@ -4,10 +4,10 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import { LoginScreen } from '../screens'
+import { LoginScreen } from "../screens";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -22,11 +22,11 @@ import { LoginScreen } from '../screens'
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type AuthParamList = {
-  login: undefined
-}
+  login: undefined;
+};
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createStackNavigator<AuthParamList>()
+const Stack = createStackNavigator<AuthParamList>();
 
 export function AuthNavigator() {
   return (
@@ -39,7 +39,7 @@ export function AuthNavigator() {
     >
       <Stack.Screen name="login" component={LoginScreen} />
     </Stack.Navigator>
-  )
+  );
 }
 
 /**
@@ -51,5 +51,5 @@ export function AuthNavigator() {
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ['login']
-export const canExit = (routeName: string) => exitRoutes.includes(routeName)
+const exitRoutes = ["login"];
+export const canExit = (routeName: string) => exitRoutes.includes(routeName);

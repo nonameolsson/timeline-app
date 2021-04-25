@@ -7,9 +7,8 @@
 // side effect of breaking other tooling like mobile-center and react-native-rename.
 //
 // It's easier just to leave it here.
-import { AppRegistry } from 'react-native'
+import App from "./app/app.tsx";
+import { AppRegistry } from "react-native";
 
-import App from './app/app.tsx'
-
-AppRegistry.registerComponent('YourTimeline', () => App)
-export default App
+AppRegistry.registerComponent("KalleKula", () => App);
+export default App;
