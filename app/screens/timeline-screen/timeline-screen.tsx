@@ -4,14 +4,7 @@ import React, {
   useLayoutEffect,
 } from "react";
 import { Alert, SafeAreaView, ScrollView, View } from "react-native";
-import {
-  Card,
-  Headline,
-  List,
-  Subheading,
-  Text,
-  useTheme,
-} from "react-native-paper";
+import { Card, List, useTheme } from "react-native-paper";
 import {
   useFocusEffect,
   useNavigation,
@@ -23,7 +16,6 @@ import { Timeline } from "navigators/types";
 
 import { Item, MaterialHeaderButtons } from "components";
 import { useStores } from "models";
-import { formatDateYear } from "utils/date";
 
 import { styles } from "./timeline-screen.styles";
 
@@ -56,7 +48,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => console.tron.log("Cancel Pressed"),
           style: "cancel",
         },
         { text: "OK", onPress: () => deleteTimeline() },
@@ -150,12 +142,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
         {events.length > 0 ? (
           <>
             <Card style={{ padding: 16 }}>
-              <Card.Title
-                title={timeline.description}
-                subtitle={`${timeline.events[0].startDate} - ${
-                  timeline.events.pop()?.startDate
-                }`}
-              />
+              <Card.Title title={timeline.description} />
             </Card>
             {renderEventList()}
           </>

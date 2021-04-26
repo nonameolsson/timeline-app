@@ -47,7 +47,6 @@ export const AddEventScreen = observer(function AddEventScreen({
     <SafeAreaView>
       <View style={styles.container}>
         <EventForm onSubmit={(data) => handleSubmit(data)} />
-        <Text style={{ color: "red" }}>hasdf</Text>
       </View>
     </SafeAreaView>
   );

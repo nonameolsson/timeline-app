@@ -35,6 +35,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
       title: event?.title || "",
       description: event?.description || "",
       startDate: event?.startDate,
+      endDate: event?.endDate,
       url: event?.url || "",
     },
   });
@@ -46,6 +47,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
         title: data.title,
         description: data.description,
         startDate: data.startDate.toString(),
+        endDate: data.endDate.toString(),
         url: data.url,
       };
 
@@ -123,7 +125,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
       />
       <Controller
         control={control}
-        name="date"
+        name="startDate"
         render={({ onChange, onBlur, value }) => (
           <TextInput
             style={{ marginBottom: 24 }}
@@ -133,6 +135,22 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
             onChangeText={(text) => onChange(text)}
             label="Date"
             error={!!errors.startDate}
+            value={value}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="endDate"
+        render={({ onChange, onBlur, value }) => (
+          <TextInput
+            style={{ marginBottom: 24 }}
+            disabled={formState.isSubmitting}
+            onBlur={onBlur}
+            left={<TextInput.Icon name="calendar" />}
+            onChangeText={(text) => onChange(text)}
+            label="Date"
+            error={!!errors.endDate}
             value={value}
           />
         )}
