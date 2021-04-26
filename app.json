@@ -2,7 +2,7 @@
   "expo": {
     "name": "YourTimeline",
     "slug": "yourtimeline",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -15,10 +15,18 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "app.yourtimeline.yourtimeline",
+      "buildNumber": "0.1.0"
+    },
+    "android": {
+      "package": "app.yourtimeline.yourtimeline",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Create your own timeline",
+    "githubUrl": "https://github.com/nonameolsson/timeline-app"
   }
 }
