@@ -73,7 +73,7 @@ export const EventScreen: Component = observer(function EventScreen() {
         [
           {
             text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
+            onPress: () => console.tron.log("Cancel Pressed"),
             style: "cancel",
           },
           { text: "OK", onPress: () => deleteEvent() },
