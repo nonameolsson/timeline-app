@@ -27,6 +27,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   NavigationContainerRef,
 } from "@react-navigation/native";
+import { observer } from "mobx-react-lite";
 
 import "./i18n";
 import "./utils/ignore-warnings";
@@ -69,7 +70,7 @@ const CombinedDefaultTheme = {
 /**
  * This is the root component of our app.
  */
-function App() {
+const App = observer(() => {
   const navigationRef = useRef<NavigationContainerRef>();
   const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
 
@@ -119,6 +120,6 @@ function App() {
       </PaperProvider>
     </ToggleStorybook>
   );
-}
+});
 
 export default App;
