@@ -12,6 +12,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import {
   getFocusedRouteNameFromRoute,
   useIsFocused,
+  useNavigationState,
 } from "@react-navigation/native";
 import color from "color";
 import { observer } from "mobx-react-lite";
@@ -31,6 +32,20 @@ export type BottomTabParamList = {
 
 const Tab = createMaterialBottomTabNavigator<BottomTabParamList>();
 
+function getFabIcon(route) {
+  // If the focused route is not found, we need to assume it's the initial screen
+  // This can happen during if there hasn't been any navigation inside the screen
+  // In our case, it's "Feed" as that's the first screen inside the navigator
+
+  // const routeName = route.state ? getActiveRouteName(route.state) : "timelines";
+  const routeName = getFocusedRouteNameFromRoute(route) ?? "timelines";
+
+  if (routeName === "timelines") return "timeline-plus-outline";
+  else if (routeName === "people") return "account-plus-outline";
+  else if (routeName === "places") return "map-plus";
+  else return routeName;
+}
+
 export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({
   route,
   navigation,
@@ -40,7 +55,7 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({
   const isFocused = useIsFocused();
   const insets = useSafeAreaInsets();
 
-  const routeName = route ? getFocusedRouteNameFromRoute(route) : "timelines";
+  const routeName = getFocusedRouteNameFromRoute(route) ?? "timelines";
 
   /**
    * Calculate when to show a global FAB.
@@ -54,8 +69,6 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({
       } else {
         return false;
       }
-    } else if (routeName === "timeline") {
-      return true;
     } else if (routeName === "people") {
       return true;
     } else {
@@ -66,30 +79,11 @@ export const PrimaryTabNavigator = observer(function PrimaryTabNavigator({
   /**
    * Display different icons on each screen
    */
-  const fabIcon =
-    routeName === "timelines"
-      ? "timeline-plus-outline"
-      : routeName === "people"
-      ? "account-plus-outline"
-      : routeName === "places"
-      ? "map-plus"
-      : "plus";
+  const fabIcon = getFabIcon(route);
 
   const onFabPress = () => {
     if (routeName === "timelines") {
       navigation.navigate("addTimeline");
-    } else if (routeName === "timeline") {
-      const timelineId = route.state.routes[0].state.routes[1].params.id; // FIXME: Throws a warning: Accessing the 'state' property of the 'route' object is not supported. If you want to get the focused route name, use the 'getFocusedRouteNameFromRoute' helper instead: https://reactnavigation.org/docs/screen-options-resolution/#setting-parent-screen-options-based-on-child-navigators-state
-
-      navigation.navigate("addEvent", {
-        timelineId: timelineId,
-      });
-    } else if (routeName === "people") {
-      navigation.navigate("addPeople");
-    } else if (routeName === "places") {
-      navigation.navigate("addPlace");
-    } else {
-      throw new Error("No action defined for onPress FAB ");
     }
   };
 
