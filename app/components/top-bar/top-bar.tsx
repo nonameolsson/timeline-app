@@ -1,8 +1,8 @@
-import React from "react";
-import { Appbar, useTheme } from "react-native-paper";
-import { DrawerNavigationProp } from "@react-navigation/drawer";
-import { StackHeaderProps } from "@react-navigation/stack";
-import { observer } from "mobx-react-lite";
+import React from "react"
+import { Appbar, useTheme } from "react-native-paper"
+import { DrawerNavigationProp } from "@react-navigation/drawer"
+import { StackHeaderProps } from "@react-navigation/stack"
+import { observer } from "mobx-react-lite"
 
 export interface TopBarProps extends StackHeaderProps {}
 
@@ -11,20 +11,16 @@ export interface TopBarProps extends StackHeaderProps {}
  *
  * Component description here for TypeScript tips.
  */
-export const TopBar = observer(function TopBar({
-  scene,
-  previous,
-  navigation,
-}: TopBarProps) {
-  const { options } = scene.descriptor;
+export const TopBar = observer(function TopBar({ scene, previous, navigation }: TopBarProps) {
+  const { options } = scene.descriptor
   const title =
     options.headerTitle !== undefined
       ? options.headerTitle
       : options.title !== undefined
       ? options.title
-      : scene.route.name;
+      : scene.route.name
 
-  const { colors } = useTheme();
+  const { colors } = useTheme()
 
   return (
     <Appbar.Header theme={{ colors: { primary: colors.surface } }}>
@@ -35,14 +31,12 @@ export const TopBar = observer(function TopBar({
         <Appbar.Action
           icon="menu"
           onPress={() => {
-            ((navigation as any) as DrawerNavigationProp<
-              Record<string, any>
-            >).openDrawer();
+            ;((navigation as any) as DrawerNavigationProp<Record<string, any>>).openDrawer()
           }}
         />
       )}
       <Appbar.Content title={title} />
       {options.headerRight && options.headerRight({})}
     </Appbar.Header>
-  );
-});
+  )
+})

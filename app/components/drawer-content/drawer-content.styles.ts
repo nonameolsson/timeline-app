@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native"
 
 export const drawerContentStyles = StyleSheet.create({
   avatar: {
@@ -54,4 +54,4 @@ export const drawerContentStyles = StyleSheet.create({
   wrapper: {
     flex: 1,
   },
-});
+})

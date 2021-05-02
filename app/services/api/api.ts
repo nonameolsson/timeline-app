@@ -1,8 +1,8 @@
-import { ApiResponse, ApisauceInstance, create } from "apisauce";
+import { ApiResponse, ApisauceInstance, create } from "apisauce"
 
-import * as Types from "./api.types";
-import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config";
-import { getGeneralApiProblem } from "./api-problem";
+import * as Types from "./api.types"
+import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
+import { getGeneralApiProblem } from "./api-problem"
 
 /**
  * Manages all requests to the API.
@@ -11,12 +11,12 @@ export class Api {
   /**
    * The underlying apisauce instance which performs the requests.
    */
-  apisauce!: ApisauceInstance;
+  apisauce!: ApisauceInstance
 
   /**
    * Configurable options.
    */
-  config: ApiConfig;
+  config: ApiConfig
 
   /**
    * Creates the api.
@@ -24,7 +24,7 @@ export class Api {
    * @param config The configuration to use.
    */
   constructor(config: ApiConfig = DEFAULT_API_CONFIG) {
-    this.config = config;
+    this.config = config
   }
 
   /**
@@ -43,7 +43,7 @@ export class Api {
       headers: {
         Accept: "application/json",
       },
-    });
+    })
   }
 
   /**
@@ -54,21 +54,21 @@ export class Api {
    */
   async getUsers(): Promise<Types.GetUsersResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users`);
+    const response: ApiResponse<any> = await this.apisauce.get(`/users`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -82,21 +82,21 @@ export class Api {
    */
   async getUser(id: number): Promise<Types.GetUserResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`);
+    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -109,29 +109,26 @@ export class Api {
    * @returns {Promise<Types.PostLoginResult>}
    * @memberof Api
    */
-  async login(
-    identifier: string,
-    password: string
-  ): Promise<Types.PostLoginResult> {
+  async login(identifier: string, password: string): Promise<Types.PostLoginResult> {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.post(`/auth/local`, {
       identifier,
       password,
-    });
+    })
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -143,21 +140,21 @@ export class Api {
    */
   async getAllTimelines(): Promise<Types.GetTimelinesResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/timelines`);
+    const response: ApiResponse<any> = await this.apisauce.get(`/timelines`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -171,23 +168,21 @@ export class Api {
    */
   async getTimelinesByUser(id: number): Promise<Types.GetTimelinesResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(
-      `/timelines/?user.id=${id}`
-    );
+    const response: ApiResponse<any> = await this.apisauce.get(`/timelines/?user.id=${id}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -199,28 +194,23 @@ export class Api {
    * @returns {Promise<Types.PostTimelineResult>}
    * @memberof Api
    */
-  async createTimeline(
-    data: Types.PostTimelineRequest
-  ): Promise<Types.PostTimelineResult> {
+  async createTimeline(data: Types.PostTimelineRequest): Promise<Types.PostTimelineResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.post(
-      `/timelines`,
-      data
-    );
+    const response: ApiResponse<any> = await this.apisauce.post(`/timelines`, data)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -235,27 +225,24 @@ export class Api {
    */
   async updateTimeline(
     data: Types.PutTimelineRequest,
-    id: number
+    id: number,
   ): Promise<Types.PutTimelineResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.put(
-      `/timelines/${id}`,
-      data
-    );
+    const response: ApiResponse<any> = await this.apisauce.put(`/timelines/${id}`, data)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -269,23 +256,21 @@ export class Api {
    */
   async deleteTimeline(id: number): Promise<Types.DeleteTimelineResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.delete(
-      `/timelines/${id}`
-    );
+    const response: ApiResponse<any> = await this.apisauce.delete(`/timelines/${id}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -297,21 +282,21 @@ export class Api {
    */
   async getEvents(): Promise<Types.GetEventsResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/events`);
+    const response: ApiResponse<any> = await this.apisauce.get(`/events`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -327,21 +312,21 @@ export class Api {
     // make the api call
     const response: ApiResponse<any> = await this.apisauce.post(`/events`, {
       ...data,
-    });
+    })
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -354,29 +339,23 @@ export class Api {
    * @returns {Promise<Types.PutEventResult>}
    * @memberof Api
    */
-  async updateEvent(
-    data: Types.EventRequest,
-    id: number
-  ): Promise<Types.PutEventResult> {
+  async updateEvent(data: Types.EventRequest, id: number): Promise<Types.PutEventResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.put(
-      `/events/${id}`,
-      data
-    );
+    const response: ApiResponse<any> = await this.apisauce.put(`/events/${id}`, data)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 
@@ -389,23 +368,21 @@ export class Api {
    */
   async deleteEvent(id: number): Promise<Types.DeleteEventResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.delete(
-      `/events/${id}`
-    );
+    const response: ApiResponse<any> = await this.apisauce.delete(`/events/${id}`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
-      const problem = getGeneralApiProblem(response);
-      if (problem) return problem;
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
     }
 
     // transform the data into the format we are expecting
     try {
-      const { data } = response;
+      const { data } = response
 
-      return { kind: "ok", data };
+      return { kind: "ok", data }
     } catch {
-      return { kind: "bad-data" };
+      return { kind: "bad-data" }
     }
   }
 }

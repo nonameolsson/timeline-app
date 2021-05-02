@@ -1,24 +1,24 @@
-import React, { FunctionComponent as Component } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Appbar, HelperText, TextInput } from "react-native-paper";
-import { yupResolver } from "@hookform/resolvers";
+import React, { FunctionComponent as Component } from "react"
+import { Controller, useForm } from "react-hook-form"
+import { Appbar, HelperText, TextInput } from "react-native-paper"
+import { yupResolver } from "@hookform/resolvers/yup"
 
-import { Event } from "models/event/event";
-import { useHeaderButtons } from "utils/hooks";
+import { Event } from "models/event/event"
+import { useHeaderButtons } from "utils/hooks"
 
-import { EditEventFormSchema } from "./edit-event-form.validation";
+import { EditEventFormSchema } from "./edit-event-form.validation"
 
 export type EditEventFormData = {
-  title: string;
-  description: string;
-  startDate: string;
-  endDate?: string;
-  url?: string;
-};
+  title: string
+  description: string
+  startDate: string
+  endDate?: string
+  url?: string
+}
 
 export interface EditEventFormProps {
-  event: Event;
-  onSubmit: (data: EditEventFormData) => void;
+  event: Event
+  onSubmit: (data: EditEventFormData) => void
 }
 
 /**
@@ -26,14 +26,10 @@ export interface EditEventFormProps {
  *
  * Component description here for TypeScript tips.
  */
-export const EditEventForm: Component<EditEventFormProps> = ({
-  event,
-  onSubmit,
-}) => {
+export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }) => {
   const {
     control,
-    errors,
-    formState,
+    formState: { errors, isValid, isSubmitting },
     handleSubmit,
   } = useForm<EditEventFormData>({
     resolver: yupResolver(EditEventFormSchema),
@@ -45,7 +41,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({
       endDate: event.endDate || "",
       url: event.url || "",
     },
-  });
+  })
 
   const localSubmit = (data: EditEventFormData) => {
     const updatedData = {
@@ -55,20 +51,20 @@ export const EditEventForm: Component<EditEventFormProps> = ({
       startDate: data.startDate,
       endDate: data.endDate,
       description: data.description,
-    };
+    }
 
-    onSubmit(updatedData);
-  };
+    onSubmit(updatedData)
+  }
 
   const headerRight = () => (
     <Appbar.Action
-      disabled={!formState.isValid || formState.isSubmitting}
+      disabled={!isValid || isSubmitting}
       icon="check"
       onPress={handleSubmit(localSubmit)}
     />
-  );
+  )
 
-  useHeaderButtons({ right: headerRight });
+  useHeaderButtons({ right: headerRight })
 
   return (
     <>
@@ -76,7 +72,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({
         control={control}
         name="title"
         label="Title"
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
@@ -96,7 +92,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({
         control={control}
         name="description"
         label="Description"
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
@@ -116,7 +112,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({
         control={control}
         name="startDate"
         label="Start Date"
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
@@ -136,7 +132,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({
         control={control}
         name="endDate"
         label="End Date"
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
@@ -156,7 +152,7 @@ export const EditEventForm: Component<EditEventFormProps> = ({
         control={control}
         name="url"
         label="URL"
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
@@ -173,5 +169,5 @@ export const EditEventForm: Component<EditEventFormProps> = ({
         )}
       />
     </>
-  );
-};
+  )
+}

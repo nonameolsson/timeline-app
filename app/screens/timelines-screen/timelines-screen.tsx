@@ -1,13 +1,14 @@
-import React, { useCallback, useState } from "react";
-import { ActivityIndicator, FlatList, SafeAreaView, View } from "react-native";
-import { Button, List, Text } from "react-native-paper";
-import { useFocusEffect } from "@react-navigation/native";
-import { observer } from "mobx-react-lite";
+import React, { useCallback, useState } from "react"
+import { ActivityIndicator, FlatList, SafeAreaView, View } from "react-native"
+import { Button, List, Text, useTheme, FAB } from "react-native-paper"
+import { useFocusEffect } from "@react-navigation/native"
+import { observer } from "mobx-react-lite"
 
-import { EmptyState } from "components";
-import { useStores } from "models";
+import { EmptyState } from "components"
+import { useStores } from "models"
 
-import { styles } from "./timelines-screen.styles";
+import { styles } from "./timelines-screen.styles"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 // type TimelinesScreenProp = {
 //   navigation: CompositeNavigationProp<
@@ -25,46 +26,46 @@ export const TimelinesScreen = observer(function TimelinesScreen({
   navigation,
   route: { params },
 }: any) {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const insets = useSafeAreaInsets()
+  const theme = useTheme()
 
   // Fix to get correct type
-  const { userStore, timelineStore } = useStores();
+  const { userStore, timelineStore } = useStores()
 
   // TODO: Adjust so new timelines are retrieved when navigating to this screen.
   useFocusEffect(
     useCallback(() => {
       if (userStore.user) {
-        timelineStore
-          .getTimelines(userStore.user.id)
-          .then(() => setIsLoading(false));
+        timelineStore.getTimelines(userStore.user.id).then(() => setIsLoading(false))
       }
-    }, [timelineStore, userStore.user])
-  );
+    }, [timelineStore, userStore.user]),
+  )
 
   useFocusEffect(
     useCallback(() => {
-      if (!params || !params.action) return;
-      const { action } = params;
+      if (!params || !params.action) return
+      const { action } = params
 
       const deleteTimeline = async (timelineId: number) => {
-        const timeline = timelineStore.getTimeline(timelineId);
-        if (!timeline) return;
+        const timeline = timelineStore.getTimeline(timelineId)
+        if (!timeline) return
 
-        await timeline.deleteAllEvents();
-        await timelineStore.deleteTimeline(timelineId);
-      };
+        await timeline.deleteAllEvents()
+        await timelineStore.deleteTimeline(timelineId)
+      }
 
       if (action.type === "DELETE_TIMELINE") {
-        setIsLoading(true);
-        deleteTimeline(action.meta.id);
-        setIsLoading(false);
+        setIsLoading(true)
+        deleteTimeline(action.meta.id)
+        setIsLoading(false)
       }
-    }, [params, timelineStore])
-  );
+    }, [params, timelineStore]),
+  )
 
   const openTimeline = (id: string, title: string): void => {
-    navigation.navigate("timeline", { id, title });
-  };
+    navigation.navigate("timeline", { id, title })
+  }
 
   const renderItem = ({ item: { title, id, description } }) => (
     <List.Item
@@ -74,12 +75,12 @@ export const TimelinesScreen = observer(function TimelinesScreen({
       description={description}
       left={(props) => <List.Icon {...props} icon="folder" />}
     />
-  );
+  )
 
   const renderList = () => {
-    const timelines = timelineStore.getTimelinesArray();
+    const timelines = timelineStore.getTimelinesArray()
 
-    if (!timelines) return null;
+    if (!timelines) return null
 
     return (
       <FlatList
@@ -87,8 +88,8 @@ export const TimelinesScreen = observer(function TimelinesScreen({
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
       />
-    );
-  };
+    )
+  }
 
   const emptyState = () => {
     return (
@@ -99,16 +100,13 @@ export const TimelinesScreen = observer(function TimelinesScreen({
           icon="timeline-plus-outline"
         />
         <View style={styles.emptyStateButtonWrapper}>
-          <Button
-            onPress={() => navigation.navigate("addTimeline")}
-            mode="contained"
-          >
+          <Button onPress={() => navigation.navigate("addTimeline")} mode="contained">
             Create timeline
           </Button>
         </View>
       </View>
-    );
-  };
+    )
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -127,6 +125,22 @@ export const TimelinesScreen = observer(function TimelinesScreen({
           <Text>Logging in...</Text>
         )}
       </View>
+      {timelineStore.hasTimelines() && (
+        <FAB
+          icon="timeline-plus-outline"
+          style={{
+            position: "absolute",
+            bottom: insets.bottom,
+            right: 16,
+          }}
+          theme={{
+            colors: {
+              accent: theme.colors.primary,
+            },
+          }}
+          onPress={() => navigation.navigate("addTimeline")}
+        />
+      )}
     </SafeAreaView>
-  );
-});
+  )
+})

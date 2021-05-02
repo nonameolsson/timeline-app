@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native"
 
 export const loginScreenStyles = StyleSheet.create({
   alignCenter: {
@@ -19,4 +19,4 @@ export const loginScreenStyles = StyleSheet.create({
   subheading: {
     textAlign: "center",
   },
-});
+})

@@ -1,4 +1,4 @@
-import { TextStyle, ViewStyle } from "react-native";
+import { TextStyle, ViewStyle } from "react-native"
 
 export const emptyStateStyles = {
   WRAPPER: {
@@ -11,4 +11,4 @@ export const emptyStateStyles = {
   SUBHEADING: {
     textAlign: "center",
   } as TextStyle,
-};
+}

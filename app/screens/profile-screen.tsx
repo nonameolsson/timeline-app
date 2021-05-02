@@ -1,9 +1,7 @@
-import React, { FunctionComponent as Component } from "react";
-import { SafeAreaView, Text, View } from "react-native";
-import { Button, Headline } from "react-native-paper";
-import { observer } from "mobx-react-lite";
-
-import { StyleSheet, ViewStyle } from "react-native";
+import React, { FunctionComponent as Component } from "react"
+import { SafeAreaView, View, StyleSheet, ViewStyle } from "react-native"
+import { Button, Headline } from "react-native-paper"
+import { observer } from "mobx-react-lite"
 
 export const styles = StyleSheet.create({
   container: {
@@ -20,7 +18,7 @@ export const styles = StyleSheet.create({
   screen: {
     flex: 1,
   } as ViewStyle,
-});
+})
 
 export const ProfileScreen: Component = observer(function ProfileScreen(props) {
   // Pull in one of our MST stores
@@ -38,5 +36,5 @@ export const ProfileScreen: Component = observer(function ProfileScreen(props) {
         <Button onPress={() => props.navigation.navigate("app")}>Back</Button>
       </View>
     </SafeAreaView>
-  );
-});
+  )
+})

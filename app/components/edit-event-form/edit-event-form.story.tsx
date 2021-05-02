@@ -1,11 +1,11 @@
-import * as React from "react";
-import { storiesOf } from "@storybook/react-native";
+import * as React from "react"
+import { storiesOf } from "@storybook/react-native"
 
-import { Story, StoryScreen, UseCase } from "../../../storybook/views";
+import { Story, StoryScreen, UseCase } from "../../../storybook/views"
 
-import { EditEventForm } from "./edit-event-form";
+import { EditEventForm } from "./edit-event-form"
 
-declare let module;
+declare let module
 
 storiesOf("EditEventForm", module)
   .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
@@ -15,4 +15,4 @@ storiesOf("EditEventForm", module)
         <EditEventForm text="EditEventForm" />
       </UseCase>
     </Story>
-  ));
+  ))

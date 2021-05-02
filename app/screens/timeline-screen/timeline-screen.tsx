@@ -1,45 +1,40 @@
-import React, {
-  FunctionComponent as Component,
-  useCallback,
-  useLayoutEffect,
-} from "react";
-import { Alert, SafeAreaView, ScrollView, View } from "react-native";
-import { Card, List, useTheme } from "react-native-paper";
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
-import { observer } from "mobx-react-lite";
-import { TimelineRouteProp, TimelineStackNavigationProp } from "navigators";
-import { Timeline } from "navigators/types";
+import React, { FunctionComponent as Component, useCallback, useLayoutEffect } from "react"
+import { Alert, SafeAreaView, ScrollView, View } from "react-native"
+import { Card, FAB, Headline, List, Paragraph, Subheading, useTheme } from "react-native-paper"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import { observer } from "mobx-react-lite"
+import { TimelineRouteProp, TimelineStackNavigationProp } from "navigators"
+import { Timeline } from "navigators/types"
 
-import { Item, MaterialHeaderButtons } from "components";
-import { useStores } from "models";
+import { Item, MaterialHeaderButtons } from "components"
+import { useStores } from "models"
 
-import { styles } from "./timeline-screen.styles";
+import { styles } from "./timeline-screen.styles"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
-  const { timelineStore } = useStores();
-  const navigation = useNavigation<TimelineStackNavigationProp<"timeline">>();
-  const { params } = useRoute<TimelineRouteProp<"timeline">>();
+  const { timelineStore } = useStores()
+  const navigation = useNavigation<TimelineStackNavigationProp<"timeline">>()
+  const { params } = useRoute<TimelineRouteProp<"timeline">>()
 
   const {
     colors: { background },
-  } = useTheme();
+  } = useTheme()
+  const insets = useSafeAreaInsets()
+  const theme = useTheme()
 
-  const timeline = timelineStore.getTimeline(params.id);
-  const events = timeline.getEvents();
+  const timeline = timelineStore.getTimeline(params.id)
+  const events = timeline.getEvents()
 
   const goToEditTimelineScreen = useCallback(() => {
-    navigation.navigate("editTimeline", { id: params.id });
-  }, [navigation, params.id]);
+    navigation.navigate("editTimeline", { id: params.id })
+  }, [navigation, params.id])
 
   const deleteTimeline = useCallback(() => {
     navigation.navigate("timelines", {
       action: { type: "DELETE_TIMELINE", meta: { id: params.id } },
-    });
-  }, [navigation, params.id]);
+    })
+  }, [navigation, params.id])
 
   const showDeleteAlert = useCallback(() => {
     Alert.alert(
@@ -53,105 +48,118 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
         },
         { text: "OK", onPress: () => deleteTimeline() },
       ],
-      { cancelable: false }
-    );
-  }, [deleteTimeline]);
+      { cancelable: false },
+    )
+  }, [deleteTimeline])
 
   useLayoutEffect(() => {
     const headerRightComponent = () => {
       return (
         <MaterialHeaderButtons>
-          <Item
-            title="Delete"
-            iconName="delete"
-            onPress={() => showDeleteAlert()}
-          />
-          <Item
-            title="Edit"
-            iconName="edit"
-            onPress={() => goToEditTimelineScreen()}
-          />
+          <Item title="Delete" iconName="delete" onPress={() => showDeleteAlert()} />
+          <Item title="Edit" iconName="edit" onPress={() => goToEditTimelineScreen()} />
         </MaterialHeaderButtons>
-      );
-    };
+      )
+    }
 
     navigation.setOptions({
       // in your app, extract the arrow function into a separate component
       // to avoid creating a new one every time
       headerRight: () => headerRightComponent(),
-    });
-  }, [goToEditTimelineScreen, navigation, showDeleteAlert]);
+    })
+  }, [goToEditTimelineScreen, navigation, showDeleteAlert])
 
   useFocusEffect(
     useCallback(() => {
-      if (!params.action || !timeline) return;
-      const { action } = params;
+      if (!params.action || !timeline) return
+      const { action } = params
 
       const deleteEvent = async (eventId: number) => {
-        await timeline.deleteEvent(eventId);
-      };
+        await timeline.deleteEvent(eventId)
+      }
 
       const editTimeline = async (payload: Timeline) => {
-        await timeline.editTimeline(payload, payload.id);
-      };
+        await timeline.editTimeline(payload, payload.id)
+      }
 
       if (action.type === "DELETE_EVENT") {
-        deleteEvent(action.meta.id);
+        deleteEvent(action.meta.id)
       } else if (action.type === "EDIT_TIMELINE") {
-        editTimeline(action.payload);
+        editTimeline(action.payload)
       }
-    }, [params, timeline])
-  );
+    }, [params, timeline]),
+  )
 
   // Make sure all data exists before using it
   // if (!timeline) return null
 
   const openEvent = (eventId: number) => {
-    const event = timeline.getEvent(eventId);
+    const event = timeline.getEvent(eventId)
 
     navigation.navigate("event", {
       title: event?.title,
       timelineId: params.id,
       eventId,
-    });
-  };
+    })
+  }
 
   const renderEventList = () => {
-    const eventList: JSX.Element[] = [];
+    const eventList: JSX.Element[] = []
 
     events.forEach((event) => {
-      const description = event.endDate
-        ? `${event.startDate} - ${event.endDate}`
-        : event.startDate;
+      const description = event.endDate ? `${event.startDate} - ${event.endDate}` : event.startDate
       eventList.push(
         <List.Item
           key={event.id}
           onPress={() => openEvent(event.id)}
           title={event.title}
           description={description}
-        />
-      );
-    });
+        />,
+      )
+    })
 
-    return <ScrollView>{eventList}</ScrollView>;
-  };
+    return <ScrollView>{eventList}</ScrollView>
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={[styles.container, { backgroundColor: background }]}>
         {events.length > 0 ? (
           <>
-            <Card style={{ padding: 16 }}>
-              <Card.Title title={timeline.description} />
+            <Card>
+              <Card.Title title={timeline.title} />
+              <Card.Content>
+                <Paragraph>{timeline.description} </Paragraph>
+                <Paragraph>Number of events: {timeline.events.length} </Paragraph>
+              </Card.Content>
             </Card>
+            <Headline style={{ marginTop: 16 }}>Events</Headline>
             {renderEventList()}
           </>
         ) : (
-          <Card style={{ padding: 16 }}>
+          <Card>
             <Card.Title title="No events" subtitle="Start by adding an event" />
           </Card>
         )}
       </View>
+      <FAB
+        icon="timeline-plus-outline"
+        style={{
+          position: "absolute",
+          bottom: insets.bottom,
+          right: 16,
+        }}
+        theme={{
+          colors: {
+            accent: theme.colors.primary,
+          },
+        }}
+        onPress={() =>
+          navigation.navigate("addEvent", {
+            timelineId: timeline.id,
+          })
+        }
+      />
     </SafeAreaView>
-  );
-});
+  )
+})
