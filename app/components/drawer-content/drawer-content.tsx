@@ -1,5 +1,5 @@
 import React from "react"
-import { SafeAreaView, View } from "react-native"
+import { Linking, SafeAreaView, View } from "react-native"
 import {
   Avatar,
   Caption,
@@ -28,6 +28,8 @@ export interface DrawerContentProps {}
 
 export const DrawerContent = observer((props: DrawerContentProps) => {
   const { userStore, uiStore } = useStores()
+
+  const openHelp = () => Linking.openURL("https://yourtimeline.app")
 
   const logOut = () => userStore.logOut()
 
@@ -100,7 +102,7 @@ export const DrawerContent = observer((props: DrawerContentProps) => {
             <MaterialCommunityIcons name="help-circle" color={color} size={size} />
           )}
           label="Help"
-          onPress={() => undefined}
+          onPress={openHelp}
         />
         <DrawerItem
           icon={({ color, size }) => (
