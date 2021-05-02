@@ -17,8 +17,7 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "models"
 
 import { drawerContentStyles as styles } from "./drawer-content.styles"
-
-export interface DrawerContentProps {}
+import { useNavigation } from "@react-navigation/native"
 
 /**
  * This is a React functional component, ready to
@@ -26,29 +25,21 @@ export interface DrawerContentProps {}
  * Component description here for TypeScript tips.
  */
 
-export const DrawerContent = observer((props: DrawerContentProps) => {
+export const DrawerContent = observer(() => {
   const { userStore, uiStore } = useStores()
+  const { navigate } = useNavigation()
 
   const openHelp = () => Linking.openURL("https://yourtimeline.app")
 
   const logOut = () => userStore.logOut()
 
   return (
-    /**
-     * // FIXME: Fix this warning
-     * useObserver is deprecated. use
-     **/
     <SafeAreaView style={styles.wrapper}>
-      <DrawerContentScrollView {...props}>
+      <DrawerContentScrollView>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={styles.avatar}>
-              <Avatar.Image
-                source={{
-                  uri: "https://api.adorable.io/avatars/50/hey@adorable.io.png",
-                }}
-                size={50}
-              />
+              <Avatar.Icon style={styles.avatar} size={50} icon="emoticon-poop" />
               <View style={styles.userInfo}>
                 <Title style={styles.title}>{userStore.user?.username}</Title>
                 <Caption style={styles.caption}>{userStore.user?.email}</Caption>
@@ -62,14 +53,14 @@ export const DrawerContent = observer((props: DrawerContentProps) => {
                 <MaterialCommunityIcons name="home-outline" color={color} size={size} />
               )}
               label="Home"
-              onPress={() => props.navigation.navigate("app")}
+              onPress={() => navigate("app")}
             />
             <DrawerItem
               icon={({ color, size }) => (
                 <MaterialCommunityIcons name="account-outline" color={color} size={size} />
               )}
               label="Profile"
-              onPress={() => props.navigation.navigate("profile")}
+              onPress={() => navigate("profile")}
             />
             {/* <DrawerItem
               icon={({ color, size }) => (

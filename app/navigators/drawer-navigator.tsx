@@ -1,12 +1,12 @@
 import React from "react"
 import { createDrawerNavigator, DrawerNavigationProp } from "@react-navigation/drawer"
+import { observer } from "mobx-react-lite"
 import { RouteProp } from "@react-navigation/native"
-import { ProfileScreen } from "screens"
 
 import { DrawerContent } from "components"
 
+import { ProfileStackScreen } from "./profile-stack-navigator"
 import { TimelineStackScreen } from "./timeline-stack-navigator"
-import { observer } from "mobx-react-lite"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -67,7 +67,7 @@ export const DrawerNavigator = observer(function DrawerNavigator() {
         />
         <DrawerNav.Screen
           name="profile"
-          component={ProfileScreen}
+          component={ProfileStackScreen}
           options={({ route }) => {
             return {
               title: route.name,
