@@ -1,40 +1,50 @@
 import React, { FunctionComponent as Component } from "react"
 import { SafeAreaView, View, StyleSheet, ViewStyle } from "react-native"
-import { Button, Headline } from "react-native-paper"
-import { observer } from "mobx-react-lite"
+import { Avatar, TextInput } from "react-native-paper"
+
+import { useStores } from "models"
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  } as ViewStyle,
-  emptyStateButtonWrapper: {
-    flex: 1,
-    width: 256,
+  avatar: {
     alignSelf: "center",
+    marginTop: 32,
+    marginBottom: 32,
   } as ViewStyle,
-  emptyStateWrapper: {
+  container: {
     flex: 1,
   } as ViewStyle,
   screen: {
     flex: 1,
+    margin: 16,
   } as ViewStyle,
+  textInput: {
+    marginBottom: 16,
+  },
 })
 
-export const ProfileScreen: Component = observer(function ProfileScreen(props) {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  // OR
-  // const rootStore = useStores()
-
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
+export const ProfileScreen: Component = function ProfileScreen() {
+  const { userStore } = useStores()
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.container}>
-        <Headline>Your profile</Headline>
-        <Button onPress={() => props.navigation.navigate("app")}>Back</Button>
+        <Avatar.Icon style={styles.avatar} size={96} icon="emoticon-poop" />
+
+        <TextInput
+          style={styles.textInput}
+          mode="outlined"
+          label="Username"
+          disabled={true}
+          value={userStore.user.username}
+        />
+        <TextInput
+          mode="outlined"
+          disabled={true}
+          label="E-mail"
+          style={styles.textInput}
+          value={userStore.user.email}
+        />
       </View>
     </SafeAreaView>
   )
-})
+}
