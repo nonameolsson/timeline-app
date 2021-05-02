@@ -4,15 +4,16 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react";
-import { RouteProp } from "@react-navigation/native";
+import React, { useCallback } from "react"
+import { RouteProp } from "@react-navigation/native"
 import {
   createStackNavigator,
+  StackHeaderProps,
   StackNavigationProp,
-} from "@react-navigation/stack";
-import { PlacesScreen } from "screens";
+} from "@react-navigation/stack"
+import { PlacesScreen } from "screens"
 
-import { TopBar } from "components";
+import { TopBar } from "components"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -27,8 +28,8 @@ import { TopBar } from "components";
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PlacesParamList = {
-  places: undefined;
-};
+  places: undefined
+}
 
 /**
  * Utility type to make it easier to use with `useNavigation()`
@@ -38,9 +39,10 @@ export type PlacesParamList = {
  * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
  * ```
  */
-export type PeopleStackNavigationProp<
-  T extends keyof PlacesParamList
-> = StackNavigationProp<PlacesParamList, T>;
+export type PeopleStackNavigationProp<T extends keyof PlacesParamList> = StackNavigationProp<
+  PlacesParamList,
+  T
+>
 /**
  * Utility type to make it easier to use with `useRoute()`
  *
@@ -49,14 +51,18 @@ export type PeopleStackNavigationProp<
  * const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
  * ```
  */
-export type PeopleRouteProp<T extends keyof PlacesParamList> = RouteProp<
-  PlacesParamList,
-  T
->;
+export type PeopleRouteProp<T extends keyof PlacesParamList> = RouteProp<PlacesParamList, T>
 
-const PlacesStack = createStackNavigator<PlacesParamList>();
+const PlacesStack = createStackNavigator<PlacesParamList>()
 
 export const PlacesStackNavigator = () => {
+  const header = useCallback(
+    ({ scene, previous, navigation, ...props }: StackHeaderProps) => (
+      <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+    ),
+    [],
+  )
+
   return (
     <PlacesStack.Navigator
       initialRouteName="places"
@@ -64,14 +70,7 @@ export const PlacesStackNavigator = () => {
       screenOptions={{
         headerShown: true,
         gestureEnabled: true,
-        header: ({ scene, previous, navigation, ...props }) => (
-          <TopBar
-            scene={scene}
-            previous={previous}
-            navigation={navigation}
-            {...props}
-          />
-        ),
+        header: (props: StackHeaderProps) => header(props),
       }}
     >
       <PlacesStack.Screen
@@ -80,8 +79,8 @@ export const PlacesStackNavigator = () => {
         options={() => ({ headerShown: true, headerTitle: "Places" })}
       />
     </PlacesStack.Navigator>
-  );
-};
+  )
+}
 
 /**
  * A list of routes from which we're allowed to leave the app when

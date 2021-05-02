@@ -10,53 +10,50 @@
  * if you're interested in adding screens and navigators.
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react"
 import {
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
   Provider as PaperProvider,
-} from "react-native-paper";
-import {
-  initialWindowMetrics,
-  SafeAreaProvider,
-} from "react-native-safe-area-context";
-import { enableScreens } from "react-native-screens";
-import { OverflowMenuProvider } from "react-navigation-header-buttons";
+} from "react-native-paper"
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
+import { enableScreens } from "react-native-screens"
+import { OverflowMenuProvider } from "react-navigation-header-buttons"
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
   NavigationContainerRef,
-} from "@react-navigation/native";
-import { observer } from "mobx-react-lite";
+} from "@react-navigation/native"
+import { observer } from "mobx-react-lite"
 
-import "./i18n";
-import "./utils/ignore-warnings";
+import "./i18n"
+import "./utils/ignore-warnings"
 
-import { ToggleStorybook } from "../storybook/toggle-storybook";
+import { ToggleStorybook } from "../storybook/toggle-storybook"
 
-import { initFonts } from "./theme/fonts"; // expo
-import * as storage from "./utils/storage";
-import { RootStore, RootStoreProvider, setupRootStore } from "./models";
+import { initFonts } from "./theme/fonts" // expo
+import * as storage from "./utils/storage"
+import { RootStore, RootStoreProvider, setupRootStore } from "./models"
 import {
   canExit,
   RootNavigator,
   setRootNavigation,
   useBackButtonHandler,
   useNavigationPersistence,
-} from "./navigators";
+} from "./navigators"
 
 // This puts screens in a native ViewController or Activity. If you want fully native
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
-enableScreens();
+enableScreens()
 
-export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE";
+export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 const CombinedDarkTheme = {
   ...PaperDarkTheme,
   ...NavigationDarkTheme,
   colors: { ...PaperDarkTheme.colors, ...NavigationDarkTheme.colors },
-};
+}
 
 const CombinedDefaultTheme = {
   ...PaperDefaultTheme,
@@ -65,41 +62,38 @@ const CombinedDefaultTheme = {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors,
   },
-};
+}
 
 /**
  * This is the root component of our app.
  */
 const App = observer(() => {
-  const navigationRef = useRef<NavigationContainerRef>();
-  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined);
+  const navigationRef = useRef<NavigationContainerRef>()
+  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
 
-  setRootNavigation(navigationRef);
-  useBackButtonHandler(navigationRef, canExit);
-  const {
-    initialNavigationState,
-    onNavigationStateChange,
-  } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY);
+  setRootNavigation(navigationRef)
+  useBackButtonHandler(navigationRef, canExit)
+  const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
+    storage,
+    NAVIGATION_PERSISTENCE_KEY,
+  )
 
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-extra-semi
-    (async () => {
-      await initFonts(); // expo
-      setupRootStore().then(setRootStore);
-    })();
-  }, []);
+    ;(async () => {
+      await initFonts() // expo
+      setupRootStore().then(setRootStore)
+    })()
+  }, [])
 
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background
   // color set in native by rootView's background color. You can replace
   // with your own loading component if you wish.
-  if (!rootStore) return null;
+  if (!rootStore) return null
 
-  const theme =
-    rootStore.uiStore.theme === "light"
-      ? CombinedDefaultTheme
-      : CombinedDarkTheme;
+  const theme = rootStore.uiStore.theme === "light" ? CombinedDefaultTheme : CombinedDarkTheme
 
   // otherwise, we're ready to render the app
   return (
@@ -119,7 +113,7 @@ const App = observer(() => {
         </RootStoreProvider>
       </PaperProvider>
     </ToggleStorybook>
-  );
-});
+  )
+})
 
-export default App;
+export default App

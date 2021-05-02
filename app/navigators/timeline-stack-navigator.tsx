@@ -4,28 +4,29 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react";
-import { RouteProp } from "@react-navigation/native";
+import React, { useCallback } from "react"
+import { RouteProp } from "@react-navigation/native"
 import {
   createStackNavigator,
+  StackHeaderProps,
   StackNavigationProp,
-} from "@react-navigation/stack";
+} from "@react-navigation/stack"
 import {
   EditEventScreen,
   EditTimelineScreen,
   EventScreen,
   TimelineScreen,
   TimelinesScreen,
-} from "screens";
+} from "screens"
 
-import { TopBar } from "components";
+import { TopBar } from "components"
 
 import {
   DeleteEventAction,
   DeleteTimelineAction,
   EditEventAction,
   EditTimelineAction,
-} from "./types";
+} from "./types"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -41,28 +42,30 @@ import {
  */
 export type TimelineParamList = {
   timelines: {
-    action?: DeleteTimelineAction;
-  };
+    action?: DeleteTimelineAction
+  }
   // NOTE: Timeline interfaces should only be optional when goint BACK to TimelineScreen from EventScreen. Fix this.
   timeline: {
-    id: number;
-    title?: string;
-    action?: DeleteEventAction | EditTimelineAction;
-  };
-  editTimeline: { id: number };
+    id: number
+    title?: string
+    action?: DeleteEventAction | EditTimelineAction
+  }
+  editTimeline: { id: number }
   event: {
-    title?: string;
-    timelineId: number;
-    eventId: number;
-    action?: EditEventAction;
-  };
+    title?: string
+    timelineId: number
+    eventId: number
+    action?: EditEventAction
+    startDate?: string
+    endDate?: string
+  }
   editEvent: {
     /** ID of the timeline to wich the event corresponds */
-    timelineId: number;
+    timelineId: number
     /** ID of the event */
-    eventId: number;
-  };
-};
+    eventId: number
+  }
+}
 
 /**
  * Utility type to make it easier to use with `useNavigation()`
@@ -72,9 +75,10 @@ export type TimelineParamList = {
  * const navigation = useNavigation<PrimaryStackNavigationProp<"timeline">>()
  * ```
  */
-export type TimelineStackNavigationProp<
-  T extends keyof TimelineParamList
-> = StackNavigationProp<TimelineParamList, T>;
+export type TimelineStackNavigationProp<T extends keyof TimelineParamList> = StackNavigationProp<
+  TimelineParamList,
+  T
+>
 /**
  * Utility type to make it easier to use with `useRoute()`
  *
@@ -83,14 +87,18 @@ export type TimelineStackNavigationProp<
  * const { params: { id } } = useRoute<PrimaryRouteProp<"timeline">>()
  * ```
  */
-export type TimelineRouteProp<T extends keyof TimelineParamList> = RouteProp<
-  TimelineParamList,
-  T
->;
+export type TimelineRouteProp<T extends keyof TimelineParamList> = RouteProp<TimelineParamList, T>
 
-const TimelineStack = createStackNavigator<TimelineParamList>();
+const TimelineStack = createStackNavigator<TimelineParamList>()
 
 export const TimelineStackScreen = () => {
+  const header = useCallback(
+    ({ scene, previous, navigation, ...props }: StackHeaderProps) => (
+      <TopBar scene={scene} previous={previous} navigation={navigation} {...props} />
+    ),
+    [],
+  )
+
   return (
     <TimelineStack.Navigator
       initialRouteName="timelines"
@@ -98,14 +106,7 @@ export const TimelineStackScreen = () => {
       screenOptions={{
         headerShown: true,
         gestureEnabled: true,
-        header: ({ scene, previous, navigation, ...props }) => (
-          <TopBar
-            scene={scene}
-            previous={previous}
-            navigation={navigation}
-            {...props}
-          />
-        ),
+        header: (props) => header(props),
       }}
     >
       <TimelineStack.Screen
@@ -139,8 +140,8 @@ export const TimelineStackScreen = () => {
         options={{ headerTitle: "Edit" }}
       />
     </TimelineStack.Navigator>
-  );
-};
+  )
+}
 
 /**
  * A list of routes from which we're allowed to leave the app when

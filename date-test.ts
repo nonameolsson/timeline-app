@@ -1,8 +1,8 @@
 interface IEvent {
-  id: number;
-  name: string;
-  startDate: string;
-  endDate: string | null;
+  id: number
+  name: string
+  startDate: string
+  endDate: string | null
 }
 
 const events: IEvent[] = [
@@ -48,14 +48,12 @@ const events: IEvent[] = [
     startDate: "1914-10-91",
     endDate: null,
   },
-];
+]
 
 const newArr = events
   .map(({ name, startDate, id }) => {
-    return { name, id, startDate };
+    return { name, id, startDate }
   })
-  .sort((a, b) =>
-    a.startDate > b.startDate ? 1 : a.startDate < b.startDate ? -1 : 0
-  )
-  .map((event) => event.name);
-console.log(newArr);
+  .sort((a, b) => (a.startDate > b.startDate ? 1 : a.startDate < b.startDate ? -1 : 0))
+  .map((event) => event.name)
+console.log(newArr)

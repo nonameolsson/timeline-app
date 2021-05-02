@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree";
+import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 /**
  * Model description here for TypeScript hints.
@@ -12,7 +12,7 @@ export const RoleModel = types
     type: types.enumeration(["authenticated", "public"]),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})); // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -22,7 +22,7 @@ export const RoleModel = types
   *  .postProcessSnapshot(omit(["password", "socialSecurityNumber", "creditCardNumber"]))
   */
 
-type RoleType = Instance<typeof RoleModel>;
+type RoleType = Instance<typeof RoleModel>
 export interface Role extends RoleType {}
-type RoleSnapshotType = SnapshotOut<typeof RoleModel>;
+type RoleSnapshotType = SnapshotOut<typeof RoleModel>
 export interface RoleSnapshot extends RoleSnapshotType {}

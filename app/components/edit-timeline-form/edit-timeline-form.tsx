@@ -1,34 +1,30 @@
-import React, { FunctionComponent as Component } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Appbar, HelperText, TextInput } from "react-native-paper";
-import { yupResolver } from "@hookform/resolvers";
+import React, { FunctionComponent as Component } from "react"
+import { Controller, useForm } from "react-hook-form"
+import { Appbar, HelperText, TextInput } from "react-native-paper"
+import { yupResolver } from "@hookform/resolvers/yup"
 
-import { Timeline } from "models";
-import { useHeaderButtons } from "utils/hooks";
+import { Timeline } from "models"
+import { useHeaderButtons } from "utils/hooks"
 
-import { EditTimelineFormSchema } from "./edit-timeline-form.validation";
+import { EditTimelineFormSchema } from "./edit-timeline-form.validation"
 
 export interface EditTimelineFormProps {
-  timeline: Timeline;
-  onSubmit: (data: EditTimelineFormData) => void;
+  timeline: Timeline
+  onSubmit: (data: EditTimelineFormData) => void
 }
 
 export type EditTimelineFormData = {
-  title: string;
-  description: string;
-};
+  title: string
+  description: string
+}
 
 /**
  * Form used when editing a timeline.
  */
-export const EditTimelineForm: Component<EditTimelineFormProps> = ({
-  timeline,
-  onSubmit,
-}) => {
+export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, onSubmit }) => {
   const {
     control,
-    errors,
-    formState,
+    formState: { errors, isValid, isSubmitting },
     handleSubmit,
   } = useForm<EditTimelineFormData>({
     resolver: yupResolver(EditTimelineFormSchema),
@@ -37,27 +33,27 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({
       title: timeline.title || "",
       description: timeline.description || "",
     },
-  });
+  })
 
   const localSubmit = (data: EditTimelineFormData) => {
     const updatedData = {
       id: timeline.id,
       title: data.title,
       description: data.description,
-    };
+    }
 
-    onSubmit(updatedData);
-  };
+    onSubmit(updatedData)
+  }
 
   const headerRight = () => (
     <Appbar.Action
-      disabled={!formState.isValid || formState.isSubmitting}
+      disabled={!isValid || isSubmitting}
       icon="check"
       onPress={handleSubmit(localSubmit)}
     />
-  );
+  )
 
-  useHeaderButtons({ right: headerRight });
+  useHeaderButtons({ right: headerRight })
 
   return (
     <>
@@ -65,7 +61,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({
         control={control}
         name="title"
         label="Title"
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
@@ -85,7 +81,7 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({
         control={control}
         name="description"
         label="Description"
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
@@ -102,5 +98,5 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({
         )}
       />
     </>
-  );
-};
+  )
+}

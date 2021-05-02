@@ -1,43 +1,38 @@
-import React, { FunctionComponent } from "react";
-import { Controller, useForm } from "react-hook-form";
-import {
-  Button,
-  HelperText,
-  Text,
-  TextInput,
-  useTheme,
-} from "react-native-paper";
-import { yupResolver } from "@hookform/resolvers";
+import React, { FunctionComponent } from "react"
+import { Controller, useForm } from "react-hook-form"
+import { Button, HelperText, Text, TextInput, useTheme } from "react-native-paper"
+import { yupResolver } from "@hookform/resolvers/yup"
 
 /** Import types here */
-import { FormData } from "./login-form.types";
-import { LoginSchema } from "./login-form.validation";
+import { FormData } from "./login-form.types"
+import { LoginSchema } from "./login-form.validation"
 
 interface LoginFormProps {
-  handleLogin: (email: string, password: string) => void;
-  errorText: string | null;
+  handleLogin: (email: string, password: string) => void
+  errorText: string | null
 }
 
-export const LoginForm: FunctionComponent<LoginFormProps> = ({
-  handleLogin,
-  errorText,
-}) => {
-  const { control, formState, handleSubmit, errors } = useForm<FormData>({
+export const LoginForm: FunctionComponent<LoginFormProps> = ({ handleLogin, errorText }) => {
+  const {
+    control,
+    formState: { isSubmitting, errors },
+    handleSubmit,
+  } = useForm<FormData>({
     resolver: yupResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
-    mode: "onBlur",
-  });
+    mode: "onChange",
+  })
 
   const onSubmit = ({ email, password }): void => {
-    handleLogin(email, password);
-  };
+    handleLogin(email, password)
+  }
 
   const {
     colors: { error },
-  } = useTheme();
+  } = useTheme()
 
   /**
    * TODO: Implement this
@@ -49,7 +44,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({
       <Controller
         control={control}
         name="email"
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
@@ -58,7 +53,7 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({
               label="E-mail"
               left={<TextInput.Icon name="email" />}
               // label={errors.email && errors.email.message}
-              disabled={formState.isSubmitting}
+              disabled={isSubmitting}
               keyboardType="email-address"
               onBlur={onBlur}
               onChangeText={(text) => onChange(text)}
@@ -76,12 +71,12 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({
       <Controller
         control={control}
         name="password"
-        render={({ onChange, onBlur, value }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
               // label={errors.password && errors.password.message}
-              disabled={formState.isSubmitting}
+              disabled={isSubmitting}
               keyboardAppearance="dark"
               keyboardType="visible-password"
               onBlur={onBlur}
@@ -108,17 +103,15 @@ export const LoginForm: FunctionComponent<LoginFormProps> = ({
         </TouchableOpacity>
       </View> */}
 
-      <Text style={{ textAlign: "center", marginBottom: 16, color: error }}>
-        {errorText || ""}
-      </Text>
+      <Text style={{ textAlign: "center", marginBottom: 16, color: error }}>{errorText || ""}</Text>
       <Button
-        disabled={formState.isSubmitting}
+        disabled={isSubmitting}
         onPress={handleSubmit(onSubmit)}
         mode="contained"
-        loading={formState.isSubmitting}
+        loading={isSubmitting}
       >
         SIGN IN
       </Button>
     </>
-  );
-};
+  )
+}

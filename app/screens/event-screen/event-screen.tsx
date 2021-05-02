@@ -1,58 +1,43 @@
-import React, {
-  FunctionComponent as Component,
-  useCallback,
-  useLayoutEffect,
-} from "react";
-import { Alert, SafeAreaView, View } from "react-native";
-import { Headline, List, Subheading, Text, useTheme } from "react-native-paper";
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
-import * as WebBrowser from "expo-web-browser";
-import { observer } from "mobx-react-lite";
-import { TimelineRouteProp, TimelineStackNavigationProp } from "navigators";
+import React, { FunctionComponent as Component, useCallback, useLayoutEffect } from "react"
+import { Alert, SafeAreaView, View } from "react-native"
+import { Card, Headline, Paragraph, List, Subheading, Text, useTheme } from "react-native-paper"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
+import * as WebBrowser from "expo-web-browser"
+import { observer } from "mobx-react-lite"
+import { TimelineRouteProp, TimelineStackNavigationProp } from "navigators"
 
-import { Item, MaterialHeaderButtons } from "components";
-import { useStores } from "models";
-import {
-  formatDateYear,
-  getTimelineDataString,
-  getTimelineDate,
-} from "utils/date";
+import { Item, MaterialHeaderButtons } from "components"
+import { useStores } from "models"
 
-import { styles } from "./event-screen.styles";
+import { styles } from "./event-screen.styles"
+import { Event } from "models/event/event"
 
 export const EventScreen: Component = observer(function EventScreen() {
-  const { timelineStore } = useStores();
-  const navigation = useNavigation<TimelineStackNavigationProp<"event">>();
-  const { params } = useRoute<TimelineRouteProp<"event">>();
+  const { timelineStore } = useStores()
+  const navigation = useNavigation<TimelineStackNavigationProp<"event">>()
+  const { params } = useRoute<TimelineRouteProp<"event">>()
 
   const {
     colors: { background },
-  } = useTheme();
+  } = useTheme()
 
-  const event = timelineStore.getEventFromTimeline(
+  const event: Event | undefined = timelineStore.getEventFromTimeline(
     params.timelineId,
-    params.eventId
-  );
+    params.eventId,
+  )
 
   useFocusEffect(
     useCallback(() => {
-      if (!params.action || !event) return;
+      if (!params.action || !event) return
       if (params.action.type === "EDIT_EVENT") {
-        event.updateEvent(params.action.payload, params.action.payload.id);
+        event.updateEvent(params.action.payload, params.action.payload.id)
       }
-    }, [event, params.action])
-  );
+    }, [event, params.action]),
+  )
 
   const deleteEvent = useCallback(() => {
-    const currentEvent = timelineStore.getEventFromTimeline(
-      params.timelineId,
-      params.eventId
-    );
-    if (!currentEvent) return;
+    const currentEvent = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
+    if (!currentEvent) return
 
     navigation.navigate("timeline", {
       id: params.timelineId,
@@ -62,8 +47,8 @@ export const EventScreen: Component = observer(function EventScreen() {
           id: currentEvent.id,
         },
       },
-    });
-  }, [navigation, params.eventId, params.timelineId, timelineStore]);
+    })
+  }, [navigation, params.eventId, params.timelineId, timelineStore])
 
   const showDeleteAlert = useCallback(
     function showDeleteAlert() {
@@ -78,11 +63,29 @@ export const EventScreen: Component = observer(function EventScreen() {
           },
           { text: "OK", onPress: () => deleteEvent() },
         ],
-        { cancelable: false }
-      );
+        { cancelable: false },
+      )
     },
-    [deleteEvent]
-  );
+    [deleteEvent],
+  )
+
+  const headerRight = useCallback(() => {
+    return (
+      <MaterialHeaderButtons>
+        <Item title="Delete" iconName="delete" onPress={showDeleteAlert} />
+        <Item
+          title="Edit"
+          iconName="edit"
+          onPress={() =>
+            navigation.navigate("editEvent", {
+              eventId: event.id,
+              timelineId: params.timelineId,
+            })
+          }
+        />
+      </MaterialHeaderButtons>
+    )
+  }, [event.id, navigation, params.timelineId, showDeleteAlert])
 
   useLayoutEffect(
     function HeaderButtons() {
@@ -90,32 +93,12 @@ export const EventScreen: Component = observer(function EventScreen() {
         navigation.setOptions({
           // in your app, extract the arrow function into a separate component
           // to avoid creating a new one every time
-          headerRight: () => (
-            <MaterialHeaderButtons>
-              <Item
-                title="Delete"
-                iconName="delete"
-                onPress={showDeleteAlert}
-              />
-              <Item
-                title="Edit"
-                iconName="edit"
-                onPress={() =>
-                  navigation.navigate("editEvent", {
-                    eventId: event.id,
-                    timelineId: params.timelineId,
-                  })
-                }
-              />
-            </MaterialHeaderButtons>
-          ),
-        });
+          headerRight: () => headerRight(),
+        })
       }
     },
-    [event, event?.id, navigation, params.timelineId, showDeleteAlert]
-  );
-
-  if (!event) return null;
+    [event, event.id, headerRight, navigation, params.timelineId, showDeleteAlert],
+  )
 
   const openBrowser = async () => {
     if (event.url) {
@@ -123,53 +106,38 @@ export const EventScreen: Component = observer(function EventScreen() {
         const res = await WebBrowser.openBrowserAsync(event.url, {
           enableBarCollapsing: true,
           enableDefaultShareMenuItem: true,
-        });
-        console.log("res", res);
+        })
+        console.log("res", res)
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     }
-  };
+  }
 
   const renderUrlList = () => {
     if (event.url) {
-      return <List.Item title={event.url} onPress={openBrowser} />;
+      return <List.Item title={event.url} onPress={openBrowser} />
     } else {
-      return <List.Item title="No refefence added" />;
+      return <List.Item title="No refefence added" />
     }
-  };
+  }
 
   return (
     <SafeAreaView style={styles.screen}>
       <View style={[styles.container, { backgroundColor: background }]}>
-        <Subheading>Title</Subheading>
-        <Text>{event.title}</Text>
-        <Subheading>Description</Subheading>
-        <Text>{event.description}</Text>
-        <Subheading>Start Date</Subheading>
-        <Text>{event.startDate}</Text>
-        <Subheading>End Date</Subheading>
-        <Text>{event.endDate}</Text>
-        <Subheading>Test</Subheading>
-        <Text>
-          {formatDateYear(
-            getTimelineDate({ negative: true, year: 1914, month: 10, day: 22 })
-          )}
-        </Text>
-        <Text>
-          {getTimelineDataString({
-            negative: true,
-            year: 1914,
-            month: 10,
-            day: 22,
-          })}
-        </Text>
-        <Text>
-          {formatDateYear(getTimelineDate({ negative: true, year: 1914 }))}
-        </Text>
-        <Headline>References</Headline>
-        {renderUrlList()}
+        <Card>
+          <Card.Title title={event.title} />
+          <Card.Content>
+            <Paragraph>{event.description}</Paragraph>
+            <Subheading>Start Date</Subheading>
+            <Text>{event.startDate}</Text>
+            <Subheading>End Date</Subheading>
+            <Text>{event.endDate}</Text>
+            <Headline>References</Headline>
+            {renderUrlList()}
+          </Card.Content>
+        </Card>
       </View>
     </SafeAreaView>
-  );
-});
+  )
+})

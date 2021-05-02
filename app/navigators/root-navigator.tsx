@@ -4,18 +4,15 @@
  * and a "main" flow (which is contained in your MainNavigator) which the user
  * will use once logged in.
  */
-import React, { forwardRef } from "react";
-import {
-  NavigationContainer,
-  NavigationContainerRef,
-} from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { observer } from "mobx-react-lite";
+import React, { forwardRef } from "react"
+import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
+import { createStackNavigator } from "@react-navigation/stack"
+import { observer } from "mobx-react-lite"
 
-import { useStores } from "models";
+import { useStores } from "models"
 
-import { AuthNavigator } from "./auth-navigator";
-import { ModalStackScreen } from "./modal-stack";
+import { AuthNavigator } from "./auth-navigator"
+import { ModalStackScreen } from "./modal-stack"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -28,14 +25,14 @@ import { ModalStackScreen } from "./modal-stack";
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type RootParamList = {
-  modalStack: undefined;
-  authStack: undefined;
-};
+  modalStack: undefined
+  authStack: undefined
+}
 
-const Stack = createStackNavigator<RootParamList>();
+const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = observer(function RootStack() {
-  const { userStore } = useStores();
+  const { userStore } = useStores()
 
   return (
     <Stack.Navigator
@@ -50,8 +47,8 @@ const RootStack = observer(function RootStack() {
         <Stack.Screen name="authStack" component={AuthNavigator} />
       )}
     </Stack.Navigator>
-  );
-});
+  )
+})
 
 export const RootNavigator = forwardRef<
   NavigationContainerRef,
@@ -61,7 +58,7 @@ export const RootNavigator = forwardRef<
     <NavigationContainer {...props} ref={ref}>
       <RootStack />
     </NavigationContainer>
-  );
-});
+  )
+})
 
-RootNavigator.displayName = "RootNavigator";
+RootNavigator.displayName = "RootNavigator"

@@ -1,11 +1,11 @@
-import * as React from "react";
-import { storiesOf } from "@storybook/react-native";
+import * as React from "react"
+import { storiesOf } from "@storybook/react-native"
 
-import { Story, StoryScreen, UseCase } from "../../../storybook/views";
+import { Story, StoryScreen, UseCase } from "../../../storybook/views"
 
-import { DrawerContent } from "./drawer-content";
+import { DrawerContent } from "./drawer-content"
 
-declare let module;
+declare let module
 
 storiesOf("DrawerContent", module)
   .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
@@ -15,4 +15,4 @@ storiesOf("DrawerContent", module)
         <DrawerContent text="DrawerContent" />
       </UseCase>
     </Story>
-  ));
+  ))
