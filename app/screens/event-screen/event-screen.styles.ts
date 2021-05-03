@@ -5,6 +5,14 @@ export const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  dateWrapper: {
+    flexDirection: "row",
+    marginTop: 16,
+  },
+  endDate: {
+    marginBottom: 16,
+    marginLeft: 32,
+  },
   screen: {
     flex: 1,
   },

@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form"
 import { Appbar, HelperText, TextInput } from "react-native-paper"
 import { yupResolver } from "@hookform/resolvers/yup"
 
-import { Timeline } from "models"
+import { Timeline } from "models/timeline/timeline"
 import { useHeaderButtons } from "utils/hooks"
 
 import { EditTimelineFormSchema } from "./edit-timeline-form.validation"
@@ -60,7 +60,6 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
       <Controller
         control={control}
         name="title"
-        label="Title"
         render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
@@ -80,7 +79,6 @@ export const EditTimelineForm: Component<EditTimelineFormProps> = ({ timeline, o
       <Controller
         control={control}
         name="description"
-        label="Description"
         render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput

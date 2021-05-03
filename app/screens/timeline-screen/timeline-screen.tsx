@@ -1,20 +1,24 @@
 import React, { FunctionComponent as Component, useCallback, useLayoutEffect } from "react"
 import { Alert, SafeAreaView, ScrollView, View } from "react-native"
-import { Card, FAB, Headline, List, Paragraph, Subheading, useTheme } from "react-native-paper"
+import { Card, FAB, Headline, List, Paragraph, useTheme } from "react-native-paper"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { TimelineRouteProp, TimelineStackNavigationProp } from "navigators"
 import { Timeline } from "navigators/types"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { Item, MaterialHeaderButtons } from "components"
+import { TimelineRouteProp, TimelineStackNavigationProp } from "navigators"
+import { ModalStackNavigationProp } from "navigators/modal-stack"
 import { useStores } from "models"
+import { Timeline as TimelineType } from "models/timeline/timeline"
 
 import { styles } from "./timeline-screen.styles"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export const TimelineScreen: Component = observer(function TimelineScreen() {
   const { timelineStore } = useStores()
-  const navigation = useNavigation<TimelineStackNavigationProp<"timeline">>()
+  const { navigate, setOptions } = useNavigation<
+    TimelineStackNavigationProp<"timeline"> & ModalStackNavigationProp<"addEvent">
+  >()
   const { params } = useRoute<TimelineRouteProp<"timeline">>()
 
   const {
@@ -23,18 +27,18 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 
-  const timeline = timelineStore.getTimeline(params.id)
-  const events = timeline.getEvents()
+  const timeline: TimelineType | undefined = timelineStore.getTimeline(params.id)
+  const events = timeline?.getEvents()
 
   const goToEditTimelineScreen = useCallback(() => {
-    navigation.navigate("editTimeline", { id: params.id })
-  }, [navigation, params.id])
+    navigate("editTimeline", { id: params.id })
+  }, [navigate, params.id])
 
   const deleteTimeline = useCallback(() => {
-    navigation.navigate("timelines", {
+    navigate("timelines", {
       action: { type: "DELETE_TIMELINE", meta: { id: params.id } },
     })
-  }, [navigation, params.id])
+  }, [navigate, params.id])
 
   const showDeleteAlert = useCallback(() => {
     Alert.alert(
@@ -62,12 +66,12 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
       )
     }
 
-    navigation.setOptions({
+    setOptions({
       // in your app, extract the arrow function into a separate component
       // to avoid creating a new one every time
       headerRight: () => headerRightComponent(),
     })
-  }, [goToEditTimelineScreen, navigation, showDeleteAlert])
+  }, [goToEditTimelineScreen, setOptions, showDeleteAlert])
 
   useFocusEffect(
     useCallback(() => {
@@ -94,9 +98,11 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   // if (!timeline) return null
 
   const openEvent = (eventId: number) => {
+    if (!timeline) return
+
     const event = timeline.getEvent(eventId)
 
-    navigation.navigate("event", {
+    navigate("event", {
       title: event?.title,
       timelineId: params.id,
       eventId,
@@ -104,8 +110,8 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
   }
 
   const renderEventList = () => {
+    if (!events) return
     const eventList: JSX.Element[] = []
-
     events.forEach((event) => {
       const description = event.endDate ? `${event.startDate} - ${event.endDate}` : event.startDate
       eventList.push(
@@ -120,6 +126,9 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
 
     return <ScrollView>{eventList}</ScrollView>
   }
+
+  if (!timeline) return <></>
+  if (!events) return <></>
 
   return (
     <SafeAreaView style={styles.screen}>
@@ -155,7 +164,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
           },
         }}
         onPress={() =>
-          navigation.navigate("addEvent", {
+          navigate("addEvent", {
             timelineId: timeline.id,
           })
         }

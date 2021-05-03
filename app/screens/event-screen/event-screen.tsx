@@ -1,18 +1,18 @@
 import React, { FunctionComponent as Component, useCallback, useLayoutEffect } from "react"
 import { Alert, SafeAreaView, View } from "react-native"
-import { Card, Headline, Paragraph, List, Subheading, Text, useTheme } from "react-native-paper"
+import { Card, Paragraph, List, Subheading, Text, useTheme } from "react-native-paper"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import * as WebBrowser from "expo-web-browser"
 import { observer } from "mobx-react-lite"
+
 import { TimelineRouteProp, TimelineStackNavigationProp } from "navigators"
 
 import { Item, MaterialHeaderButtons } from "components"
 import { useStores } from "models"
 
 import { styles } from "./event-screen.styles"
-import { Event } from "models/event/event"
 
-export const EventScreen: Component = observer(function EventScreen() {
+export const EventScreen: Component = observer(function EventScreen(): JSX.Element {
   const { timelineStore } = useStores()
   const navigation = useNavigation<TimelineStackNavigationProp<"event">>()
   const { params } = useRoute<TimelineRouteProp<"event">>()
@@ -21,10 +21,7 @@ export const EventScreen: Component = observer(function EventScreen() {
     colors: { background },
   } = useTheme()
 
-  const event: Event | undefined = timelineStore.getEventFromTimeline(
-    params.timelineId,
-    params.eventId,
-  )
+  const event = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
 
   useFocusEffect(
     useCallback(() => {
@@ -70,6 +67,8 @@ export const EventScreen: Component = observer(function EventScreen() {
   )
 
   const headerRight = useCallback(() => {
+    if (event === undefined) return undefined
+
     return (
       <MaterialHeaderButtons>
         <Item title="Delete" iconName="delete" onPress={showDeleteAlert} />
@@ -78,14 +77,14 @@ export const EventScreen: Component = observer(function EventScreen() {
           iconName="edit"
           onPress={() =>
             navigation.navigate("editEvent", {
-              eventId: event.id,
+              eventId: event?.id,
               timelineId: params.timelineId,
             })
           }
         />
       </MaterialHeaderButtons>
     )
-  }, [event.id, navigation, params.timelineId, showDeleteAlert])
+  }, [event, navigation, params.timelineId, showDeleteAlert])
 
   useLayoutEffect(
     function HeaderButtons() {
@@ -97,26 +96,33 @@ export const EventScreen: Component = observer(function EventScreen() {
         })
       }
     },
-    [event, event.id, headerRight, navigation, params.timelineId, showDeleteAlert],
+    [event, event?.id, headerRight, navigation, params.timelineId, showDeleteAlert],
   )
 
+  if (!event) return <></>
+
   const openBrowser = async () => {
-    if (event.url) {
-      try {
-        const res = await WebBrowser.openBrowserAsync(event.url, {
-          enableBarCollapsing: true,
-          enableDefaultShareMenuItem: true,
-        })
-        console.log("res", res)
-      } catch (error) {
-        console.error(error)
-      }
+    if (!event?.url) return
+    try {
+      const res = await WebBrowser.openBrowserAsync(event.url, {
+        enableBarCollapsing: true,
+        enableDefaultShareMenuItem: true,
+      })
+      console.log("res", res)
+    } catch (error) {
+      console.error(error)
     }
   }
 
   const renderUrlList = () => {
-    if (event.url) {
-      return <List.Item title={event.url} onPress={openBrowser} />
+    if (event?.url) {
+      return (
+        <List.Item
+          left={(props) => <List.Icon {...props} icon="open-in-app" />}
+          title={event.url}
+          onPress={openBrowser}
+        />
+      )
     } else {
       return <List.Item title="No refefence added" />
     }
@@ -128,12 +134,19 @@ export const EventScreen: Component = observer(function EventScreen() {
         <Card>
           <Card.Title title={event.title} />
           <Card.Content>
+            <Subheading>Description</Subheading>
             <Paragraph>{event.description}</Paragraph>
-            <Subheading>Start Date</Subheading>
-            <Text>{event.startDate}</Text>
-            <Subheading>End Date</Subheading>
-            <Text>{event.endDate}</Text>
-            <Headline>References</Headline>
+            <View style={styles.dateWrapper}>
+              <View>
+                <Subheading>Start Date</Subheading>
+                <Text>{event.startDate}</Text>
+              </View>
+              <View style={styles.endDate}>
+                <Subheading>End Date</Subheading>
+                <Text>{event.endDate}</Text>
+              </View>
+            </View>
+            <Subheading>References</Subheading>
             {renderUrlList()}
           </Card.Content>
         </Card>

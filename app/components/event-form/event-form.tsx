@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect } from "react"
+import React, { useLayoutEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { View } from "react-native"
 import { HelperText, TextInput, useTheme } from "react-native-paper"
@@ -35,7 +35,7 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
     resolver: yupResolver(EventFormSchema),
     mode: "onChange",
     defaultValues: {
-      id: event?.id || null,
+      id: event?.id ?? undefined,
       title: event?.title || "",
       description: event?.description || "",
       startDate: event?.startDate || "",
@@ -44,58 +44,44 @@ export const EventForm = ({ event, onSubmit }: EventFormProps) => {
     },
   })
 
-  const headerLeft = useCallback(
-    () => (
+  useLayoutEffect(() => {
+    const headerLeft = () => (
       <MaterialHeaderButtons left={true}>
         <Item title="Cancel" onPress={() => navigation.goBack()} />
       </MaterialHeaderButtons>
-    ),
-    [navigation],
-  )
+    )
 
-  const headerRight = useCallback(() => {
-    const localSubmit = (data: EventFormData) => {
-      const updatedData: EventFormData = {
-        id: event ? event.id : null,
-        title: data.title,
-        description: data.description,
-        startDate: data.startDate.toString(),
-        endDate: data.endDate.toString(),
-        url: data.url,
+    const headerRight = () => {
+      const localSubmit = (data: EventFormData) => {
+        const updatedData: EventFormData = {
+          id: event?.id ?? undefined,
+          title: data.title,
+          description: data.description,
+          startDate: data.startDate.toString(),
+          endDate: data.endDate ? data.endDate.toString() : "",
+          url: data.url,
+        }
+
+        onSubmit(updatedData)
       }
 
-      onSubmit(updatedData)
+      return (
+        <MaterialHeaderButtons left={true}>
+          <Item
+            title="Save"
+            disabled={!isValid || isSubmitting}
+            onPress={handleSubmit(localSubmit)}
+          />
+        </MaterialHeaderButtons>
+      )
     }
-
-    return (
-      <MaterialHeaderButtons left={true}>
-        <Item
-          title="Save"
-          disabled={!isValid || isSubmitting}
-          onPress={handleSubmit(localSubmit)}
-        />
-      </MaterialHeaderButtons>
-    )
-  }, [event, handleSubmit, isSubmitting, isValid, onSubmit])
-
-  useLayoutEffect(() => {
     navigation.setOptions({
       // in your app, extract the arrow function into a separate component
       // to avoid creating a new one every time
       headerLeft: () => headerLeft(),
       headerRight: () => headerRight(),
     })
-  }, [
-    event,
-    event?.id,
-    isSubmitting,
-    isValid,
-    handleSubmit,
-    navigation,
-    onSubmit,
-    headerLeft,
-    headerRight,
-  ])
+  }, [event, event?.id, isSubmitting, isValid, handleSubmit, navigation, onSubmit])
 
   return (
     <View>
