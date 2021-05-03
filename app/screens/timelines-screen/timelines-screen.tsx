@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react"
-import { ActivityIndicator, FlatList, SafeAreaView, View } from "react-native"
+import { ActivityIndicator, SafeAreaView, ScrollView, View } from "react-native"
 import { Button, List, Text, useTheme, FAB } from "react-native-paper"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
@@ -37,6 +37,7 @@ export const TimelinesScreen = observer(function TimelinesScreen() {
   useFocusEffect(
     useCallback(() => {
       if (userStore.user) {
+        console.tron.log("herp!")
         timelineStore.getTimelines(userStore.user.id).then(() => setIsLoading(false))
       }
     }, [timelineStore, userStore.user]),
@@ -63,30 +64,27 @@ export const TimelinesScreen = observer(function TimelinesScreen() {
     }, [params, timelineStore]),
   )
 
-  const openTimeline = (id: string, title: string): void => {
+  const openTimeline = (id: number, title: string): void => {
     navigate("timeline", { id, title })
   }
-
-  const renderItem = ({ item: { title, id, description } }) => (
-    <List.Item
-      title={title}
-      key={id}
-      onPress={() => openTimeline(id, title)}
-      description={description}
-      left={(props) => <List.Icon {...props} icon="folder" />}
-    />
-  )
 
   const renderList = () => {
     if (!timelines) return null
 
-    return (
-      <FlatList
-        data={timelineStore.getTimelinesArray()}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    )
+    const timelineList: JSX.Element[] = []
+    timelines.forEach(({ id, title, description, ...props }) => {
+      timelineList.push(
+        <List.Item
+          title={title}
+          key={id}
+          onPress={() => openTimeline(id, title)}
+          description={description}
+          left={(props) => <List.Icon {...props} icon="folder" />}
+        />,
+      )
+    })
+
+    return <ScrollView>{timelineList}</ScrollView>
   }
 
   const emptyState = () => {
