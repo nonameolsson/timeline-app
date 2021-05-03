@@ -27,6 +27,8 @@ export const setRootNavigation = (ref: React.RefObject<NavigationContainerRef>) 
  * Gets the current screen from any navigation state.
  */
 export function getActiveRouteName(state: NavigationState | PartialState<NavigationState>) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const route = state.routes[state.index]
 
   // Found the active route -- return the name

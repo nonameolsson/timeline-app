@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react"
 import { ActivityIndicator, FlatList, SafeAreaView, View } from "react-native"
 import { Button, List, Text, useTheme, FAB } from "react-native-paper"
-import { useFocusEffect } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 
 import { EmptyState } from "components"
@@ -9,6 +9,7 @@ import { useStores } from "models"
 
 import { styles } from "./timelines-screen.styles"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { TimelineRouteProp } from "navigators/timeline-stack-navigator"
 
 // type TimelinesScreenProp = {
 //   navigation: CompositeNavigationProp<
@@ -22,16 +23,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 //   route: TimelineRouteProp<"timelines">
 // };
 
-export const TimelinesScreen = observer(function TimelinesScreen({
-  navigation,
-  route: { params },
-}: any) {
+export const TimelinesScreen = observer(function TimelinesScreen() {
+  const { navigate } = useNavigation()
+  const { params } = useRoute<TimelineRouteProp<"timelines">>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 
-  // Fix to get correct type
   const { userStore, timelineStore } = useStores()
+  const timelines = timelineStore.getTimelinesArray()
 
   // TODO: Adjust so new timelines are retrieved when navigating to this screen.
   useFocusEffect(
@@ -64,7 +64,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
   )
 
   const openTimeline = (id: string, title: string): void => {
-    navigation.navigate("timeline", { id, title })
+    navigate("timeline", { id, title })
   }
 
   const renderItem = ({ item: { title, id, description } }) => (
@@ -78,8 +78,6 @@ export const TimelinesScreen = observer(function TimelinesScreen({
   )
 
   const renderList = () => {
-    const timelines = timelineStore.getTimelinesArray()
-
     if (!timelines) return null
 
     return (
@@ -100,7 +98,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
           icon="timeline-plus-outline"
         />
         <View style={styles.emptyStateButtonWrapper}>
-          <Button onPress={() => navigation.navigate("addTimeline")} mode="contained">
+          <Button onPress={() => navigate("addTimeline")} mode="contained">
             Create timeline
           </Button>
         </View>
@@ -138,7 +136,7 @@ export const TimelinesScreen = observer(function TimelinesScreen({
               accent: theme.colors.primary,
             },
           }}
-          onPress={() => navigation.navigate("addTimeline")}
+          onPress={() => navigate("addTimeline")}
         />
       )}
     </SafeAreaView>

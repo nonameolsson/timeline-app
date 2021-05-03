@@ -1,8 +1,8 @@
 export type EventFormData = {
-  id: number | null
+  id: number | undefined
   title: string
-  description: string | null
+  description: string | undefined
   startDate: string
-  endDate: string | null
-  url: string | null
+  endDate: string | undefined
+  url: string | undefined
 }

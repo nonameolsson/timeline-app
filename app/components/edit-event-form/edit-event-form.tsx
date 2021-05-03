@@ -71,7 +71,6 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       <Controller
         control={control}
         name="title"
-        label="Title"
         render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
@@ -91,7 +90,6 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       <Controller
         control={control}
         name="description"
-        label="Description"
         render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
@@ -111,7 +109,6 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       <Controller
         control={control}
         name="startDate"
-        label="Start Date"
         render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
@@ -131,7 +128,6 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       <Controller
         control={control}
         name="endDate"
-        label="End Date"
         render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
@@ -151,14 +147,13 @@ export const EditEventForm: Component<EditEventFormProps> = ({ event, onSubmit }
       <Controller
         control={control}
         name="url"
-        label="URL"
         render={({ field: { onChange, onBlur, value } }) => (
           <>
             <TextInput
               autoCapitalize="none"
               autoCorrect={false}
               error={!!errors.url}
-              label="Url"
+              label="URL"
               onBlur={onBlur}
               onChangeText={(text) => onChange(text)}
               value={value}

@@ -27,7 +27,8 @@ export interface EventRequest {
   title: string
   description: string | null
   timeline: number
-  date: string
+  startDate: string
+  endDate: string
   url: string | null
 }
 

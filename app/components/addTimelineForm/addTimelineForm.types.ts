@@ -1,4 +1,4 @@
 export type FormData = {
   title: string
-  description?: string
+  description: string | undefined
 }

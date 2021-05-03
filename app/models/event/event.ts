@@ -51,6 +51,8 @@ export const EventModel = types
       if (result.kind === "ok") {
         updateEventInStore(result.data)
       } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         __DEV__ && console.tron.log(result.kind)
       }
     })
