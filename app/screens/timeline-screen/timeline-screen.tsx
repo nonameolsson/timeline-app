@@ -47,7 +47,7 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
       [
         {
           text: "Cancel",
-          onPress: () => console.tron.log("Cancel Pressed"),
+          onPress: () => undefined,
           style: "cancel",
         },
         { text: "OK", onPress: () => deleteTimeline() },
@@ -113,13 +113,12 @@ export const TimelineScreen: Component = observer(function TimelineScreen() {
     if (!events) return
     const eventList: JSX.Element[] = []
     events.forEach((event) => {
-      const description = event.endDate ? `${event.startDate} - ${event.endDate}` : event.startDate
       eventList.push(
         <List.Item
           key={event.id}
           onPress={() => openEvent(event.id)}
           title={event.title}
-          description={description}
+          description={event.readableStartToEndDateString}
         />,
       )
     })

@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react-native"
 
 import { Story, StoryScreen, UseCase } from "../../../storybook/views"
 
-import { EventForm } from "./event-form"
+import { AddEventForm } from "./add-event-form"
 
 declare const module
 
@@ -12,7 +12,7 @@ storiesOf("EventForm", module)
   .add("Style Presets", () => (
     <Story>
       <UseCase text="Primary" usage="The primary.">
-        <EventForm />
+        <AddEventForm />
       </UseCase>
     </Story>
   ))

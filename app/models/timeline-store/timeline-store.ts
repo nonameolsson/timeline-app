@@ -19,8 +19,8 @@ export const TimelineStoreModel = types
     hasTimelines: () => {
       return self.timelines.size > 0
     },
-    getEventFromTimeline: (id: number, eventId: number): Event | undefined => {
-      const timeline = self.timelines.get(id.toString())
+    getEventFromTimeline: (timelineId: number, eventId: number): Event | undefined => {
+      const timeline = self.timelines.get(timelineId.toString())
 
       if (!timeline) return undefined
       return timeline.events.find((event) => event.id === eventId)
@@ -51,17 +51,19 @@ export const TimelineStoreModel = types
     },
 
     addTimelinesToStore: (timelineSnapshot: Types.TimelineResponse[]) => {
-      const createEventModelFromData = (event: Types.TimelineEvent) => {
+      const createEventModelFromData = (timelineId: number, event: Types.EventResponse) => {
         return EventModel.create({
           id: event.id,
           title: event.title,
           description: event.description,
           url: event.url,
-          timeline: event.timeline,
+          timeline: timelineId,
           created_at: event.created_at,
           updated_at: event.updated_at,
           startDate: event.startDate.toString(),
+          startBC: event.startBC,
           endDate: event.endDate?.toString() || "",
+          endBC: event.endBC,
         })
       }
 
@@ -70,7 +72,7 @@ export const TimelineStoreModel = types
           id: timeline.id,
           title: timeline.title,
           description: timeline.description,
-          events: timeline.events.map((event) => createEventModelFromData(event)),
+          events: timeline.events.map((event) => createEventModelFromData(timeline.id, event)),
           created_at: timeline.created_at,
           updated_at: timeline.updated_at,
         })

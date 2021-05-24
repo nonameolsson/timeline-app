@@ -6,8 +6,7 @@ import {
   StackNavigationProp,
   TransitionPresets,
 } from "@react-navigation/stack"
-import { AddEventScreen } from "screens"
-import { AddTimelineScreen } from "screens/add-timeline-screen/add-timeline-screen"
+import { AddEventScreen, AddTimelineScreen } from "screens"
 
 import { DrawerNavigator } from "./drawer-navigator"
 
@@ -24,6 +23,7 @@ import { DrawerNavigator } from "./drawer-navigator"
 export type ModalStackParamList = {
   main: undefined
   addEvent: { timelineId: number }
+  editEvent: { eventId: number; timelineId: number }
   addTimeline: undefined
 }
 /**

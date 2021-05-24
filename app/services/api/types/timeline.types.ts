@@ -1,19 +1,11 @@
 /* eslint-disable camelcase */
 
 import { GeneralApiProblem } from "../api-problem"
+import { EventResponse } from "./event.types"
 
-export interface TimelineEvent {
-  id: number
-  title: string
-  description: string | null
-  timeline: number
-  url: null | string
-  created_at: string
-  updated_at: string
-  startDate: string
-  endDate: string | null
-}
-
+/**
+ * User in Timeline response
+ */
 interface TimelineUser {
   id: number
   username: string
@@ -29,11 +21,11 @@ interface TimelineUser {
 export interface TimelineResponse {
   id: number
   title: string
-  description: string | null
-  events: TimelineEvent[]
+  description: string
+  events: EventResponse[]
+  user: TimelineUser
   created_at: string
   updated_at: string
-  user: TimelineUser
 }
 
 export interface PostTimelineRequest {
@@ -55,7 +47,7 @@ export interface DeleteTimelineResponse {
   user: TimelineUser
   created_at: string
   updated_at: string
-  events: TimelineEvent[]
+  events: EventResponse[]
 }
 
 export type GetTimelinesResult = { kind: "ok"; data: TimelineResponse[] } | GeneralApiProblem

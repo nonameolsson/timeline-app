@@ -7,8 +7,8 @@ import { useNavigation } from "@react-navigation/native"
 
 import { Item, MaterialHeaderButtons } from "components"
 
-import { FormData } from "./addTimelineForm.types"
-import { AddTimelineFormSchema } from "./addTimelineForm.validation"
+import { FormData } from "./add-timeline-form.types"
+import { AddTimelineFormSchema } from "./add-timeline-form.validation"
 
 interface AddTimelineFormProps {
   onSubmit: (data: { title: string; description: string }) => void

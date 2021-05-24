@@ -4,31 +4,41 @@ import { GeneralApiProblem } from "../api-problem"
 interface EventTimeline {
   id: number
   title: string
-  description: string | null
+  description: string
   user: number
   date: string
   created_at: string
   updated_at: string
 }
 
+/**
+ * Response data after creating or retrieving an event
+ */
 export interface EventResponse {
   id: number
   title: string
-  description: string | null
+  description: string
   timeline: EventTimeline | null
   url: string | null
-  created_at: string
-  updated_at: string
   startDate: string
   endDate: string | null
+  startBC: boolean
+  endBC: boolean
+  updated_at: string
+  created_at: string
 }
 
+/**
+ * Request for creating a new event
+ */
 export interface EventRequest {
-  title: string
   description: string | null
-  timeline: number
+  endDate: string | null
+  endBC: boolean | null
   startDate: string
-  endDate: string
+  startBC: boolean
+  timeline: number
+  title: string
   url: string | null
 }
 

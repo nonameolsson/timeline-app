@@ -1,6 +1,6 @@
 import React, { FunctionComponent as Component, useCallback, useLayoutEffect } from "react"
 import { Alert, SafeAreaView, View } from "react-native"
-import { Card, Paragraph, List, Subheading, Text, useTheme } from "react-native-paper"
+import { Card, Paragraph, List, Subheading, Headline, Text, useTheme } from "react-native-paper"
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import * as WebBrowser from "expo-web-browser"
 import { observer } from "mobx-react-lite"
@@ -55,7 +55,7 @@ export const EventScreen: Component = observer(function EventScreen(): JSX.Eleme
         [
           {
             text: "Cancel",
-            onPress: () => console.tron.log("Cancel Pressed"),
+            onPress: () => undefined,
             style: "cancel",
           },
           { text: "OK", onPress: () => deleteEvent() },
@@ -68,7 +68,6 @@ export const EventScreen: Component = observer(function EventScreen(): JSX.Eleme
 
   const headerRight = useCallback(() => {
     if (event === undefined) return undefined
-
     return (
       <MaterialHeaderButtons>
         <Item title="Delete" iconName="delete" onPress={showDeleteAlert} />
@@ -77,7 +76,7 @@ export const EventScreen: Component = observer(function EventScreen(): JSX.Eleme
           iconName="edit"
           onPress={() =>
             navigation.navigate("editEvent", {
-              eventId: event?.id,
+              eventId: event.id,
               timelineId: params.timelineId,
             })
           }
@@ -134,19 +133,21 @@ export const EventScreen: Component = observer(function EventScreen(): JSX.Eleme
         <Card>
           <Card.Title title={event.title} />
           <Card.Content>
-            <Subheading>Description</Subheading>
+            <Headline>Description</Headline>
             <Paragraph>{event.description}</Paragraph>
             <View style={styles.dateWrapper}>
               <View>
                 <Subheading>Start Date</Subheading>
-                <Text>{event.startDate}</Text>
+                <Text>{event.readableStartDateString}</Text>
               </View>
-              <View style={styles.endDate}>
-                <Subheading>End Date</Subheading>
-                <Text>{event.endDate}</Text>
-              </View>
+              {!!event.endDate && (
+                <View style={styles.endDate}>
+                  <Subheading>End Date</Subheading>
+                  <Text>{event.readableEndDateString}</Text>
+                </View>
+              )}
             </View>
-            <Subheading>References</Subheading>
+            <Headline>References</Headline>
             {renderUrlList()}
           </Card.Content>
         </Card>
