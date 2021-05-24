@@ -1,57 +1,65 @@
-import React, { FunctionComponent as Component } from "react"
-import { SafeAreaView, View } from "react-native"
-import { useTheme } from "react-native-paper"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import React from "react"
+import { SafeAreaView, ScrollView } from "react-native"
+import { useRoute } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { TimelineRouteProp, TimelineStackNavigationProp } from "navigators"
+import { ModalStackRouteProp } from "navigators/modal-stack"
 
-import { EventForm } from "components"
-import { EventFormData } from "components/event-form/event-form.types"
+import { EditEventForm } from "components"
+import { EditEventFormData } from "components/edit-event-form/edit-event-form.types"
 import { useStores } from "models"
 
-import { editEventScreenStyles as styles } from "./add-event-screen.styles"
+import { EditEventScreenProps } from "./edit-event-screen.interfaces"
+import { styles } from "./edit-event-screen.styles"
+import { EventRequest } from "services/api"
+import { convertValuesToTimelineDateString } from "utils/date"
 
-// #den här koden vet jag inte vad den gör, det är @nonameolsson som har koll
-export const EditEventScreen: Component = observer(function EditEventScreen() {
-  const navigation = useNavigation<TimelineStackNavigationProp<"editEvent">>() // NOTE: Should this be a props instead?
+export const EditEventScreen = observer(function EditEventScreen({
+  navigation,
+}: EditEventScreenProps) {
   const { timelineStore } = useStores()
-  const { params } = useRoute<TimelineRouteProp<"editEvent">>()
-
-  const {
-    colors: { background },
-  } = useTheme()
+  const { params } = useRoute<ModalStackRouteProp<"editEvent">>()
 
   // Make sure all data exists
   const event = timelineStore.getEventFromTimeline(params.timelineId, params.eventId)
   if (!event) return null
 
-  // This will be changed when implementing #87
-  // @nonameolsson
-  const onSubmit = async ({ title, url, description }: EventFormData) => {
-    navigation.navigate("event", {
-      eventId: params.eventId,
-      timelineId: params.timelineId,
+  const handleSubmit = async ({
+    description,
+    endBC,
+    endDate,
+    endMonth,
+    endYear,
+    startBC,
+    startDate,
+    startMonth,
+    startYear,
+    title,
+    url,
+  }: EditEventFormData) => {
+    const formattedStartDate = convertValuesToTimelineDateString(startYear, startMonth, startDate)
+    if (!formattedStartDate) throw new Error("Not a valid year")
+
+    const formattedEndDate = convertValuesToTimelineDateString(endYear, endMonth, endDate)
+
+    const eventData: EventRequest = {
       title,
-      action: {
-        type: "EDIT_EVENT",
-        payload: {
-          id: event.id,
-          created_at: event.created_at,
-          updated_at: event.updated_at,
-          timeline: params.timelineId,
-          title,
-          url,
-          description,
-        },
-      },
-    })
+      timeline: params.timelineId,
+      description,
+      startBC,
+      startDate: formattedStartDate,
+      endBC,
+      endDate: formattedEndDate,
+      url,
+    }
+
+    await event.updateEvent(eventData, event.id).then(() => navigation.goBack())
   }
 
   return (
     <SafeAreaView style={styles.screen}>
-      <View style={[styles.container, { backgroundColor: background }]}>
-        <EventForm event={event} onSubmit={onSubmit} />
-      </View>
+      <ScrollView style={styles.container}>
+        <EditEventForm event={event} onSubmit={(data) => handleSubmit(data)} />
+      </ScrollView>
     </SafeAreaView>
   )
 })

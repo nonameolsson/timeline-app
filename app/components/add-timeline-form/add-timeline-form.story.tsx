@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react-native"
 
 import { Story, StoryScreen, UseCase } from "../../../storybook/views"
 
-import { AddTimelineForm } from "./addTimelineForm"
+import { AddTimelineForm } from "./add-timeline-form"
 
 declare const module
 

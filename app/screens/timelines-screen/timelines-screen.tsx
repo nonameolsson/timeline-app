@@ -37,7 +37,6 @@ export const TimelinesScreen = observer(function TimelinesScreen() {
   useFocusEffect(
     useCallback(() => {
       if (userStore.user) {
-        console.tron.log("herp!")
         timelineStore.getTimelines(userStore.user.id).then(() => setIsLoading(false))
       }
     }, [timelineStore, userStore.user]),

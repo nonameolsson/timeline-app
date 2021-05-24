@@ -1,7 +1,5 @@
 import { format } from "date-fns"
 
-// export const formatShortISO = (date: Date): string => format(date, { representation: 'date' })
-
 export const formatDateYear = (date?: Date | null, empty = ""): string =>
   date ? format(date, "yyyy-MM-dd") : empty
 export const formatShortTime = (date?: Date | null, empty = ""): string =>
@@ -10,96 +8,47 @@ export const formatShortTime = (date?: Date | null, empty = ""): string =>
 export const formatDateTime = (date?: Date, empty = ""): string =>
   date ? format(date, `yyyy-MM-dd'T'HH:mm`) : empty
 
-interface TimelineDate {
-  /**
-   * negative true = BC
-   *
-   * negative false or undefined = AD
-   */
-  negative?: boolean
-  year: number
-  month?: number
-  day?: number
-}
+/**
+ * Parse a timeline string to get year, month and date
+ *
+ * @param dateString String containing date. Could be `1998-08-20`, `1988-08` or `1988`
+ * @returns Object with year, month and date property
+ */
+export const parseTimelineDate = (
+  dateString: string,
+): { year: string; month: string; date: string } => {
+  const dateArray = dateString.split("-")
 
-// sista dagarna
-// const date1: dateObject = {
-//   negative: false,
-//   year: 1914,
-// };
+  if (!dateArray[0]) throw new Error("Year is required in a date string")
 
-// // sista dagarna oktober
-// const date2: dateObject = {
-//   year: 607,
-//   month: 10,
-// };
+  const isValidYear = parseFloat(dateArray[0])
+  if (!isValidYear) throw new Error("Not a valid year")
 
-// // sista dagarna med låtsasdatum
-// const date3: dateObject = {
-//   year: 1914,
-//   month: 10,
-//   day: 25,
-// };
-
-// // jesus döps
-// const date4: dateObject = {
-//   year: 29,
-// };
-
-// // jesus dör
-// const date5: dateObject = {
-//   year: 33,
-// };
-
-// // jerusalem börjar återuppbyggas
-// const date6: dateObject = {
-//   negative: true,
-//   year: 455,
-// };
-
-// // jerusalem färdigt
-// const date7: dateObject = {
-//   negative: true,
-//   year: 406,
-// };
-
-// // andreas föds
-// const date8: dateObject = {
-//   negative: true,
-//   year: 1988,
-//   month: 8,
-//   day: 25,
-// };
-
-export const getTimelineDate = (date: TimelineDate) => {
-  return new Date(
-    date.negative ? parseInt(`-${date.year}`) : date.year,
-    date.month || 0,
-    date.day || 1,
-  )
-}
-
-// const formattedDate = date(date8);
-
-export const getTimelineDataString = ({
-  year,
-  day,
-  month,
-  negative = false,
-}: TimelineDate): string | undefined => {
-  let readableData: string
-
-  if (year) {
-    readableData = `${year}`
-
-    if (month) {
-      readableData += `-${month}`
-
-      if (day) {
-        readableData += `-${day}`
-      }
-    }
-
-    return negative ? `${readableData} BC` : readableData
+  return {
+    year: dateArray[0],
+    month: dateArray[1],
+    date: dateArray[2],
   }
+}
+
+/**
+ * Convert date for an event to a valid timeline date string.
+ *
+ * @param year
+ * @param month
+ * @param date
+ * @returns A valid timeline date string like `1988`, `1988-8` or `1988-12-15`
+ */
+export const convertValuesToTimelineDateString = (
+  year: string | null,
+  month?: string | null | undefined,
+  date?: string | null | undefined,
+): string | null => {
+  if (!year) return null
+
+  let formattedDate = year
+  if (month) formattedDate = `${formattedDate}-${month}`
+  if (date) formattedDate = `${formattedDate}-${date}`
+
+  return formattedDate.toString()
 }

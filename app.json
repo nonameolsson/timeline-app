@@ -27,6 +27,7 @@
       "favicon": "./assets/favicon.png"
     },
     "description": "Create your own timeline",
-    "githubUrl": "https://github.com/nonameolsson/timeline-app"
+    "githubUrl": "https://github.com/nonameolsson/timeline-app",
+    "sdkVersion": "41.0.0"
   }
 }

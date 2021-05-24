@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo } from "react"
+import React, { useEffect, useLayoutEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { ScrollView } from "react-native"
 import { HelperText, Subheading, Checkbox, Text, TextInput, useTheme } from "react-native-paper"
@@ -7,26 +7,19 @@ import { useNavigation } from "@react-navigation/native"
 
 import { Item, MaterialHeaderButtons } from "components"
 
-import { EditEventFormData, EditEventFormProps } from "./edit-event-form.types"
-import { EditEventFormSchema } from "./edit-event-form.validation"
-import { parseTimelineDate } from "utils/date"
+import { AddEventFormData, AddEventFormProps } from "./add-event-form.types"
+import { AddEventFormSchema } from "./add-event-form.validation"
 
 /**
  * This is a React functional component, ready to
  *
  * Component description here for TypeScript tips.
  */
-export const EditEventForm = ({ event, onSubmit }: EditEventFormProps) => {
+export const AddEventForm = ({ onSubmit }: AddEventFormProps) => {
   const navigation = useNavigation()
   const {
     colors: { error },
   } = useTheme()
-
-  const startDate = useMemo(() => parseTimelineDate(event.startDate), [event.startDate])
-
-  const endDate = useMemo(() => (event.endDate ? parseTimelineDate(event.endDate) : undefined), [
-    event.endDate,
-  ])
 
   const {
     control,
@@ -34,21 +27,21 @@ export const EditEventForm = ({ event, onSubmit }: EditEventFormProps) => {
     watch,
     formState: { errors, isValid, isSubmitting },
     handleSubmit,
-  } = useForm<EditEventFormData>({
-    resolver: yupResolver(EditEventFormSchema),
+  } = useForm<AddEventFormData>({
+    resolver: yupResolver(AddEventFormSchema),
     mode: "onChange",
     defaultValues: {
-      title: event.title,
-      description: event.description || "",
-      startBC: event.startBC,
-      startYear: startDate?.year || undefined,
-      startMonth: startDate?.month || undefined,
-      startDate: startDate?.date || undefined,
-      endBC: !!event.endBC,
-      endYear: endDate?.year || undefined,
-      endMonth: endDate?.month || undefined,
-      endDate: endDate?.date || undefined,
-      url: event.url,
+      title: "",
+      description: "",
+      startBC: false,
+      startYear: undefined,
+      startMonth: undefined,
+      startDate: undefined,
+      endBC: false,
+      endYear: undefined,
+      endMonth: undefined,
+      endDate: undefined,
+      url: null,
     },
   })
 
@@ -75,13 +68,14 @@ export const EditEventForm = ({ event, onSubmit }: EditEventFormProps) => {
         </MaterialHeaderButtons>
       )
     }
+
     navigation.setOptions({
       // in your app, extract the arrow function into a separate component
       // to avoid creating a new one every time
       headerLeft: () => headerLeft(),
       headerRight: () => headerRight(),
     })
-  }, [event, isSubmitting, isValid, handleSubmit, navigation, onSubmit])
+  }, [isSubmitting, isValid, handleSubmit, navigation, onSubmit])
 
   function onToggleChecked(value) {
     setValue("startBC", !value)
@@ -166,7 +160,7 @@ export const EditEventForm = ({ event, onSubmit }: EditEventFormProps) => {
             <TextInput
               onChangeText={(text) => onChange(text)}
               onBlur={onBlur}
-              keyboardType="number-pad"
+              // keyboardType="number-pad"
               error={!!errors.startYear?.message}
               label="Year"
               value={value || undefined}
@@ -187,7 +181,7 @@ export const EditEventForm = ({ event, onSubmit }: EditEventFormProps) => {
                 onChangeText={(text) => onChange(text)}
                 onBlur={onBlur}
                 value={value || undefined}
-                keyboardType="number-pad"
+                // keyboardType="number-pad"
                 error={!!errors.startMonth?.message}
                 label="Month"
               />
@@ -206,7 +200,7 @@ export const EditEventForm = ({ event, onSubmit }: EditEventFormProps) => {
             <>
               <TextInput
                 error={!!errors.startDate?.message}
-                keyboardType="number-pad"
+                keyboardType="numeric"
                 label="Date"
                 onChangeText={(text) => onChange(text)}
                 onBlur={onBlur}
