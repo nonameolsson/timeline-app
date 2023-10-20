@@ -117,7 +117,7 @@
     "patch-package": "6.2.2",
     "postinstall-prepare": "1.0.1",
     "prettier": "2.2.1",
-    "react-devtools-core": "4.10.1",
+    "react-devtools-core": "4.28.4",
     "react-dom": "16.14.0",
     "react-native-web": "0.13.18",
     "react-powerplug": "1.0.0",
